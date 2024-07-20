@@ -1,17 +1,13 @@
 package am9.olbcore.onebot
 
-import am9.olbcore.onebot.feature.{BreadFactory, Sender}
+import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.misc.Terminal
 import cn.hutool.log.{Log, LogFactory}
-import cn.hutool.json.JSON
-import cn.hutool.json.JSONObject
 import config.{AdminData, Bread, Config}
 import onebot.{Connect, OneBotWS}
 import org.jetbrains.annotations.Nullable
-import org.slf4j.{Logger, LoggerFactory}
 
 import java.io.File
-import java.net.URI
 import java.util
 import java.util.Timer
 
@@ -21,7 +17,7 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  val version = "0.1.0"
+  val version = "0.1.0-beta.1"
   val changelog: String =
     """
       |

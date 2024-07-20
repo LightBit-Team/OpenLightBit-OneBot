@@ -30,12 +30,16 @@ object WebThings {
     try {
       val json = JSONUtil.parseObj(webQuery(s"https://api.leafone.cn/api/icp?name=${domain}"))
       if (!json.getStr("code").equals("200")) {
-        throw new RuntimeException(s"Request failed ${json.getStr("msg")}")
+        if (json.getStr("code").equals("404")) {
+          Sender.sendGroup(group, "未备案")
+        } else {
+          throw new RuntimeException(s"Request failed ${json.getStr("msg")}")
+        }
       } else {
-        val info = json.getJSONObject("data").get("data").asInstanceOf[java.util.List[JSONObject]].get(0)
+        val info = json.getJSONObject("data").get("list").asInstanceOf[java.util.List[JSONObject]].get(0)
         Sender.sendGroup(group,
           s"""${info.getStr("domain")}的备案信息如下：
-            |备案号：${json.getStr("mainLicence")}""".stripMargin)
+            |备案号：${info.getStr("mainLicence")}""".stripMargin)
       }
     } catch {
       case e: Throwable =>
