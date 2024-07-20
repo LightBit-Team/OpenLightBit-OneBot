@@ -2,6 +2,7 @@ package am9.olbcore.onebot
 package feature
 
 import am9.olbcore.onebot.feature
+import am9.olbcore.onebot.Main
 import cn.hutool.json.{JSONObject, JSONUtil}
 
 object Parser {
@@ -86,10 +87,10 @@ object Parser {
         }
         if (str.startsWith("!version")) {
           Sender.sendGroup(groupId,
-            """OpenLightBit version 0.0.1.dev
-              |更新内容：啥都没有
-              |------------
-              |不想做，不会做，做不了，脑壳疼""".stripMargin)
+            s"""OpenLightBit version ${Main.version}
+               |更新内容：${Main.changelog}
+               |------------
+               |todo""".stripMargin)
         }
         if (str.startsWith("!help")) {
           Sender.sendGroup(groupId,

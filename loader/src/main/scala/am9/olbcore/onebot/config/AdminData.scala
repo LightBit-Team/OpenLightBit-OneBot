@@ -7,8 +7,6 @@ import java.io.{File, FileNotFoundException, IOException}
 import java.nio.file.{FileAlreadyExistsException, Files, NoSuchFileException, Paths}
 import java.util
 
-//import am9.olbcore.onebot.config.JsonStorage
-
 @SuppressWarnings(Array("deprecation"))
 class AdminData {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef]() {

@@ -21,7 +21,11 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  //private val timer = new Timer()
+  val version = "0.1.0"
+  val changelog: String =
+    """
+      |
+      |""".stripMargin
   def main(@Nullable args: Array[String]): Unit = {
     try {
       logger = LogFactory.get(this.getClass)

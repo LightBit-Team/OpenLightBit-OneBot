@@ -8,14 +8,11 @@
 plugins {
     // Apply the scala Plugin to add support for Scala.
     scala
-    // scala 3
-    //bloop
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    //id 'com.github.johnrengelman.shadow' version '7.1.2' // 版本号根据最新发布调整
 }
 
 repositories {
@@ -24,8 +21,6 @@ repositories {
 }
 
 dependencies {
-    // Use Scala 2.13 in our library project
-    //implementation(libs.scala.library)
     // https://mvnrepository.com/artifact/org.scala-lang/scala3-library
     implementation("org.scala-lang:scala3-library_3:3.6.0-RC1-bin-20240712-97a711c-NIGHTLY")
 
@@ -40,26 +35,7 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
 
-    // Use Scalatest for testing our library
-    testImplementation(libs.junit)
-    // https://mvnrepository.com/artifact/org.scalatest/scalatest
-    testImplementation("org.scalatest:scalatest_3:3.3.0-alpha.1")
-
-    testImplementation(libs.junit.v4.v13.v2.v13)
-
-    // Need scala-xml at test runtime
-    // https://mvnrepository.com/artifact/org.scala-lang.modules/scala-xml
-    //implementation("org.scala-lang.modules:scala-xml_3:2.3.0")
-
-    // https://mvnrepository.com/artifact/org.jetbrains/annotations
     implementation("org.jetbrains:annotations:24.1.0")
-
-    // https://mvnrepository.com/artifact/org.yaml/snakeyaml
-    //implementation("org.yaml:snakeyaml:2.2")
-
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    //implementation("org.apache.logging.log4j:log4j-core:3.0.0-beta2")
-    //implementation("org.apache.logging.log4j:log4j-slf4j-impl:3.0.0-beta2")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
