@@ -1,6 +1,8 @@
 package am9.olbcore.onebot.misc
 
+import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.Main.logger
+import org.jetbrains.annotations.NotNull
 
 object Terminal {
   def serverLauncherWarn(): Unit = {
@@ -15,5 +17,10 @@ object Terminal {
     val location = this.getClass.getProtectionDomain.getCodeSource.getLocation.toString
     location.contains("Server") || location.contains("version") || location.contains("launcher") ||
       location.contains("data")
+  }
+  def sendDebug(@NotNull msg: AnyRef): Unit = {
+    if (Main.config.getData.get("debug-enabled").toString.toBoolean) {
+      Main.logger.debug(msg.toString)
+    }
   }
 }

@@ -1,6 +1,7 @@
 package am9.olbcore.onebot
 package feature
 
+import am9.olbcore.onebot.misc.Terminal
 import cn.hutool.json.{JSONObject, JSONUtil}
 
 import java.util.Random
@@ -51,28 +52,28 @@ object Parser {
                 case "enable" => Main.logger.info("机器人已启用")
                 case "disable" => Main.logger.info("机器人已禁用")
                 case _ => Main.logger.info(str)
-            case "heartbeat" => Main.logger.info("We are still alive!")
-            case _ => Main.logger.info(str)
+            case "heartbeat" => Terminal.debug("We are still alive!")
+            case _ => Terminal.debug(str)
         }
         case "notice" => {
           json.getStr("notice_type") match
-            case "group_upload" => Main.logger.info("群文件上传")
-            case "group_admin" => Main.logger.info("群管理员变动")
-            case "group_decrease" => Main.logger.info("群成员减少")
-            case "group_increase" => Main.logger.info("群成员增加")
-            case "group_ban" => Main.logger.info("群禁言")
-            case "friend_add" => Main.logger.info("添加好友")
-            case "friend_recall" => Main.logger.info("好友撤回")
-            case "group_recall" => Main.logger.info("群消息撤回")
-            case "notify" => Main.logger.info("提醒")
+            case "group_upload" => Terminal.debug("群文件上传")
+            case "group_admin" => Terminal.debug("群管理员变动")
+            case "group_decrease" => Terminal.debug("群成员减少")
+            case "group_increase" => Terminal.debug("群成员增加")
+            case "group_ban" => Terminal.debug("群禁言")
+            case "friend_add" => Terminal.debug("添加好友")
+            case "friend_recall" => Terminal.debug("好友撤回")
+            case "group_recall" => Terminal.debug("群消息撤回")
+            case "notify" => Terminal.debug("提醒")
             case "poke" => feature.OnPoke.doIt(json.getLong("group_id"))
-            case "lucky_king" => Main.logger.info("群红包运气王")
-            case "honor" => Main.logger.info("群荣誉变更")
-            case _ => Main.logger.info(str)
+            case "lucky_king" => Terminal.debug("群红包运气王")
+            case "honor" => Terminal.debug("群荣誉变更")
+            case _ => Terminal.debug(str)
         }
         case _ =>
           if (!(json.getStr("status").equals("ok") || json.getStr("status").equals("await"))) {
-            Main.logger.info(str)
+            Main.logger.warning(str)
           }
     } catch {
       case e: MatchError => Main.logger.info("invalid event", e)
@@ -161,6 +162,18 @@ object Parser {
         }
         if (str.startsWith(s"${p}hitokoto")) {
           WebThings.hitokoto(groupId)
+        }
+        if (str.startsWith(s"${p}info")) {
+          val args = str.split(" ")
+          if (args.length < 2) {
+            Sender.sendGroup(groupId, "格式错误")
+            return
+          } else {
+            args.apply(1) match 
+              case "src" => Sender.sendGroup(groupId, "OpenLightBit")
+              case "copyright" => Sender.sendGroup(groupId, Main.copyright)
+              case _ => Sender.sendGroup(groupId, "格式错误")
+          }
         }
       }
       if (str.startsWith(s"${p}enable")) {
