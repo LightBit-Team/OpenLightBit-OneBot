@@ -56,7 +56,7 @@ object Parser {
             case _ => Terminal.debug(str)
         case _ =>
           if (!(json.getStr("status").equals("ok") || json.getStr("status").equals("await"))) {
-            Main.logger.warning(str)
+            Main.logger.warn(str)
           }
     } catch {
       case e: MatchError => Main.logger.info("invalid event", e)
