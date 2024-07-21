@@ -17,8 +17,8 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  val version = "0.1.0"
-  val changelog: String = "第一个release"
+  val version = "0.2.0"
+  val changelog: String = "..."
   val splashes: util.List[String] = util.List.of(
     "也试试KuoHuBit罢！Also try KuoHuBit!",
     "PHP是世界上最好的编程语言（雾）",
