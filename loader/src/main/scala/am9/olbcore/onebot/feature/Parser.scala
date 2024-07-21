@@ -7,21 +7,8 @@ import cn.hutool.json.{JSONObject, JSONUtil}
 import java.util.Random
 
 object Parser {
-  /*
-  connect:
-  {
-    "time": unix时间戳,
-    "self_id": 10001,
-    "post_type": "meta_event",
-    "meta_event_type": "lifecycle",
-    "sub_type": "connect"
-  }
-   */
   def parse(str: String): Unit = {
-    //str.replaceAll("\\\\n", "\n")
     val json: JSONObject = JSONUtil.parseObj(str)
-    //Main.logger.debug(json.toStringPretty)
-    //Main.logger.debug(json)
     try {
       json.getStr("post_type") match
         case "message" =>
@@ -42,7 +29,7 @@ object Parser {
             }
           }
           BreadFactory.expReward(json.getLong("group_id"))
-        case "meta_event" => {
+        case "meta_event" => 
           json.getStr("meta_event_type") match
             case "lifecycle" =>
               json.getStr("sub_type") match
@@ -52,8 +39,7 @@ object Parser {
                 case _ => Main.logger.info(str)
             case "heartbeat" => Terminal.debug("We are still alive!")
             case _ => Terminal.debug(str)
-        }
-        case "notice" => {
+        case "notice" => 
           json.getStr("notice_type") match
             case "group_upload" => Terminal.debug("群文件上传")
             case "group_admin" => Terminal.debug("群管理员变动")
@@ -68,7 +54,6 @@ object Parser {
             case "lucky_king" => Terminal.debug("群红包运气王")
             case "honor" => Terminal.debug("群荣誉变更")
             case _ => Terminal.debug(str)
-        }
         case _ =>
           if (!(json.getStr("status").equals("ok") || json.getStr("status").equals("await"))) {
             Main.logger.warning(str)

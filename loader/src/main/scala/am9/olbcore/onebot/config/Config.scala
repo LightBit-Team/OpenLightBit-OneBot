@@ -1,8 +1,8 @@
 package am9.olbcore.onebot
 package config
 
-import cn.hutool.json.{JSONObject, JSONUtil}
 import am9.olbcore.onebot.misc.YuShengJun
+import cn.hutool.json.JSONUtil
 
 import java.io.{File, IOException}
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}

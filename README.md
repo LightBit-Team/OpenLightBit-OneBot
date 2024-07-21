@@ -6,7 +6,8 @@ http，反向ws协议支持<br />
 拆分OneBot适配和olb功能（1.0.0）<br />
 发送图片/音乐<br />
 更好的事件监测<br />
-群管功能
+群管功能<br />
+交互式入群配置
 
 # 其他的机器人
 
@@ -32,6 +33,6 @@ http，反向ws协议支持<br />
         - [ltzXiaoYanMo/YanBot_KHB_Edition](https://kkgithub.com/ltzXiaoYanMo/YanBot_KHB_Edition)
         - [emerald-am9/lightbit](https://gitee.com/Emerald-AM9/lightbit)
     - [daizihan233/KuoHuShit](https://kkgithub.com/daizihan233/KuoHuShit)
-- Fangtang3（本项目作者）
-    - LightBit-Team/OpenLightBit-OneBot（本项目）
+- Fangtang3
+    - LightBit-Team/OpenLightBit-OneBot（你在这里）
  
