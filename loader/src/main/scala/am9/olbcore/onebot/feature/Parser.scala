@@ -29,10 +29,8 @@ object Parser {
             Main.logger.info("get private message")
           } else {
             if (json.getStr("message_format") == "array") {
-              //Main.logger.debug(json.toStringPretty)
-              Main.logger.info("use cq code pls :)")
+              Main.logger.info("Array message format: not implemented")
             } else {
-              //Main.logger.info(json.getStr("message"))
               if (json.getStr("message").contains("!")) {
                 parseGroupMessage(
                   json.getLong("user_id"),

@@ -1,7 +1,7 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.feature.BreadFactory
-import am9.olbcore.onebot.misc.Terminal
+import am9.olbcore.onebot.misc.{Terminal, YuShengJun}
 import cn.hutool.log.{Log, LogFactory}
 import config.{AdminData, Bread, Config}
 import onebot.{Connect, OneBotWS}
@@ -12,7 +12,7 @@ import java.util
 import java.util.Timer
 
 object Main {
-  var logger: Log = null
+  var logger: Log = LogFactory.get(YuShengJun().getClass)
   var oneBotWS: OneBotWS = null
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
@@ -44,7 +44,6 @@ object Main {
       |""".stripMargin
   def main(@Nullable args: Array[String]): Unit = {
     try {
-      logger = LogFactory.get("Nothing")
       //读取配置文件
       val configFile = new File("config.json")
       val adminConfigFile = new File("admin.json")
