@@ -18,7 +18,7 @@ object Terminal {
     location.contains("Server") || location.contains("version") || location.contains("launcher") ||
       location.contains("data")
   }
-  def sendDebug(@NotNull msg: AnyRef): Unit = {
+  def debug(@NotNull msg: AnyRef): Unit = {
     if (Main.config.getData.get("debug-enabled").toString.toBoolean) {
       Main.logger.debug(msg.toString)
     }

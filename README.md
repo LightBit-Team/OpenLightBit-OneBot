@@ -30,7 +30,7 @@ http，反向ws协议支持<br />
 - [daizihan233](https://kkgithub.com/daizihan233)
     - [daizihan233/KuoHuBit](https://kkgithub.com/daizihan233/KuoHuBit/)
         - [~~ltzXiaoYanMo/YanBot-KHB_Edition_Older~~](https://kkgithub.com/ltzXiaoYanMo/YanBot-KHB_Edition_Older)
-        - [ltzXiaoYanMo/YanBot_KHB_Edition](https://kkgithub.com/ltzXiaoYanMo/YanBot_KHB_Edition)
+        - [~~ltzXiaoYanMo/YanBot_KHB_Edition~~](https://kkgithub.com/ltzXiaoYanMo/YanBot_KHB_Edition)
         - [emerald-am9/lightbit](https://gitee.com/Emerald-AM9/lightbit)
     - [daizihan233/KuoHuShit](https://kkgithub.com/daizihan233/KuoHuShit)
 - Fangtang3
