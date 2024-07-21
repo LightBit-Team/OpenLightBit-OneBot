@@ -3,6 +3,8 @@ package feature
 
 import cn.hutool.json.{JSONObject, JSONUtil}
 
+import java.util.Random
+
 object Parser {
   /*
   connect:
@@ -84,11 +86,12 @@ object Parser {
           Sender.sendGroup(groupId, "Hello, World!")
         }
         if (str.startsWith(s"${p}version")) {
+          val rd = new Random()
           Sender.sendGroup(groupId,
             s"""OpenLightBit version ${Main.version}
                |更新内容：${Main.changelog}
                |------------
-               |todo""".stripMargin)
+               |${Main.splashes.get((rd.nextDouble() * (Main.splashes.size() - 1)).round.toInt)}""".stripMargin)
         }
         if (str.startsWith(s"${p}help")) {
           Sender.sendGroup(groupId,

@@ -18,10 +18,21 @@ object Main {
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
   val version = "0.1.0-beta.2"
-  val changelog: String =
-    """
-      |
-      |""".stripMargin
+  val changelog: String = "第一个release"
+  val splashes: util.List[String] = util.List.of(
+    "也试试KuoHuBit罢！Also try KuoHuBit!",
+    "PHP是世界上最好的编程语言（雾）",
+    "Minecraft很好玩，但也可以试试Terraria！",
+    "So Nvidia, f**k you!",
+    "Bug是杀不完的，你杀死了一个Bug，就会有千千万万个Bug站起来！",
+    "跟张浩扬博士一起来学Jvav罢！",
+    "哼哼哼，啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊",
+    "你知道吗？其实你什么都不知道！",
+    "Tips:这是一条烫...烫..烫知识（）",
+    "有时候ctmd不一定是骂人 可能是传统美德",
+    "这条标语虽然没有用，但是是有用的，因为他被加上了标语",
+    "使用Scala编写！"
+  )
   def main(@Nullable args: Array[String]): Unit = {
     try {
       logger = LogFactory.get("Nothing")
