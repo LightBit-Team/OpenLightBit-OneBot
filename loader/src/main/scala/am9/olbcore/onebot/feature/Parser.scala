@@ -1,13 +1,11 @@
 package am9.olbcore.onebot
 package feature
 
-import am9.olbcore.onebot.feature
-import am9.olbcore.onebot.Main
 import cn.hutool.json.{JSONObject, JSONUtil}
 
 object Parser {
   /*
-  刚链接上第一个返回类似于：
+  connect:
   {
     "time": unix时间戳,
     "self_id": 10001,
@@ -15,7 +13,6 @@ object Parser {
     "meta_event_type": "lifecycle",
     "sub_type": "connect"
   }
-
    */
   def parse(str: String): Unit = {
     //str.replaceAll("\\\\n", "\n")
@@ -80,19 +77,20 @@ object Parser {
     }
   }
   private def parseGroupMessage(senderId: Long, groupId: Long, msgId: Long, str: String): Unit = {
+    val p = Main.config.getData.get("command-prefix").toString
     try {
       if (!Admin.isDisabled(groupId)) {
-        if (str.startsWith("!test")) {
+        if (str.startsWith(s"${p}test")) {
           Sender.sendGroup(groupId, "Hello, World!")
         }
-        if (str.startsWith("!version")) {
+        if (str.startsWith(s"${p}version")) {
           Sender.sendGroup(groupId,
             s"""OpenLightBit version ${Main.version}
                |更新内容：${Main.changelog}
                |------------
                |todo""".stripMargin)
         }
-        if (str.startsWith("!help")) {
+        if (str.startsWith(s"${p}help")) {
           Sender.sendGroup(groupId,
             """OpenLightBit 帮助
               |------------
@@ -106,14 +104,14 @@ object Parser {
               |------------
               |欢迎使用！""".stripMargin)
         }
-        if (str.startsWith("!ping")) {
+        if (str.startsWith(s"${p}ping")) {
           Sender.sendGroup(groupId, "Pong!")
         }
-        if (str.startsWith("!echo")) {
+        if (str.startsWith(s"${p}echo")) {
           val args = str.split(" ")
           Sender.sendGroup(groupId, args.apply(1))
         }
-        if (str.startsWith("!op")) {
+        if (str.startsWith(s"${p}op")) {
           val args = str.split(" ")
           if (args.length == 2) {
             Admin.op(args.apply(1).toLong, groupId, senderId)
@@ -121,7 +119,7 @@ object Parser {
             Sender.sendGroup(groupId, "格式错误")
           }
         }
-        if (str.startsWith("!deop")) {
+        if (str.startsWith(s"${p}deop")) {
           val args = str.split(" ")
           if (args.length == 2) {
             Admin.deop(args.apply(1).toLong, groupId, senderId)
@@ -129,10 +127,10 @@ object Parser {
             Sender.sendGroup(groupId, "格式错误")
           }
         }
-        if (str.startsWith("!disable")) {
+        if (str.startsWith(s"${p}disable")) {
           Admin.disable(groupId, senderId)
         }
-        if (str.startsWith("!bread")) {
+        if (str.startsWith(s"${p}bread")) {
           val args = str.split(" ")
           try {
             args.apply(1) match
@@ -146,26 +144,23 @@ object Parser {
             case e: MatchError => Sender.sendGroup(groupId, "格式错误")
           }
         }
-        if (str.startsWith("!icp")) {
+        if (str.startsWith(s"${p}icp")) {
           WebThings.checkICP(str.split(" ").apply(1), groupId)
         }
-        if (str.startsWith("!short_link")) {
+        if (str.startsWith(s"${p}short_link")) {
           WebThings.getShortLink(str.split(" ").apply(1), groupId)
         }
-        if (str.startsWith("!query_http")) {
+        if (str.startsWith(s"${p}query_http")) {
           WebThings.webQuery(str.split(" ").apply(1))
         }
-        if (str.startsWith("!reload")) {
-          //Main.restart(groupId)
-        }
-        if (str.startsWith("!shutdown")) {
+        if (str.startsWith(s"${p}shutdown")) {
           Main.shutdown()
         }
-        if (str.startsWith("!hitokoto")) {
+        if (str.startsWith(s"${p}hitokoto")) {
           WebThings.hitokoto(groupId)
         }
       }
-      if (str.startsWith("!enable")) {
+      if (str.startsWith(s"${p}enable")) {
         Admin.enable(groupId, senderId)
       }
     } catch {

@@ -2,27 +2,21 @@ package am9.olbcore.onebot
 package config
 
 import cn.hutool.json.{JSONObject, JSONUtil}
+import am9.olbcore.onebot.misc.YuShengJun
 
 import java.io.{File, IOException}
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
 import java.util
 
 @SuppressWarnings(Array("deprecation"))
-class Config {
+class Config extends YuShengJun {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef]() {
     put("config-version", "1")
     put("bot-name", "OLB")
-    put("logger-name", "OLB")
+    put("logger-name", "OpenLightBit")
     put("debug-enabled", "true")
     put("owner", "10001")
-    put("token", "")
     put("command-prefix", "!")
-    put("command-aliases", new JSONObject(true) {
-      put("help", "h")
-      put("ping", "p")
-      put("reload", "r")
-      put("shutdown", "s")
-    })
     put("onebot-address", "localhost")
     put("onebot-port", "8080")
     put("onebot-secret", "")

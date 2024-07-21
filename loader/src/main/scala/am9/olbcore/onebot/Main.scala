@@ -17,20 +17,20 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  val version = "0.1.0-beta.1"
+  val version = "0.1.0-beta.2"
   val changelog: String =
     """
       |
       |""".stripMargin
   def main(@Nullable args: Array[String]): Unit = {
     try {
-      logger = LogFactory.get(this.getClass)
+      logger = LogFactory.get("Nothing")
       //读取配置文件
       val configFile = new File("config.json")
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
       if (configFile.exists()) {
-        //logger = LogFactory.get(config.getData.get("bot-name").toString)
+        logger = LogFactory.get(config.getData.get("logger-name").toString)
         config = config.read(configFile)
       } else {
         config.write(configFile)
