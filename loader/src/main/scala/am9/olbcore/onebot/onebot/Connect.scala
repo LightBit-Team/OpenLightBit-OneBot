@@ -5,13 +5,14 @@ import java.net.URI
 
 object Connect {
 
-  def connect(): Unit = {
+  def getConnection: OneBot = {
     Main.config.getData.get("onebot-protocol") match
       case "http" =>
         ???
       case "ws" =>
-        Main.oneBotWS = new OneBotWS(new URI(s"ws://${Main.config.getData.get("onebot-address")}:${Main.config.getData.get("onebot-port")}/"))
-        Main.oneBotWS.connect()
+        val oneBotWS = new OneBotWS(new URI(s"ws://${Main.config.getData.get("onebot-address")}:${Main.config.getData.get("onebot-port")}/"))
+        oneBotWS.connect()
+        oneBotWS
       case "ws-reserved" =>
         ???
   }

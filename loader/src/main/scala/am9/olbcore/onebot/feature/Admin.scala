@@ -1,6 +1,7 @@
 package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.onebot.OneBot
 
 import java.io.File
 
@@ -31,24 +32,20 @@ object Admin {
         val adminMap = Main.adminData.getData
         val admins = adminMap.get("admin").asInstanceOf[java.util.List[Long]]
         if (admins.contains(userId)) {
-          Sender.sendGroup(executeGroup, "已经是管理")
+          Main.oneBot.sendGroup(executeGroup, "已经是管理")
         } else {
           admins.add(userId)
           adminMap.replace("admin", admins)
           Main.adminData.setData(adminMap)
           Main.adminData.write(new File("admin.json"))
-          Sender.sendGroup(executeGroup, "成功执行")
+          Main.oneBot.sendGroup(executeGroup, "成功执行")
         }
       } else {
-        Sender.sendGroup(executeGroup, "权限不足")
+        Main.oneBot.sendGroup(executeGroup, "权限不足")
       }
     } catch {
       case e: Exception =>
-        var msg = e.getMessage
-        for (i <- e.getStackTrace) {
-          msg += "\n" + i.toString
-        }
-        Sender.sendGroup(executeGroup, "出现错误：" + msg)
+        ErrorProcess.logGroup(executeGroup, e)
     }
   }
   def deop(userId: Long, executeGroup: Long, executor: Long): Unit = {
@@ -61,20 +58,16 @@ object Admin {
           adminMap.replace("admin", admins)
           Main.adminData.setData(adminMap)
           Main.adminData.write(new File("admin.json"))
-          Sender.sendGroup(executeGroup, "成功执行")
+          Main.oneBot.sendGroup(executeGroup, "成功执行")
         } else {
-          Sender.sendGroup(executeGroup, "不是管理")
+          Main.oneBot.sendGroup(executeGroup, "不是管理")
         }
       } else {
-        Sender.sendGroup(executeGroup, "权限不足")
+        Main.oneBot.sendGroup(executeGroup, "权限不足")
       }
     } catch {
       case e: Exception =>
-        var msg = e.getMessage
-        for (i <- e.getStackTrace) {
-          msg += "\n" + i.toString
-        }
-        Sender.sendGroup(executeGroup, "出现错误：" + msg)
+        ErrorProcess.logGroup(executeGroup, e)
     }
   }
   def disable(groupId: Long, executor: Long): Unit = {
@@ -86,24 +79,20 @@ object Admin {
         //  disabledGroups = new java.util.ArrayList[Long]()
         //}
         if (disabledGroups.contains(groupId)) {
-          Sender.sendGroup(groupId, "已经是禁用状态")
+          Main.oneBot.sendGroup(groupId, "已经是禁用状态")
         } else {
           disabledGroups.add(groupId)
           adminMap.replace("disabled_group", disabledGroups)
           Main.adminData.setData(adminMap)
           Main.adminData.write(new File("admin.json"))
-          Sender.sendGroup(groupId, "成功执行")
+          Main.oneBot.sendGroup(groupId, "成功执行")
         }
       } else {
-        Sender.sendGroup(groupId, "权限不足")
+        Main.oneBot.sendGroup(groupId, "权限不足")
       }
     } catch {
       case e: Exception =>
-        var msg = e.getMessage
-        for (i <- e.getStackTrace) {
-          msg += "\n" + i.toString
-        }
-        Sender.sendGroup(groupId, "出现错误：" + msg)
+        ErrorProcess.logGroup(groupId, e)
     }
   }
   def enable(groupId: Long, executor: Long): Unit = {
@@ -116,20 +105,16 @@ object Admin {
           adminMap.replace("disabled_group", disabledGroups)
           Main.adminData.setData(adminMap)
           Main.adminData.write(new File("admin.json"))
-          Sender.sendGroup(groupId, "成功执行")
+          Main.oneBot.sendGroup(groupId, "成功执行")
         } else {
-          Sender.sendGroup(groupId, "不是禁用状态")
+          Main.oneBot.sendGroup(groupId, "不是禁用状态")
         }
-     } else {
-        Sender.sendGroup(groupId, "权限不足")
+      } else {
+        Main.oneBot.sendGroup(groupId, "权限不足")
       }
    } catch {
       case e: Exception =>
-        var msg = e.getMessage
-        for (i <- e.getStackTrace) {
-          msg += "\n" + i.toString
-        }
-        Sender.sendGroup(groupId, "出现错误：" + msg)
+        ErrorProcess.logGroup(groupId, e)
     }
  }
 }

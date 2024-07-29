@@ -1,10 +1,11 @@
 package am9.olbcore.onebot.feature
 
+import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.onebot.OneBot
 import cn.hutool.json.{JSONObject, JSONUtil}
 
 import java.io.{BufferedReader, InputStreamReader}
 import java.net.{HttpURLConnection, URL}
-
 import java.nio.charset.StandardCharsets
 
 object WebThings {
@@ -31,13 +32,13 @@ object WebThings {
       val json = JSONUtil.parseObj(webQuery(s"https://api.leafone.cn/api/icp?name=${domain}"))
       if (!json.getStr("code").equals("200")) {
         if (json.getStr("code").equals("404")) {
-          Sender.sendGroup(group, "未备案")
+          Main.oneBot.sendGroup(group, "未备案")
         } else {
           throw new RuntimeException(s"Request failed ${json.getStr("msg")}")
         }
       } else {
         val info = json.getJSONObject("data").get("list").asInstanceOf[java.util.List[JSONObject]].get(0)
-        Sender.sendGroup(group,
+        Main.oneBot.sendGroup(group,
           s"""${info.getStr("domain")}的备案信息如下：
             |备案号：${info.getStr("mainLicence")}""".stripMargin)
       }
@@ -52,7 +53,7 @@ object WebThings {
       if ((!json.getStr("code").equals("1")) || json.getStr("msg").contains("维护")) {
         throw new RuntimeException(s"Request failed ${json.getStr("msg")}")
       } else {
-        Sender.sendGroup(group, "短链接为" + json.getStr("ae_url"))
+        Main.oneBot.sendGroup(group, "短链接为" + json.getStr("ae_url"))
       }
     } catch {
       case e: Throwable =>
@@ -70,7 +71,7 @@ object WebThings {
       } else {
         ret = s"${json.getStr("hitokoto")}    ——《${json.getStr("from")}》${json.getStr("from_who")}"
       }
-      Sender.sendGroup(group, ret)
+      Main.oneBot.sendGroup(group, ret)
     } catch {
       case e: Throwable =>
         ErrorProcess.logGroup(group, e)

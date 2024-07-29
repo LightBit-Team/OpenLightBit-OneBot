@@ -2,6 +2,7 @@ package am9.olbcore.onebot
 package feature
 
 import am9.olbcore.onebot.misc.Terminal
+import am9.olbcore.onebot.onebot.OneBot
 import cn.hutool.json.{JSONObject, JSONUtil}
 
 import java.util.Random
@@ -67,18 +68,18 @@ object Parser {
     try {
       if (!Admin.isDisabled(groupId)) {
         if (str.startsWith(s"${p}test")) {
-          Sender.sendGroup(groupId, "Hello, World!")
+          Main.oneBot.sendGroup(groupId, "Hello, World!")
         }
         if (str.startsWith(s"${p}version")) {
           val rd = new Random()
-          Sender.sendGroup(groupId,
+          Main.oneBot.sendGroup(groupId,
             s"""OpenLightBit version ${Main.version}
                |更新内容：${Main.changelog}
                |------------
                |${Main.splashes.get((rd.nextDouble() * (Main.splashes.size() - 1)).round.toInt)}""".stripMargin)
         }
         if (str.startsWith(s"${p}help")) {
-          Sender.sendGroup(groupId,
+          Main.oneBot.sendGroup(groupId,
             """OpenLightBit 帮助
               |------------
               |!version    !deop
@@ -92,18 +93,18 @@ object Parser {
               |欢迎使用！""".stripMargin)
         }
         if (str.startsWith(s"${p}ping")) {
-          Sender.sendGroup(groupId, "Pong!")
+          Main.oneBot.sendGroup(groupId, "Pong!")
         }
         if (str.startsWith(s"${p}echo")) {
           val args = str.split(" ")
-          Sender.sendGroup(groupId, args.apply(1))
+          Main.oneBot.sendGroup(groupId, args.apply(1))
         }
         if (str.startsWith(s"${p}op")) {
           val args = str.split(" ")
           if (args.length == 2) {
             Admin.op(args.apply(1).toLong, groupId, senderId)
           } else {
-            Sender.sendGroup(groupId, "格式错误")
+            Main.oneBot.sendGroup(groupId, "格式错误")
           }
         }
         if (str.startsWith(s"${p}deop")) {
@@ -111,7 +112,7 @@ object Parser {
           if (args.length == 2) {
             Admin.deop(args.apply(1).toLong, groupId, senderId)
           } else {
-            Sender.sendGroup(groupId, "格式错误")
+            Main.oneBot.sendGroup(groupId, "格式错误")
           }
         }
         if (str.startsWith(s"${p}disable")) {
@@ -126,9 +127,9 @@ object Parser {
               case "info" => BreadFactory.getInfo(groupId)
               case "upgrade" => BreadFactory.upgrade(groupId)
           } catch {
-            case e: IndexOutOfBoundsException => Sender.sendGroup(groupId, "格式错误")
-            case e: NumberFormatException => Sender.sendGroup(groupId, "格式错误")
-            case e: MatchError => Sender.sendGroup(groupId, "格式错误")
+            case e: IndexOutOfBoundsException => Main.oneBot.sendGroup(groupId, "格式错误")
+            case e: NumberFormatException => Main.oneBot.sendGroup(groupId, "格式错误")
+            case e: MatchError => Main.oneBot.sendGroup(groupId, "格式错误")
           }
         }
         if (str.startsWith(s"${p}icp")) {
@@ -149,13 +150,13 @@ object Parser {
         if (str.startsWith(s"${p}info")) {
           val args = str.split(" ")
           if (args.length < 2) {
-            Sender.sendGroup(groupId, "格式错误")
+            Main.oneBot.sendGroup(groupId, "格式错误")
             return
           } else {
             args.apply(1) match 
-              case "src" => Sender.sendGroup(groupId, "OpenLightBit")
-              case "copyright" => Sender.sendGroup(groupId, Main.copyright)
-              case _ => Sender.sendGroup(groupId, "格式错误")
+              case "src" => Main.oneBot.sendGroup(groupId, "OpenLightBit")
+              case "copyright" => Main.oneBot.sendGroup(groupId, Main.copyright)
+              case _ => Main.oneBot.sendGroup(groupId, "格式错误")
           }
         }
       }

@@ -4,7 +4,7 @@ import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.misc.{Terminal, YuShengJun}
 import cn.hutool.log.{Log, LogFactory}
 import config.{AdminData, Bread, Config}
-import onebot.{Connect, OneBotWS}
+import onebot.{Connect, OneBotWS, OneBot}
 import org.jetbrains.annotations.Nullable
 
 import java.io.File
@@ -14,6 +14,7 @@ import java.util.Timer
 object Main {
   var logger: Log = LogFactory.get(YuShengJun().getClass)
   var oneBotWS: OneBotWS = null
+  var oneBot: OneBot = null
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
@@ -64,7 +65,7 @@ object Main {
         bread.write(breadFile)
       }
       bread = bread.read(breadFile)
-      Connect.connect()
+      oneBot = Connect.getConnection
       val timer = new Timer()
       timer.schedule(BreadFactory.makeBread, 20000)
       timer.schedule(BreadFactory.getMaterial, 25000)

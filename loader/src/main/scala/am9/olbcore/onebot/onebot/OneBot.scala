@@ -1,6 +1,9 @@
 package am9.olbcore.onebot
 package onebot
 
-class OneBot {
+import cn.hutool.json.{JSONObject, JSONUtil}
 
+trait OneBot {
+  def sendGroup(groupId: Long, message: String): Unit
+  def sendGroupWithCqCode(groupId: Long, message: String): Unit
 }

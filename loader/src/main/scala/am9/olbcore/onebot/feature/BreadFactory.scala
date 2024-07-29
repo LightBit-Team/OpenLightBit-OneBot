@@ -1,6 +1,7 @@
 package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.onebot.OneBot
 import cn.hutool.json.JSONObject
 
 import java.util.TimerTask
@@ -22,9 +23,9 @@ object BreadFactory {
       })
       Main.bread.setData(breadMap)
       Main.bread.write(new File("bread.json"))
-      Sender.sendGroup(groupId, "执行成功！")
+      Main.oneBot.sendGroup(groupId, "执行成功！")
     } else {
-      Sender.sendGroup(groupId, "本群已经有面包厂了！")
+      Main.oneBot.sendGroup(groupId, "本群已经有面包厂了！")
     }
   }
   def getBread(groupId: Long, number: Int): Unit = {
@@ -34,12 +35,12 @@ object BreadFactory {
       if (json.getStr("mode") == "default") {
         if (json.getInt("bread") >= number && number < 100) {
           json.set("bread", json.getInt("bread") - number)
-          Sender.sendGroup(groupId, s"成功获取${number}个面包！")
+          Main.oneBot.sendGroup(groupId, s"成功获取${number}个面包！")
         } else {
-          Sender.sendGroup(groupId, "面包不够！")
+          Main.oneBot.sendGroup(groupId, "面包不够！")
         }
       } else {
-        Sender.sendGroup(groupId, "本群没有面包厂！")
+        Main.oneBot.sendGroup(groupId, "本群没有面包厂！")
       }
     }
   }
@@ -48,7 +49,7 @@ object BreadFactory {
     if (breadMap.get(groupId.toString) != null) {
       val json = breadMap.get(groupId.toString).asInstanceOf[JSONObject]
       if (json.getStr("mode") == "default") {
-        Sender.sendGroup(groupId,
+        Main.oneBot.sendGroup(groupId,
           s"""群号：${groupId}
              |面包数量：${json.getInt("bread")}
              |面包最大值：${json.getInt("bread_max")}
@@ -60,7 +61,7 @@ object BreadFactory {
              |""".stripMargin)
       }
     } else {
-      Sender.sendGroup(groupId, "本群没有面包厂！")
+      Main.oneBot.sendGroup(groupId, "本群没有面包厂！")
     }
   }
   def upgrade(groupId: Long): Unit = {
@@ -72,16 +73,16 @@ object BreadFactory {
           json.set("level", json.getInt("level") + 1)
           json.set("bread_max", json.getInt("level") * 300)
         } else {
-          Sender.sendGroup(groupId, s"没有足够经验，要求${(json.getInt("level") + 1).*(300)}")
+          Main.oneBot.sendGroup(groupId, s"没有足够经验，要求${(json.getInt("level") + 1).*(300)}")
         }
       } else {
-        Sender.sendGroup(groupId, "不支持的操作！！")
+        Main.oneBot.sendGroup(groupId, "不支持的操作！！")
       }
       Main.bread.setData(breadMap)
       Main.bread.write(new File("bread.json"))
-      Sender.sendGroup(groupId, "升级成功！")
+      Main.oneBot.sendGroup(groupId, "升级成功！")
     } else {
-      Sender.sendGroup(groupId, "本群没有面包厂！")
+      Main.oneBot.sendGroup(groupId, "本群没有面包厂！")
     }
   }
   def expReward(groupId: Long): Unit = {
