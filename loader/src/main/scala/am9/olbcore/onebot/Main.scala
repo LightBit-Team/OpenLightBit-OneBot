@@ -3,8 +3,10 @@ package am9.olbcore.onebot
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.misc.{Terminal, YuShengJun}
 import cn.hutool.log.{Log, LogFactory}
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import config.{AdminData, Bread, Config}
-import onebot.{Connect, OneBotWS, OneBot}
+import onebot.{Connect, OneBot, OneBotWS}
 import org.jetbrains.annotations.Nullable
 
 import java.io.File
@@ -13,6 +15,8 @@ import java.util.Timer
 
 object Main {
   var logger: Log = LogFactory.get(YuShengJun().getClass)
+  var jb: GsonBuilder = new GsonBuilder()
+  var json: Gson = jb.setPrettyPrinting().create()
   var oneBotWS: OneBotWS = null
   var oneBot: OneBot = null
   var config: Config = new Config()
@@ -34,7 +38,7 @@ object Main {
     "这条标语虽然没有用，但是是有用的，因为他被加上了标语",
     "使用Scala编写！"
   )
-  val copyright =
+  val copyright: String =
     """OpenLightBit-OneBot
       |版权所有（C）2024 Emerald-AM9
       |本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。

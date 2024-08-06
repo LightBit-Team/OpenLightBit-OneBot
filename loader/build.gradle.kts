@@ -30,12 +30,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket
     implementation("org.java-websocket:Java-WebSocket:1.5.7")
 
-
-
     // This dependency is used by the application.
     implementation(libs.guava)
 
     implementation("org.jetbrains:annotations:24.1.0")
+
+    implementation("com.google.code.gson:gson:2.11.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

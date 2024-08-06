@@ -1,11 +1,10 @@
 package am9.olbcore.onebot
 package onebot
 
-import feature.{BreadFactory, Parser}
+import am9.olbcore.onebot.feature.Parser
+import cn.hutool.json.{JSONObject, JSONUtil}
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
-import am9.olbcore.onebot.onebot.OneBot
-import cn.hutool.json.{JSONObject, JSONUtil}
 
 import java.net.URI
 
