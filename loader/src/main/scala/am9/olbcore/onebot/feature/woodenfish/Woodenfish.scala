@@ -3,30 +3,30 @@ package am9.olbcore.onebot.feature.woodenfish
 import am9.olbcore.onebot.Main
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
-import org.jetbrains.annotations.{NonNls, Nullable}
-import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
+import com.google.gson.annotations.Expose
+import org.jetbrains.annotations.Nullable
 
-import java.util
 import java.io.File
+import java.util
 import scala.util.control.Breaks.break
 
 // 2kbit-intp woodenfish java-licious edition
 
 class Woodenfish {
   var playerid: Long = 0L
-  var time: Long = 0L
-  var level: Int = 1
+  @Expose private var time: Long = 0L
+  @Expose private var level: Int = 1
   var gongde: Long = 0L
   var e: Double = 0D
   var ee: Double = 0D
   var nirvana: Double = 1D
-  var ban: Int = 0
-  var dt: Long = 946656000
-  var end_time: Long = 946656000
-  var hit_count: Int = 0
-  var info_time: Long = 946656000
-  var info_count: Int = 0
-  var info_ctrl: Long = 946656000
+  @Expose private var ban: Int = 0
+  @Expose private var dt: Long = 946656000
+  @Expose private var end_time: Long = 946656000
+  @Expose private var hit_count: Int = 0
+  @Expose private var info_time: Long = 946656000
+  @Expose private var info_count: Int = 0
+  @Expose private var info_ctrl: Long = 946656000
   var total_ban: Int = 0
   def genValue(id: Long): Unit = {
     playerid = id
@@ -150,10 +150,11 @@ class Woodenfish {
     Woodenfishes.woodenfishes.add(this)
   }
   def info(group: Long): Unit = {
+    @Nullable val woodenfish = Woodenfishes.getWoodenfish(playerid)
     var status = ""
     var tips = ""
     val timeNow = DateUtil.date().toTimestamp.getTime
-    if (Woodenfishes.getWoodenfish(playerid) != null) {
+    if (woodenfish != null) {
       getExperience()
       if (info_ctrl < timeNow) {
         ban match {
@@ -201,6 +202,40 @@ class Woodenfish {
               |低级功德储备：${expressions.apply(2)} ${expressions.apply(3)}
               |$tips""".stripMargin)
         }
+        if (this != woodenfish) {
+          Woodenfishes.woodenfishes.remove(woodenfish)
+          Woodenfishes.woodenfishes.add(this)
+        }
+      }
+    } else {
+      Main.oneBot.sendGroup(group, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
+    }
+  }
+  def upgrade(group: Long, @Nullable upgradingLevel: Int): Unit = {
+    if (Woodenfishes.getWoodenfish(playerid) != null) {
+      if (upgradingLevel > 0 && ban == 0) {
+        val neededE = level + upgradingLevel + 2
+        if (e >= neededE) {
+          Woodenfishes.woodenfishes.remove(this)
+          e -= neededE
+          level += (if (Option(upgradingLevel).isDefined) upgradingLevel else 1)
+          Woodenfishes.woodenfishes.add(this)
+          Main.oneBot.sendGroup(group, "木鱼升级成功辣（喜）")
+        } else if (Math.pow(10, ee) + e >= neededE) {
+          Woodenfishes.woodenfishes.remove(this)
+          e = 0
+          ee = Math.log10(Math.pow(10, ee) + e) - neededE
+          level += (if (Option(upgradingLevel).isDefined) upgradingLevel else 1)
+          Woodenfishes.woodenfishes.add(this)
+          Main.oneBot.sendGroup(group, "木鱼升级成功辣（喜）")
+        } else {
+          Main.oneBot.sendGroup(group, "升级个毛啊？宁踏马功德不够（恼）")
+        }
+      } else if (ban != 0) {
+        Main.oneBot.sendGroup(group, "升级个毛啊？宁踏马被佛祖封号辣（恼）")
+      } else if (Option(upgradingLevel).isDefined && upgradingLevel <= 0) {
+        //此处改为抛出异常
+        throw new IllegalArgumentException("升级个毛啊？宁这数字踏马怎么让我理解？（恼）")
       }
     } else {
       Main.oneBot.sendGroup(group, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
