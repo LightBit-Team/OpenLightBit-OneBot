@@ -1,6 +1,8 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
+
+import java.util.TimerTask
 //import am9.olbcore.onebot.feature.woodenfish.Woodenfish
 import cn.hutool.core.io.FileUtil
 import com.google.gson.reflect.TypeToken
@@ -30,5 +32,10 @@ object Woodenfishes {
       }
     })
     null
+  }
+  val autoSave = new TimerTask {
+    override def run(): Unit = {
+      write(new File("woodenfish.json"))
+    }
   }
 }

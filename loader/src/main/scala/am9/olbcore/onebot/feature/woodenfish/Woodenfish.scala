@@ -4,8 +4,11 @@ import am9.olbcore.onebot.Main
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
 import org.jetbrains.annotations.{NonNls, Nullable}
+import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 
 import java.util
+import java.io.File
+import scala.util.control.Breaks.break
 
 // 2kbit-intp woodenfish java-licious edition
 
@@ -65,11 +68,12 @@ class Woodenfish {
         }
         Woodenfishes.woodenfishes.remove(woodenfish)
         Woodenfishes.woodenfishes.add(this)
+        Woodenfishes.write(new File("woodenfish.json"))
       } else {
         Main.oneBot.sendGroup(group, "banned")
       }
     } else {
-      Main.oneBot.sendGroup(group, "not_reg")
+      Main.oneBot.sendGroup(group, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
     }
   }
   def conversion(): Unit = {
@@ -87,12 +91,119 @@ class Woodenfish {
     }
   }
   def getExpression: Array[String] = {
-    // todo
     var expression = ""
     var expressionLow = ""
-    Array[String](expression, expressionLow)
+    var gongdeLocal = ""
+    var gongdeLow = ""
+    if (ee >= 1) {
+      expression = "(10^10^" + Math.floor(10000 * ee) / 10000 + ")"
+      expressionLow = "(10^" + Math.floor(10000 * e) / 10000 + ")"
+      gongdeLocal = "ee" + Math.floor(10000 * ee) / 10000 + "（" + expression + "）"
+      gongdeLow = "\ne（log10）：" + Math.floor(10000 * e) / 10000 + "（" + expressionLow + "）\n原始功德：" + gongde
+    } else if (e >= 1) {
+      expression = "(10^" + Math.floor(10000 * e) / 10000 + ")"
+      gongdeLocal = "ee" + Math.floor(10000 * e) / 10000 + "（" + expression + "）"
+      gongdeLow = "原始功德：" + gongde
+    } else {
+      gongdeLocal = gongde.toString
+      gongdeLow = "无"
+    }
+    Array[String](expression, expressionLow, gongdeLocal, gongdeLow)
+  }
+  def autoNirvana: Boolean = {
+    if (ee >= 300) {
+      Woodenfishes.woodenfishes.remove(this)
+      if (nirvana + 0.02 < 5) {
+        nirvana += 0.02
+      } else {
+        nirvana = 5
+      }
+      level = 1
+      gongde = 0
+      e = 0
+      ee = 0
+      Woodenfishes.woodenfishes.add(this)
+      true
+    } else {
+      false
+    }
+  }
+  def getExperience(): Unit = {
+    Woodenfishes.woodenfishes.remove(this)
+    val timeNow = DateUtil.date().toTimestamp.getTime
+    if (ban != 0) return
+    val cycleSpeed = Math.ceil(60 * Math.pow(0.978, level - 1))
+    val elapsedTime = timeNow - time
+    if (elapsedTime < cycleSpeed) return
+    val cycles = if (level + 11 > Math.floor(elapsedTime / cycleSpeed)) Math.floor(elapsedTime / cycleSpeed).toInt else level + 11
+    val actualCycles = if (cycles > 120) 120 else cycles
+    for (i <- 0 until actualCycles) {
+      if (e >= 200) break
+      e = Math.log10(Math.pow(10, e) + gongde) * Math.pow(2.7D, nirvana) + level
+      gongde = Math.round(Math.pow(10, e - Math.floor(e)))
+    }
+    if (e < 6) {
+      e = 0
+      gongde = Math.round(Math.pow(10, e) + gongde)
+    }
+    time = timeNow - (elapsedTime % cycleSpeed).toLong
+    Woodenfishes.woodenfishes.add(this)
   }
   def info(group: Long): Unit = {
-    ???
+    var status = ""
+    var tips = ""
+    val timeNow = DateUtil.date().toTimestamp.getTime
+    if (Woodenfishes.getWoodenfish(playerid) != null) {
+      getExperience()
+      if (info_ctrl < timeNow) {
+        ban match {
+          case 0 =>
+            status = "正常"
+            tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
+            conversion()
+          case 1 =>
+            status = "永久封禁中"
+            tips = "【我说那个佛祖啊，我刚刚在刷功德的时候，你有在偷看罢？】"
+          case 2 =>
+            if (timeNow < dt) {
+              val banUntil = DateUtil.date(dt).toString
+              status = s"暂时封禁中（直至：$banUntil）"
+              tips = "【待封禁结束后，可发送“我的木鱼”解封】"
+            } else {
+              ban = 0
+              time = timeNow
+              status = "正常"
+              tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
+            }
+        }
+        if (timeNow - info_time <= 10) {
+          info_count += 1
+        } else {
+          info_count = 1
+          info_time = timeNow
+        }
+        if (autoNirvana) {
+          Main.oneBot.sendGroup(group, "宁踏马功德太多辣（恼）（已自动涅槃重生，涅槃值+0.2）")
+        }
+        val expressions = getExpression
+        if (timeNow - info_time <= 10 && info_count > 5) {
+          info_ctrl = timeNow + 180
+          info_count = 0
+          Main.oneBot.sendGroup(group, "宁踏马3分钟之内也别想用我的木鱼辣（恼）")
+        } else {
+          Main.oneBot.sendGroup(group,
+            s"""赛博账号：$playerid
+              |账号状态：$status
+              |木鱼等级：$level
+              |涅槃值：$nirvana
+              |当前速度：${Math.ceil(60 * Math.pow(0.978, level - 1))} 秒/周期
+              |当前功德：${expressions.apply(0)} ${expressions.apply(1)}
+              |低级功德储备：${expressions.apply(2)} ${expressions.apply(3)}
+              |$tips""".stripMargin)
+        }
+      }
+    } else {
+      Main.oneBot.sendGroup(group, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
+    }
   }
 }
