@@ -7,6 +7,7 @@ import cn.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
+import java.beans.Transient
 import java.util
 import scala.util.control.Breaks.break
 
@@ -14,18 +15,18 @@ class Woodenfish extends YuShengJun {
   @Expose private var playerid: Long = 0L
   @Expose private var time: Long = 0L
   @Expose private var level: Int = 1
-  var gongde: Long = 0L
+  var gongde: Int = 0
   var e: Double = 0D
   var ee: Double = 0D
   var nirvana: Double = 1D
   @Expose private var ban: Int = 0
-  @Expose private var dt: Long = 946656000
-  @Expose private var end_time: Long = 946656000
+  @Expose private var dt: Long = 946656000000L
+  @Expose private var end_time: Long = 946656000000L
   @Expose private var hit_count: Int = 0
-  @Expose private var info_time: Long = 946656000
+  @Expose private var info_time: Long = 946656000000L
   @Expose private var info_count: Int = 0
-  @Expose private var info_ctrl: Long = 946656000
-  private val p = Main.config.getData.get("command-prefix").toString
+  @Expose private var info_ctrl: Long = 946656000000L
+  @Transient private val p = Main.config.getData.get("command-prefix").toString
   var total_ban: Int = 0
   def register(id: Long, group: Long): Unit = {
     if (Woodenfishes.getWoodenfish(id) == null) {
@@ -44,22 +45,23 @@ class Woodenfish extends YuShengJun {
       if (ban == 0) {
         val add = util.List.of[Int](1, 4, 5)
         val r = RandomUtil.randomInt(0, add.size())
-        if (timeNow - end_time <= 3000) {
+        if (timeNow - end_time <= 5000) {
           hit_count += 1
+          Terminal.debug(s"hitcount+1=$hit_count")
         } else {
           hit_count = 1
           end_time = timeNow
         }
-        if (timeNow - end_time <= 3000 && hit_count > 5 && total_ban < 4) {
+        if (timeNow - end_time <= 5000 && hit_count > 5 && total_ban < 4) {
           ban = 2
           hit_count = 0
           total_ban += 1
-          gongde = (gongde * 0.5).toLong
+          gongde = (gongde * 0.5).toInt
           ee *= 0.5
           e *= 0.5
           dt = timeNow + 5400000
           Main.oneBot.sendGroup(group, "DoS佛祖是吧？这就给你封了（恼）（你被封禁90分钟，功德扣掉50%）")
-        } else if (timeNow - end_time <= 3000 && hit_count > 5 && total_ban == 4) {
+        } else if (timeNow - end_time <= 5000 && hit_count > 5 && total_ban == 4) {
           ban = 1
           hit_count = 0
           total_ban = 5
@@ -110,12 +112,12 @@ class Woodenfish extends YuShengJun {
       gongdeLocal = gongde.toString
       gongdeLow = "无"
     }
-    Array[String](expression, expressionLow, gongdeLocal, gongdeLow)
+    Array[String](gongdeLocal, expression, gongdeLow, expressionLow)
   }
   private def autoNirvana: Boolean = {
     if (ee >= 300) {
-      if (nirvana + 0.02 < 5) {
-        nirvana += 0.02
+      if (nirvana + 0.2 < 5) {
+        nirvana += 0.2
       } else {
         nirvana = 5
       }
@@ -141,14 +143,14 @@ class Woodenfish extends YuShengJun {
       for (i <- 0 until actualCycles) {
         if (e >= 200) break
         e = Math.log10(Math.pow(10, e) + gongde) * Math.pow(2.7D, nirvana) + level
-        gongde = Math.round(Math.pow(10, e - Math.floor(e)))
+        gongde = Math.round(Math.pow(10, e - Math.floor(e))).toInt
       }
     } catch {
       case e: Throwable => Terminal.debug("break是抛出的？" + e)
     }
     if (e < 6) {
       e = 0
-      gongde = Math.round(Math.pow(10, e) + gongde)
+      gongde = Math.round(Math.pow(10, e) + gongde).toInt
     }
     time = timeNow - (elapsedTime % cycleSpeed).toLong
     Woodenfishes.woodenfishes.put(playerid, this)
@@ -189,7 +191,7 @@ class Woodenfish extends YuShengJun {
           Main.oneBot.sendGroup(group, "宁踏马功德太多辣（恼）（已自动涅槃重生，涅槃值+0.2）")
         }
         val expressions = getExpression
-        if (timeNow - info_time <= 10 && info_count > 5) {
+        if (timeNow - info_time <= 10000 && info_count > 5) {
           info_ctrl = timeNow + 180000
           info_count = 0
           Woodenfishes.woodenfishes.put(playerid, this)

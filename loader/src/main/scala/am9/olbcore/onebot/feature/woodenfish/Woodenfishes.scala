@@ -1,7 +1,6 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.misc.Terminal
 import cn.hutool.core.map.MapUtil
 
 import java.util.TimerTask
@@ -40,19 +39,19 @@ object Woodenfishes {
     if (!woodenfishes.isEmpty) {
       var resultEe: util.Map[Long, Double] = new util.HashMap[Long, Double]()
       var resultE: util.Map[Long, Double] = new util.HashMap[Long, Double]()
-      var resultRaw: util.Map[Long, Long] = new util.HashMap[Long, Long]()
+      var resultRaw: util.Map[Long, Int] = new util.HashMap[Long, Int]()
       woodenfishes.forEach((k, v) => {
         if (v.ee > 0) {
           resultEe.put(k, v.ee)
         } else if (v.e > 0) {
           resultE.put(k, v.e)
-        } else {
+        } else if (v.gongde > 0) {
           resultRaw.put(k, v.gongde)
         }
       })
       resultEe = MapUtil.sort[Long, Double](resultEe)
       resultE = MapUtil.sort[Long, Double](resultE)
-      resultRaw = MapUtil.sort[Long, Long](resultRaw)
+      resultRaw = MapUtil.sort[Long, Int](resultRaw)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("功德榜\n赛博账号 --- 功德")
       resultEe.forEach((k, v) => {
@@ -107,7 +106,8 @@ object Woodenfishes {
       Main.oneBot.sendGroup(group, "还没有人注册赛博账号！")
     }
   }
-  val autoSave = new TimerTask {
+
+  val autoSave: TimerTask = new TimerTask {
     override def run(): Unit = {
       write(new File("woodenfish.json"))
     }
