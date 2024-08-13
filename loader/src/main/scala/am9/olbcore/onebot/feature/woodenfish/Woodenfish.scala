@@ -30,7 +30,7 @@ class Woodenfish extends YuShengJun {
   def register(id: Long, group: Long): Unit = {
     if (Woodenfishes.getWoodenfish(id) == null) {
       playerid = id
-      time = DateUtil.date().toTimestamp.getTime
+      time = System.currentTimeMillis
       Woodenfishes.woodenfishes.put(playerid, this)
       Main.oneBot.sendGroup(group, "注册成功")
     } else {
@@ -40,26 +40,26 @@ class Woodenfish extends YuShengJun {
   def hit(group: Long): Unit = {
     @Nullable val woodenfish = Woodenfishes.getWoodenfish(playerid)
     if (Woodenfishes.getWoodenfish(playerid) != null) {
-      val timeNow = DateUtil.date().toTimestamp.getTime
+      val timeNow = System.currentTimeMillis
       if (ban == 0) {
         val add = util.List.of[Int](1, 4, 5)
         val r = RandomUtil.randomInt(0, add.size())
-        if ((timeNow - end_time) <= 3) {
+        if (timeNow - end_time <= 3000) {
           hit_count += 1
         } else {
           hit_count = 1
           end_time = timeNow
         }
-        if ((timeNow - end_time) <= 3 && hit_count > 5 && total_ban < 4) {
+        if (timeNow - end_time <= 3000 && hit_count > 5 && total_ban < 4) {
           ban = 2
           hit_count = 0
           total_ban += 1
           gongde = (gongde * 0.5).toLong
           ee *= 0.5
           e *= 0.5
-          dt = timeNow + 5400
+          dt = timeNow + 5400000
           Main.oneBot.sendGroup(group, "DoS佛祖是吧？这就给你封了（恼）（你被封禁90分钟，功德扣掉50%）")
-        } else if ((timeNow - end_time) <= 3 && hit_count > 5 && total_ban == 4) {
+        } else if (timeNow - end_time <= 3000 && hit_count > 5 && total_ban == 4) {
           ban = 1
           hit_count = 0
           total_ban = 5
@@ -156,7 +156,7 @@ class Woodenfish extends YuShengJun {
   def info(group: Long): Unit = {
     var status = ""
     var tips = ""
-    val timeNow = DateUtil.date().toTimestamp.getTime
+    val timeNow = System.currentTimeMillis
     if (Woodenfishes.getWoodenfish(playerid) != null) {
       getExperience()
       if (info_ctrl < timeNow) {
@@ -179,7 +179,7 @@ class Woodenfish extends YuShengJun {
               status = "正常"
               tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
             }
-        if (timeNow - info_time <= 10) {
+        if (timeNow - info_time <= 10000) {
           info_count += 1
         } else {
           info_count = 1
@@ -190,7 +190,7 @@ class Woodenfish extends YuShengJun {
         }
         val expressions = getExpression
         if (timeNow - info_time <= 10 && info_count > 5) {
-          info_ctrl = timeNow + 180
+          info_ctrl = timeNow + 180000
           info_count = 0
           Woodenfishes.woodenfishes.put(playerid, this)
           Main.oneBot.sendGroup(group, "宁踏马3分钟之内也别想用我的木鱼辣（恼）")
