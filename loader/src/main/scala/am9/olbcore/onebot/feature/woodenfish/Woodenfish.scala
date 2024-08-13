@@ -1,6 +1,7 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.misc.{Misc, YuShengJun}
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose
@@ -10,9 +11,7 @@ import java.io.File
 import java.util
 import scala.util.control.Breaks.break
 
-// 2kbit-intp woodenfish java-licious edition
-
-class Woodenfish {
+class Woodenfish extends YuShengJun {
   var playerid: Long = 0L
   @Expose private var time: Long = 0L
   @Expose private var level: Int = 1
@@ -28,9 +27,14 @@ class Woodenfish {
   @Expose private var info_count: Int = 0
   @Expose private var info_ctrl: Long = 946656000
   var total_ban: Int = 0
-  def genValue(id: Long): Unit = {
-    playerid = id
-    time = DateUtil.date().toTimestamp.getTime
+  def register(id: Long, group: Long): Unit = {
+    if (Woodenfishes.getWoodenfish(id) == null) {
+      playerid = id
+      time = DateUtil.date().toTimestamp.getTime
+      Woodenfishes.woodenfishes.add(this)
+    } else {
+      Main.oneBot.sendGroup(group, "你已注册过，无需重复注册")
+    }
   }
   def hit(group: Long): Unit = {
     @Nullable val woodenfish = Woodenfishes.getWoodenfish(playerid)
@@ -63,6 +67,7 @@ class Woodenfish {
           e = 0
           level = 1
           nirvana = 1
+          Main.oneBot.sendGroup(group, "多次DoS佛祖，死不悔改，罪不可赦（恼）（你被永久封禁，等级、涅槃值重置，功德清零）")
         } else {
           Main.oneBot.sendGroup(group, s"功德+${add.get(r)}")
         }
@@ -70,10 +75,11 @@ class Woodenfish {
         Woodenfishes.woodenfishes.add(this)
         Woodenfishes.write(new File("woodenfish.json"))
       } else {
-        Main.oneBot.sendGroup(group, "banned")
+        Main.oneBot.sendGroup(group, "敲拟吗呢？宁踏马被佛祖封号辣（恼）")
       }
     } else {
-      Main.oneBot.sendGroup(group, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
+      val p = Main.config.getData.get("command-prefix").toString
+      Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
     }
   }
   def conversion(): Unit = {
@@ -157,7 +163,7 @@ class Woodenfish {
     if (woodenfish != null) {
       getExperience()
       if (info_ctrl < timeNow) {
-        ban match {
+        ban match
           case 0 =>
             status = "正常"
             tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
@@ -176,7 +182,6 @@ class Woodenfish {
               status = "正常"
               tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
             }
-        }
         if (timeNow - info_time <= 10) {
           info_count += 1
         } else {
@@ -211,21 +216,22 @@ class Woodenfish {
       Main.oneBot.sendGroup(group, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
     }
   }
-  def upgrade(group: Long, @Nullable upgradingLevel: Int): Unit = {
+  def upgrade(group: Long, upgradingLevel: Int | Null): Unit = {
     if (Woodenfishes.getWoodenfish(playerid) != null) {
-      if (upgradingLevel > 0 && ban == 0) {
-        val neededE = level + upgradingLevel + 2
+      val actualUpgradingLevel = Misc.cond[Int](upgradingLevel.isInstanceOf[Int], upgradingLevel.asInstanceOf[Int], 1)
+      if (actualUpgradingLevel > 0 && ban == 0) {
+        val neededE = level + actualUpgradingLevel + 2
         if (e >= neededE) {
           Woodenfishes.woodenfishes.remove(this)
           e -= neededE
-          level += (if (Option(upgradingLevel).isDefined) upgradingLevel else 1)
+          level += actualUpgradingLevel
           Woodenfishes.woodenfishes.add(this)
           Main.oneBot.sendGroup(group, "木鱼升级成功辣（喜）")
         } else if (Math.pow(10, ee) + e >= neededE) {
           Woodenfishes.woodenfishes.remove(this)
           e = 0
           ee = Math.log10(Math.pow(10, ee) + e) - neededE
-          level += (if (Option(upgradingLevel).isDefined) upgradingLevel else 1)
+          level += actualUpgradingLevel
           Woodenfishes.woodenfishes.add(this)
           Main.oneBot.sendGroup(group, "木鱼升级成功辣（喜）")
         } else {
@@ -233,12 +239,89 @@ class Woodenfish {
         }
       } else if (ban != 0) {
         Main.oneBot.sendGroup(group, "升级个毛啊？宁踏马被佛祖封号辣（恼）")
-      } else if (Option(upgradingLevel).isDefined && upgradingLevel <= 0) {
+      } else if (actualUpgradingLevel <= 0) {
         //此处改为抛出异常
         throw new IllegalArgumentException("升级个毛啊？宁这数字踏马怎么让我理解？（恼）")
+      }
+    } else {
+      val p = Main.config.getData.get("command-prefix").toString
+      Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
+    }
+  }
+  def nirvanaNotGetter(group: Long): Unit = {
+    if (Woodenfishes.getWoodenfish(playerid) != null) {
+      if (nirvana < 5) {
+        if (ban == 0) {
+          if (ee >= 10 + Math.floor((nirvana - 1) / 0.05) * 1.5) {
+            Woodenfishes.woodenfishes.remove(this)
+            nirvana += 0.05D
+            level = 1
+            ee = 0
+            e = 0
+            gongde = 0
+            Woodenfishes.woodenfishes.add(this)
+            Main.oneBot.sendGroup(group, "涅槃重生成功辣（喜）")
+          } else {
+            Main.oneBot.sendGroup(group, "涅槃重生个毛啊？宁踏马功德不够（恼）")
+          }
+        } else {
+          Main.oneBot.sendGroup(group, "涅槃重生个毛啊？宁踏马被佛祖封号辣（恼）")
+        }
+      } else {
+        Main.oneBot.sendGroup(group, "涅槃重生个毛啊？宁踏马已经不能涅槃重生辣（恼）")
+      }
+    } else {
+      val p = Main.config.getData.get("command-prefix").toString
+      Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
+    }
+  }
+  def jue(group: Long): Unit = {
+    if (Woodenfishes.getWoodenfish(playerid) != null) {
+      if (ban == 0) {
+        Woodenfishes.woodenfishes.remove(this)
+        ban = 1
+        Woodenfishes.woodenfishes.add(this)
+        Main.oneBot.sendGroup(group, "敢撅佛祖？罪不可赦（恼）（你被永久封禁）")
+      } else {
+        Main.oneBot.sendGroup(group, "撅拟吗呢？宁踏马被佛祖封号辣（恼）")
       }
     } else {
       Main.oneBot.sendGroup(group, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
     }
   }
+
+  override def toString: String = {
+    val expressions = getExpression
+    var status: String = null
+    var tips: String = null
+    ban match
+      case 0 =>
+        status = "正常"
+        tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
+      case 1 =>
+        status = "永久封禁中"
+        tips = "【我说那个佛祖啊，我刚刚在刷功德的时候，你有在偷看罢？】"
+      case 2 =>
+        val timeNow = DateUtil.date().toTimestamp.getTime
+        if (timeNow < dt) {
+          val banUntil = DateUtil.date(dt).toString
+          status = s"暂时封禁中（直至：$banUntil）"
+          tips = "【待封禁结束后，可发送“我的木鱼”解封】"
+        } else {
+          ban = 0
+          time = timeNow
+          status = "正常"
+          tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
+        }
+    s"""赛博账号：$playerid
+       |账号状态：$status
+       |木鱼等级：$level
+       |涅槃值：$nirvana
+       |当前速度：${Math.ceil(60 * Math.pow(0.978, level - 1))} 秒/周期
+       |当前功德：${expressions.apply(0)} ${expressions.apply(1)}
+       |低级功德储备：${expressions.apply(2)} ${expressions.apply(3)}
+       |$tips"""
+  }
+
+  override def equals(obj: Any): Boolean = this.toString == obj.toString
 }

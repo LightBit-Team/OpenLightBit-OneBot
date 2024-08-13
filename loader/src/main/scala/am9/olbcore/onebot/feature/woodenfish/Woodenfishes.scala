@@ -14,8 +14,6 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util
 
-import am9.olbcore.onebot.feature.woodenfish.Woodenfish
-
 object Woodenfishes {
   var woodenfishes: util.List[Woodenfish] = new util.ArrayList[Woodenfish]()
   def read(dir: File): Unit = {
