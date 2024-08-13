@@ -1,6 +1,7 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.misc.Account
 import cn.hutool.core.map.MapUtil
 
 import java.util.TimerTask
@@ -37,30 +38,27 @@ object Woodenfishes {
   }
   def gongdeLeaderboard(group: Long): Unit = {
     if (!woodenfishes.isEmpty) {
-      var resultEe: util.Map[String, Double] = new util.HashMap[String, Double]()
-      var resultE: util.Map[String, Double] = new util.HashMap[String, Double]()
-      var resultRaw: util.Map[String, Int] = new util.HashMap[String, Int]()
+      val resultEe: util.Map[Long, java.lang.Double] = new util.HashMap[Long, java.lang.Double]()
+      val resultE: util.Map[Long, java.lang.Double] = new util.HashMap[Long, java.lang.Double]()
+      val resultRaw: util.Map[Long, java.lang.Integer] = new util.HashMap[Long, java.lang.Integer]()
       woodenfishes.forEach((k, v) => {
         if (v.ee > 0) {
-          resultEe.put(k.toString, v.ee)
+          resultEe.put(k, v.ee)
         } else if (v.e > 0) {
-          resultE.put(k.toString, v.e)
+          resultE.put(k, v.e)
         } else if (v.gongde > 0) {
-          resultRaw.put(k.toString, v.gongde)
+          resultRaw.put(k, v.gongde)
         }
       })
-      resultEe = MapUtil.sort[String, Double](resultEe)
-      resultE = MapUtil.sort[String, Double](resultE)
-      resultRaw = MapUtil.sort[String, Int](resultRaw)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("功德榜\n赛博账号 --- 功德")
-      resultEe.forEach((k, v) => {
+      MapUtil.sortByValue[Long, java.lang.Double](resultEe, true).forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- ee" + Math.floor(v * 10000) / 10000)
       })
-      resultE.forEach((k, v) => {
+      MapUtil.sortByValue[Long, java.lang.Double](resultE, true).forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- e" + Math.floor(v * 10000) / 10000)
       })
-      resultRaw.forEach((k, v) => {
+      MapUtil.sortByValue[Long, java.lang.Integer](resultRaw, true).forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- " + v)
       })
       Main.oneBot.sendGroup(group, stringBuilder.toString)
@@ -70,16 +68,15 @@ object Woodenfishes {
   }
   def banLeaderboard(group: Long): Unit = {
     if (!woodenfishes.isEmpty) {
-      var result: util.Map[String, Int] = new util.HashMap[String, Int]()
+      val result: util.Map[Long, java.lang.Integer] = new util.HashMap[Long, java.lang.Integer]()
       woodenfishes.forEach((k, v) => {
         if (v.total_ban > 0) {
-          result.put(k.toString, v.total_ban)
+          result.put(k, v.total_ban)
         }
       })
-      result = MapUtil.sort[String, Int](result)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("封禁榜\n赛博账号 --- 累计封禁次数")
-      result.forEach((k, v) => {
+      MapUtil.sortByValue[Long, java.lang.Integer](result, true).forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- " + v)
       })
       Main.oneBot.sendGroup(group, stringBuilder.toString)
@@ -89,16 +86,15 @@ object Woodenfishes {
   }
   def nirvanaLeaderboard(group: Long): Unit = {
     if (!woodenfishes.isEmpty) {
-      var result: util.Map[String, Double] = new util.HashMap[String, Double]()
+      var result: util.Map[Long, java.lang.Double] = new util.HashMap[Long, java.lang.Double]()
       woodenfishes.forEach((k, v) => {
         if (v.nirvana > 1) {
-          result.put(k.toString, v.nirvana)
+          result.put(k, v.nirvana)
         }
       })
-      result = MapUtil.sort[String, Double](result)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("涅槃榜\n赛博账号 --- 涅槃值")
-      result.forEach((k, v) => {
+      MapUtil.sortByValue[Long, java.lang.Double](result, true).forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- " + v)
       })
       Main.oneBot.sendGroup(group, stringBuilder.toString)
