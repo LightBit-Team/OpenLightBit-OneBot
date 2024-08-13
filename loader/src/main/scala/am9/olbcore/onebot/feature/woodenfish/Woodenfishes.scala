@@ -1,6 +1,7 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.misc.Terminal
 import cn.hutool.core.map.MapUtil
 
 import java.util.TimerTask
@@ -17,8 +18,12 @@ object Woodenfishes {
   var woodenfishes: util.Map[Long, Woodenfish] = new util.HashMap[Long, Woodenfish]()
   def read(dir: File): Unit = {
     val rawJson = FileUtil.readString(dir, StandardCharsets.UTF_8)
-    val t = new TypeToken[util.Map[Long, Woodenfish]](){}.getType
-    woodenfishes = Main.json.fromJson[util.Map[Long, Woodenfish]](rawJson, t)
+    if (rawJson.nonEmpty) {
+      val t = new TypeToken[util.LinkedHashMap[String, Woodenfish]](){}.getType
+      Main.json.fromJson[util.LinkedHashMap[String, Woodenfish]](rawJson, t).forEach((k, v) => {
+        woodenfishes.put(java.lang.Long.parseLong(k), v)
+      })
+    }
   }
   def write(dir: File): Unit = {
     FileUtil.writeString(Main.json.toJson(woodenfishes), dir, StandardCharsets.UTF_8)
@@ -51,10 +56,10 @@ object Woodenfishes {
       val stringBuilder = new StringBuilder()
       stringBuilder.append("功德榜\n赛博账号 --- 功德")
       resultEe.forEach((k, v) => {
-        stringBuilder.append("\n" + k + " --- " + v)
+        stringBuilder.append("\n" + k + " --- ee" + v)
       })
       resultE.forEach((k, v) => {
-        stringBuilder.append("\n" + k + " --- " + v)
+        stringBuilder.append("\n" + k + " --- e" + v)
       })
       resultRaw.forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- " + v)

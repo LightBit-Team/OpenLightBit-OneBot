@@ -187,12 +187,9 @@ object Parser {
                 case "leaderboard" => Woodenfishes.gongdeLeaderboard(groupId)
                 case "leaderboard_nirvana" => Woodenfishes.nirvanaLeaderboard(groupId)
                 case "leaderboard_ban" => Woodenfishes.banLeaderboard(groupId)
-                case _ => Main.oneBot.sendGroup(groupId, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
+                case _ => Main.oneBot.sendGroup(groupId, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
             }
           }
-        }
-        if (str.startsWith(s"${p}wflist")) {
-          Main.oneBot.sendGroup(groupId, Woodenfishes.woodenfishes.toString)
         }
       }
       if (str.startsWith(s"${p}enable")) {

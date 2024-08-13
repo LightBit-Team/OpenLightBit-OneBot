@@ -1,14 +1,14 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.misc.{Misc, YuShengJun}
+import am9.olbcore.onebot.misc.{Misc, Terminal, YuShengJun}
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
-import java.io.File
 import java.util
+import scala.util.boundary.Break
 import scala.util.control.Breaks.break
 
 class Woodenfish extends YuShengJun {
@@ -138,10 +138,14 @@ class Woodenfish extends YuShengJun {
     if (elapsedTime < cycleSpeed) return
     val cycles = if (level + 11 > Math.floor(elapsedTime / cycleSpeed)) Math.floor(elapsedTime / cycleSpeed).toInt else level + 11
     val actualCycles = if (cycles > 120) 120 else cycles
-    for (i <- 0 until actualCycles) {
-      if (e >= 200) break
-      e = Math.log10(Math.pow(10, e) + gongde) * Math.pow(2.7D, nirvana) + level
-      gongde = Math.round(Math.pow(10, e - Math.floor(e)))
+    try {
+      for (i <- 0 until actualCycles) {
+        if (e >= 200) break
+        e = Math.log10(Math.pow(10, e) + gongde) * Math.pow(2.7D, nirvana) + level
+        gongde = Math.round(Math.pow(10, e - Math.floor(e)))
+      }
+    } catch {
+      case e: Throwable => Terminal.debug("break是抛出的？" + e)
     }
     if (e < 6) {
       e = 0
@@ -151,11 +155,10 @@ class Woodenfish extends YuShengJun {
     Woodenfishes.woodenfishes.put(playerid, this)
   }
   def info(group: Long): Unit = {
-    @Nullable val woodenfish = Woodenfishes.getWoodenfish(playerid)
     var status = ""
     var tips = ""
     val timeNow = DateUtil.date().toTimestamp.getTime
-    if (woodenfish != null) {
+    if (Woodenfishes.getWoodenfish(playerid) != null) {
       getExperience()
       if (info_ctrl < timeNow) {
         ban match
@@ -190,6 +193,7 @@ class Woodenfish extends YuShengJun {
         if (timeNow - info_time <= 10 && info_count > 5) {
           info_ctrl = timeNow + 180
           info_count = 0
+          Woodenfishes.woodenfishes.put(playerid, this)
           Main.oneBot.sendGroup(group, "宁踏马3分钟之内也别想用我的木鱼辣（恼）")
         } else {
           Main.oneBot.sendGroup(group,
@@ -201,9 +205,6 @@ class Woodenfish extends YuShengJun {
               |当前功德：${expressions.apply(0)} ${expressions.apply(1)}
               |低级功德储备：${expressions.apply(2)} ${expressions.apply(3)}
               |$tips""".stripMargin)
-        }
-        if (this != woodenfish) {
-          Woodenfishes.woodenfishes.put(playerid, this)
         }
       }
     } else {
@@ -311,7 +312,7 @@ class Woodenfish extends YuShengJun {
        |当前速度：${Math.ceil(60 * Math.pow(0.978, level - 1))} 秒/周期
        |当前功德：${expressions.apply(0)} ${expressions.apply(1)}
        |低级功德储备：${expressions.apply(2)} ${expressions.apply(3)}
-       |$tips"""
+       |$tips""".stripMargin
   }
 
   override def equals(obj: Any): Boolean = this.toString == obj.toString
