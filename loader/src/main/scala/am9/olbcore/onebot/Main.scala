@@ -80,7 +80,9 @@ object Main {
       }
       bread = bread.read(breadFile)
       oneBot = Connect.getConnection
-      Woodenfishes.read(new File("woodenfish.json"))
+      if (new File("woodenfish.json").exists()) {
+        Woodenfishes.read(new File("woodenfish.json"))
+      }
       val timer = new Timer()
       timer.schedule(BreadFactory.makeBread, 20000)
       timer.schedule(BreadFactory.getMaterial, 25000)

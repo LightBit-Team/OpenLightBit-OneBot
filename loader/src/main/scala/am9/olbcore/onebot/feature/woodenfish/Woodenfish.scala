@@ -28,7 +28,7 @@ class Woodenfish extends YuShengJun {
   @Expose private var info_ctrl: Long = 946656000
   var total_ban: Int = 0
   def register(id: Long, group: Long): Unit = {
-    if (Woodenfishes.getWoodenfish(id).playerid != playerid) {
+    if (Woodenfishes.getWoodenfish(id) == null) {
       playerid = id
       time = DateUtil.date().toTimestamp.getTime
       Woodenfishes.woodenfishes.put(new Account(id), this)
