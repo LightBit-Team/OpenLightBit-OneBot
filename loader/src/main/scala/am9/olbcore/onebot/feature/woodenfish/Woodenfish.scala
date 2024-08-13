@@ -7,11 +7,12 @@ import cn.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
+import java.io.File
 import java.util
 import scala.util.control.Breaks.break
 
 class Woodenfish extends YuShengJun {
-  private var playerid: Long = 0L
+  @Expose private var playerid: Long = 0L
   @Expose private var time: Long = 0L
   @Expose private var level: Int = 1
   @Expose var gongde: Int = 0
@@ -25,13 +26,13 @@ class Woodenfish extends YuShengJun {
   @Expose private var info_time: Long = 946656000000L
   @Expose private var info_count: Int = 0
   @Expose private var info_ctrl: Long = 946656000000L
-  private val p = Main.config.getData.get("command-prefix").toString
-  var total_ban: Int = 0
+  @Expose var total_ban: Int = 0
   def register(id: Long, group: Long): Unit = {
     if (Woodenfishes.getWoodenfish(id) == null) {
       playerid = id
       time = System.currentTimeMillis
       Woodenfishes.woodenfishes.put(playerid, this)
+      Woodenfishes.write(new File("woodenfish.json"))
       Main.oneBot.sendGroup(group, "注册成功")
     } else {
       Main.oneBot.sendGroup(group, "你已注册过，无需重复注册")
@@ -46,7 +47,6 @@ class Woodenfish extends YuShengJun {
         val r = RandomUtil.randomInt(0, add.size())
         if (timeNow - end_time <= 5000) {
           hit_count += 1
-          Terminal.debug(s"hitcount+1=$hit_count")
         } else {
           hit_count = 1
           end_time = timeNow
@@ -78,6 +78,7 @@ class Woodenfish extends YuShengJun {
         Main.oneBot.sendGroup(group, "敲拟吗呢？宁踏马被佛祖封号辣（恼）")
       }
     } else {
+      val p = Main.config.getData.get("command-prefix").toString
       Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
     }
   }
@@ -208,6 +209,7 @@ class Woodenfish extends YuShengJun {
         }
       }
     } else {
+      val p = Main.config.getData.get("command-prefix").toString
       Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
     }
   }
@@ -237,6 +239,7 @@ class Woodenfish extends YuShengJun {
         throw new NumberFormatException("升级个毛啊？宁这数字踏马怎么让我理解？（恼）")
       }
     } else {
+      val p = Main.config.getData.get("command-prefix").toString
       Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
     }
   }
@@ -262,6 +265,7 @@ class Woodenfish extends YuShengJun {
         Main.oneBot.sendGroup(group, "涅槃重生个毛啊？宁踏马已经不能涅槃重生辣（恼）")
       }
     } else {
+      val p = Main.config.getData.get("command-prefix").toString
       Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
     }
   }
@@ -275,6 +279,7 @@ class Woodenfish extends YuShengJun {
         Main.oneBot.sendGroup(group, "撅拟吗呢？宁踏马被佛祖封号辣（恼）")
       }
     } else {
+      val p = Main.config.getData.get("command-prefix").toString
       Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
     }
   }
