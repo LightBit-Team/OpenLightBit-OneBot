@@ -32,7 +32,7 @@ object Parser {
             }
           }
           BreadFactory.expReward(json.getLong("group_id"))
-        case "meta_event" => 
+        case "meta_event" =>
           json.getStr("meta_event_type") match
             case "lifecycle" =>
               json.getStr("sub_type") match
@@ -42,7 +42,7 @@ object Parser {
                 case _ => Main.logger.info(str)
             case "heartbeat" => Terminal.debug("We are still alive!")
             case _ => Terminal.debug(str)
-        case "notice" => 
+        case "notice" =>
           json.getStr("notice_type") match
             case "group_upload" => Terminal.debug("群文件上传")
             case "group_admin" => Terminal.debug("群管理员变动")
@@ -65,6 +65,7 @@ object Parser {
       case e: MatchError => Main.logger.info("invalid event", e)
     }
   }
+
   private def parseGroupMessage(senderId: Long, groupId: Long, msgId: Long, str: String): Unit = {
     val p = Main.config.getData.get("command-prefix").toString
     try {
@@ -155,7 +156,7 @@ object Parser {
             Main.oneBot.sendGroup(groupId, "格式错误")
             return
           } else {
-            args.apply(1) match 
+            args.apply(1) match
               case "src" => Main.oneBot.sendGroup(groupId, "OpenLightBit")
               case "copyright" => Main.oneBot.sendGroup(groupId, Main.copyright)
               case _ => Main.oneBot.sendGroup(groupId, "格式错误")
@@ -168,36 +169,39 @@ object Parser {
             return
           } else {
             @Nullable var woodenfish = Woodenfishes.getWoodenfish(senderId)
-            if (woodenfish != null) {
-              args.apply(1) match
-                case "hit" => woodenfish.hit(groupId)
-                case "info" => woodenfish.info(groupId)
-                case "upgrade" => woodenfish.upgrade(groupId, if (args.length < 3) null else Integer.parseInt(args.apply(2)))
-                case "nirvana" => woodenfish.nirvanaNotGetter(groupId)
-                case "jue" => woodenfish.jue(groupId)
-                case "leaderboard" => Woodenfishes.gongdeLeaderboard(groupId)
-                case "leaderboard_nirvana" => Woodenfishes.nirvanaLeaderboard(groupId)
-                case "leaderboard_ban" => Woodenfishes.banLeaderboard(groupId)
-                case _ => Main.oneBot.sendGroup(groupId, "格式错误")
-            } else {
-              args.apply(1) match
-                case "reg" =>
-                  woodenfish = new Woodenfish()
-                  woodenfish.register(senderId, groupId)
-                case "leaderboard" => Woodenfishes.gongdeLeaderboard(groupId)
-                case "leaderboard_nirvana" => Woodenfishes.nirvanaLeaderboard(groupId)
-                case "leaderboard_ban" => Woodenfishes.banLeaderboard(groupId)
-                case _ => Main.oneBot.sendGroup(groupId, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
-            }
+            if (woodenfish == null) woodenfish = new Woodenfish()
+            args.apply(1) match
+              case "hit" => woodenfish.hit(groupId)
+              case "info" => woodenfish.info(groupId)
+              case "upgrade" => woodenfish.upgrade(groupId, if (args.length < 3) null else Integer.parseInt(args.apply(2)))
+              case "nirvana" => woodenfish.nirvanaNotGetter(groupId)
+              case "jue" => woodenfish.jue(groupId)
+              case "leaderboard" => Woodenfishes.gongdeLeaderboard(groupId)
+              case "nirvana_leaderboard" => Woodenfishes.nirvanaLeaderboard(groupId)
+              case "ban_leaderboard" => Woodenfishes.banLeaderboard(groupId)
+              case "reg" =>
+                woodenfish = new Woodenfish()
+                woodenfish.register(senderId, groupId)
+              case _ => Main.oneBot.sendGroup(groupId,
+                """木鱼帮助
+                  |!woodenfish reg：注册赛博账号（给我木鱼）
+                  |!woodenfish hit：敲木鱼
+                  |!woodenfish info：查询木鱼信息
+                  |!woodenfish upgrade <等级数，默认为1>：升级木鱼
+                  |!woodenfish nirvana：涅槃重生
+                  |!woodenfish jue：撅佛祖
+                  |!woodenfish leaderboard：功德榜
+                  |!woodenfish ban_leaderboard：封禁榜
+                  |!woodenfish nirvana_leaderboard：涅槃榜""".stripMargin)
           }
         }
-      }
-      if (str.startsWith(s"${p}enable")) {
-        Admin.enable(groupId, senderId)
+        if (str.startsWith(s"${p}enable")) {
+          Admin.enable(groupId, senderId)
+        }
       }
     } catch {
-      case e: Throwable =>
-        ErrorProcess.logGroup(groupId, e)
+        case e: Throwable =>
+          ErrorProcess.logGroup(groupId, e)
     }
   }
 }
