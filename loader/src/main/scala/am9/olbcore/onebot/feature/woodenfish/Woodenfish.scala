@@ -4,7 +4,7 @@ import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.misc.{Misc, Terminal, YuShengJun}
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
-import com.google.gson.annotations.Expose
+import com.google.gson.annotations.{Expose, SerializedName}
 import org.jetbrains.annotations.Nullable
 
 import java.beans.Transient
@@ -15,10 +15,10 @@ class Woodenfish extends YuShengJun {
   @Expose private var playerid: Long = 0L
   @Expose private var time: Long = 0L
   @Expose private var level: Int = 1
-  var gongde: Int = 0
-  var e: Double = 0D
-  var ee: Double = 0D
-  var nirvana: Double = 1D
+  @Expose var gongde: Int = 0
+  @Expose var e: Double = 0D
+  @Expose var ee: Double = 0D
+  @Expose var nirvana: Double = 1D
   @Expose private var ban: Int = 0
   @Expose private var dt: Long = 946656000000L
   @Expose private var end_time: Long = 946656000000L
@@ -26,7 +26,7 @@ class Woodenfish extends YuShengJun {
   @Expose private var info_time: Long = 946656000000L
   @Expose private var info_count: Int = 0
   @Expose private var info_ctrl: Long = 946656000000L
-  @Transient private val p = Main.config.getData.get("command-prefix").toString
+  private val p = Main.config.getData.get("command-prefix").toString
   var total_ban: Int = 0
   def register(id: Long, group: Long): Unit = {
     if (Woodenfishes.getWoodenfish(id) == null) {

@@ -17,7 +17,7 @@ import java.util.Timer
 object Main {
   var logger: Log = LogFactory.get(YuShengJun().getClass)
   var jb: GsonBuilder = new GsonBuilder()
-  var json: Gson = jb.setPrettyPrinting().create()
+  var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
   var oneBotWS: OneBotWS = null
   var oneBot: OneBot = null
   var config: Config = new Config()
