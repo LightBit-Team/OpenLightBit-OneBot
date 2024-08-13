@@ -28,10 +28,11 @@ class Woodenfish extends YuShengJun {
   @Expose private var info_ctrl: Long = 946656000
   var total_ban: Int = 0
   def register(id: Long, group: Long): Unit = {
-    if (Woodenfishes.getWoodenfish(id) == null) {
+    if (Woodenfishes.getWoodenfish(id).playerid != playerid) {
       playerid = id
       time = DateUtil.date().toTimestamp.getTime
       Woodenfishes.woodenfishes.add(this)
+      Main.oneBot.sendGroup(group, "注册成功")
     } else {
       Main.oneBot.sendGroup(group, "你已注册过，无需重复注册")
     }

@@ -168,7 +168,7 @@ object Parser {
             return
           } else {
             @Nullable var woodenfish = Woodenfishes.getWoodenfish(senderId)
-            if (woodenfish != null && args.apply(1) != "reg") {
+            if (woodenfish.playerid == senderId && args.apply(1) != "reg") {
               args.apply(1) match
                 case "hit" => woodenfish.hit(groupId)
                 case "info" => woodenfish.info(groupId)
@@ -179,13 +179,20 @@ object Parser {
                 case "leaderboard_nirvana" => Woodenfishes.nirvanaLeaderboard(groupId)
                 case "leaderboard_ban" => Woodenfishes.banLeaderboard(groupId)
                 case _ => Main.oneBot.sendGroup(groupId, "格式错误")
-            } else if (args.apply(1) == "reg") {
-              woodenfish = new Woodenfish()
-              woodenfish.register(senderId, groupId)
             } else {
-              Main.oneBot.sendGroup(groupId, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
+              args.apply(1) match
+                case "reg" =>
+                  woodenfish = new Woodenfish()
+                  woodenfish.register(senderId, groupId)
+                case "leaderboard" => Woodenfishes.gongdeLeaderboard(groupId)
+                case "leaderboard_nirvana" => Woodenfishes.nirvanaLeaderboard(groupId)
+                case "leaderboard_ban" => Woodenfishes.banLeaderboard(groupId)
+                case _ => Main.oneBot.sendGroup(groupId, "宁踏马害没注册？快发送“给我木鱼”注册罢！")
             }
           }
+        }
+        if (str.startsWith(s"${p}wflist")) {
+          Main.oneBot.sendGroup(groupId, Woodenfishes.woodenfishes.toString)
         }
       }
       if (str.startsWith(s"${p}enable")) {
