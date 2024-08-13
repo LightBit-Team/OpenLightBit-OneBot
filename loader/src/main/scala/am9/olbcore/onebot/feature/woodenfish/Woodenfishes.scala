@@ -1,7 +1,6 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.misc.Account
 import cn.hutool.core.map.MapUtil
 
 import java.util.TimerTask
@@ -15,29 +14,28 @@ import java.nio.charset.StandardCharsets
 import java.util
 
 object Woodenfishes {
-  var woodenfishes: util.Map[Account, Woodenfish] = new util.HashMap[Account, Woodenfish]()
+  var woodenfishes: util.Map[Long, Woodenfish] = new util.HashMap[Long, Woodenfish]()
   def read(dir: File): Unit = {
     val rawJson = FileUtil.readString(dir, StandardCharsets.UTF_8)
-    val t = new TypeToken[util.Map[Account, Woodenfish]](){}.getType
-    woodenfishes = Main.json.fromJson[util.Map[Account, Woodenfish]](rawJson, t)
+    val t = new TypeToken[util.Map[Long, Woodenfish]](){}.getType
+    woodenfishes = Main.json.fromJson[util.Map[Long, Woodenfish]](rawJson, t)
   }
   def write(dir: File): Unit = {
     FileUtil.writeString(Main.json.toJson(woodenfishes), dir, StandardCharsets.UTF_8)
   }
   @Nullable
   def getWoodenfish(qq: Long): Woodenfish = {
-    woodenfishes.forEach((k, v) => {
-      if (k.getNumber == qq) {
-        v
-      }
-    })
-    null
+    try {
+      woodenfishes.get(qq)
+    } catch {
+      case e: Throwable => null
+    }
   }
   def gongdeLeaderboard(group: Long): Unit = {
-    if (woodenfishes != new util.ArrayList[Woodenfish]()) {
-      var resultEe: util.Map[Account, Double] = new util.HashMap[Account, Double]()
-      var resultE: util.Map[Account, Double] = new util.HashMap[Account, Double]()
-      var resultRaw: util.Map[Account, Long] = new util.HashMap[Account, Long]()
+    if (!woodenfishes.isEmpty) {
+      var resultEe: util.Map[Long, Double] = new util.HashMap[Long, Double]()
+      var resultE: util.Map[Long, Double] = new util.HashMap[Long, Double]()
+      var resultRaw: util.Map[Long, Long] = new util.HashMap[Long, Long]()
       woodenfishes.forEach((k, v) => {
         if (v.ee > 0) {
           resultEe.put(k, v.ee)
@@ -47,19 +45,19 @@ object Woodenfishes {
           resultRaw.put(k, v.gongde)
         }
       })
-      resultEe = MapUtil.sort[Account, Double](resultEe)
-      resultE = MapUtil.sort[Account, Double](resultE)
-      resultRaw = MapUtil.sort[Account, Long](resultRaw)
+      resultEe = MapUtil.sort[Long, Double](resultEe)
+      resultE = MapUtil.sort[Long, Double](resultE)
+      resultRaw = MapUtil.sort[Long, Long](resultRaw)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("功德榜\n赛博账号 --- 功德")
       resultEe.forEach((k, v) => {
-        stringBuilder.append("\n" + k.getNumber + " --- " + v)
+        stringBuilder.append("\n" + k + " --- " + v)
       })
       resultE.forEach((k, v) => {
-        stringBuilder.append("\n" + k.getNumber + " --- " + v)
+        stringBuilder.append("\n" + k + " --- " + v)
       })
       resultRaw.forEach((k, v) => {
-        stringBuilder.append("\n" + k.getNumber + " --- " + v)
+        stringBuilder.append("\n" + k + " --- " + v)
       })
       Main.oneBot.sendGroup(group, stringBuilder.toString)
     } else {
@@ -67,18 +65,18 @@ object Woodenfishes {
     }
   }
   def banLeaderboard(group: Long): Unit = {
-    if (woodenfishes != new util.ArrayList[Woodenfish]()) {
-      var result: util.Map[Account, Int] = new util.HashMap[Account, Int]()
+    if (!woodenfishes.isEmpty) {
+      var result: util.Map[Long, Int] = new util.HashMap[Long, Int]()
       woodenfishes.forEach((k, v) => {
         if (v.total_ban > 0) {
           result.put(k, v.total_ban)
         }
       })
-      result = MapUtil.sort[Account, Int](result)
+      result = MapUtil.sort[Long, Int](result)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("封禁榜\n赛博账号 --- 累计封禁次数")
       result.forEach((k, v) => {
-        stringBuilder.append("\n" + k.getNumber + " --- " + v)
+        stringBuilder.append("\n" + k + " --- " + v)
       })
       Main.oneBot.sendGroup(group, stringBuilder.toString)
     } else {
@@ -86,18 +84,18 @@ object Woodenfishes {
     }
   }
   def nirvanaLeaderboard(group: Long): Unit = {
-    if (woodenfishes != new util.ArrayList[Woodenfish]()) {
-      var result: util.Map[Account, Double] = new util.HashMap[Account, Double]()
+    if (!woodenfishes.isEmpty) {
+      var result: util.Map[Long, Double] = new util.HashMap[Long, Double]()
       woodenfishes.forEach((k, v) => {
         if (v.nirvana > 1) {
           result.put(k, v.nirvana)
         }
       })
-      result = MapUtil.sort[Account, Double](result)
+      result = MapUtil.sort[Long, Double](result)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("涅槃榜\\n赛博账号 --- 涅槃值")
       result.forEach((k, v) => {
-        stringBuilder.append("\n" + k.getNumber + " --- " + v)
+        stringBuilder.append("\n" + k + " --- " + v)
       })
       Main.oneBot.sendGroup(group, stringBuilder.toString)
     } else {

@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.misc.{Account, Misc, YuShengJun}
+import am9.olbcore.onebot.misc.{Misc, YuShengJun}
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose
@@ -31,7 +31,7 @@ class Woodenfish extends YuShengJun {
     if (Woodenfishes.getWoodenfish(id) == null) {
       playerid = id
       time = DateUtil.date().toTimestamp.getTime
-      Woodenfishes.woodenfishes.put(new Account(id), this)
+      Woodenfishes.woodenfishes.put(playerid, this)
       Main.oneBot.sendGroup(group, "注册成功")
     } else {
       Main.oneBot.sendGroup(group, "你已注册过，无需重复注册")
@@ -72,8 +72,7 @@ class Woodenfish extends YuShengJun {
         } else {
           Main.oneBot.sendGroup(group, s"功德+${add.get(r)}")
         }
-        Woodenfishes.woodenfishes.put(new Account(playerid), this)
-        Woodenfishes.write(new File("woodenfish.json"))
+        Woodenfishes.woodenfishes.put(playerid, this)
       } else {
         Main.oneBot.sendGroup(group, "敲拟吗呢？宁踏马被佛祖封号辣（恼）")
       }
@@ -86,12 +85,12 @@ class Woodenfish extends YuShengJun {
     if (Math.log10(gongde.toDouble) >= 6 && e <= 200) {
       e = Math.log10(Math.pow(10D, e) + gongde.toDouble)
       gongde = 0
-      Woodenfishes.woodenfishes.put(new Account(playerid), this)
+      Woodenfishes.woodenfishes.put(playerid, this)
     }
     if (Math.log10(e) >= 2 && ee <= 200) {
       ee = Math.log10(Math.pow(10, ee) + e)
       e = 0
-      Woodenfishes.woodenfishes.put(new Account(playerid), this)
+      Woodenfishes.woodenfishes.put(playerid, this)
     }
   }
   def getExpression: Array[String] = {
@@ -125,7 +124,7 @@ class Woodenfish extends YuShengJun {
       gongde = 0
       e = 0
       ee = 0
-      Woodenfishes.woodenfishes.put(new Account(playerid), this)
+      Woodenfishes.woodenfishes.put(playerid, this)
       true
     } else {
       false
@@ -149,7 +148,7 @@ class Woodenfish extends YuShengJun {
       gongde = Math.round(Math.pow(10, e) + gongde)
     }
     time = timeNow - (elapsedTime % cycleSpeed).toLong
-    Woodenfishes.woodenfishes.put(new Account(playerid), this)
+    Woodenfishes.woodenfishes.put(playerid, this)
   }
   def info(group: Long): Unit = {
     @Nullable val woodenfish = Woodenfishes.getWoodenfish(playerid)
@@ -204,7 +203,7 @@ class Woodenfish extends YuShengJun {
               |$tips""".stripMargin)
         }
         if (this != woodenfish) {
-          Woodenfishes.woodenfishes.put(new Account(playerid), this)
+          Woodenfishes.woodenfishes.put(playerid, this)
         }
       }
     } else {
@@ -219,13 +218,13 @@ class Woodenfish extends YuShengJun {
         if (e >= neededE) {
           e -= neededE
           level += actualUpgradingLevel
-          Woodenfishes.woodenfishes.put(new Account(playerid), this)
+          Woodenfishes.woodenfishes.put(playerid, this)
           Main.oneBot.sendGroup(group, "木鱼升级成功辣（喜）")
         } else if (Math.pow(10, ee) + e >= neededE) {
           e = 0
           ee = Math.log10(Math.pow(10, ee) + e) - neededE
           level += actualUpgradingLevel
-          Woodenfishes.woodenfishes.put(new Account(playerid), this)
+          Woodenfishes.woodenfishes.put(playerid, this)
           Main.oneBot.sendGroup(group, "木鱼升级成功辣（喜）")
         } else {
           Main.oneBot.sendGroup(group, "升级个毛啊？宁踏马功德不够（恼）")
@@ -251,7 +250,7 @@ class Woodenfish extends YuShengJun {
             ee = 0
             e = 0
             gongde = 0
-            Woodenfishes.woodenfishes.put(new Account(playerid), this)
+            Woodenfishes.woodenfishes.put(playerid, this)
             Main.oneBot.sendGroup(group, "涅槃重生成功辣（喜）")
           } else {
             Main.oneBot.sendGroup(group, "涅槃重生个毛啊？宁踏马功德不够（恼）")
@@ -271,7 +270,7 @@ class Woodenfish extends YuShengJun {
     if (Woodenfishes.getWoodenfish(playerid) != null) {
       if (ban == 0) {
         ban = 1
-        Woodenfishes.woodenfishes.put(new Account(playerid), this)
+        Woodenfishes.woodenfishes.put(playerid, this)
         Main.oneBot.sendGroup(group, "敢撅佛祖？罪不可赦（恼）（你被永久封禁）")
       } else {
         Main.oneBot.sendGroup(group, "撅拟吗呢？宁踏马被佛祖封号辣（恼）")
@@ -303,7 +302,7 @@ class Woodenfish extends YuShengJun {
           time = timeNow
           status = "正常"
           tips = "【敲电子木鱼，见机甲佛祖，取赛博真经】"
-          Woodenfishes.woodenfishes.put(new Account(playerid), this)
+          Woodenfishes.woodenfishes.put(playerid, this)
         }
     s"""赛博账号：$playerid
        |账号状态：$status

@@ -168,7 +168,7 @@ object Parser {
             return
           } else {
             @Nullable var woodenfish = Woodenfishes.getWoodenfish(senderId)
-            if (woodenfish != null && args.apply(1) != "reg") {
+            if (woodenfish != null) {
               args.apply(1) match
                 case "hit" => woodenfish.hit(groupId)
                 case "info" => woodenfish.info(groupId)
