@@ -1,6 +1,7 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.feature.BreadFactory
+import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.misc.{Terminal, YuShengJun}
 import cn.hutool.log.{Log, LogFactory}
 import com.google.gson.Gson
@@ -40,10 +41,19 @@ object Main {
   )
   val copyright: String =
     """OpenLightBit-OneBot
-      |版权所有（C）2024 Emerald-AM9
-      |本程序为自由软件，在自由软件联盟发布的GNU通用公共许可协议的约束下，你可以对其进行再发布及修改。协议版本为第三版或（随你）更新的版本。
-      |我们希望发布的这款程序有用，但不保证，甚至不保证它有经济价值和适合特定用途。详情参见GNU通用公共许可协议。
-      |你理当已收到一份GNU通用公共许可协议的副本，如果没有，请查阅<http://www.gnu.org/licenses/>
+      |Copyright（C）2024 Emerald-AM9
+      |This program is free software: you can redistribute it and/or modify
+      |it under the terms of the GNU Affero General Public License as
+      |published by the Free Software Foundation, either version 3 of the
+      |License, or (at your option) any later version.
+      |
+      |This program is distributed in the hope that it will be useful,
+      |but WITHOUT ANY WARRANTY; without even the implied warranty of
+      |MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      |GNU Affero General Public License for more details.
+      |
+      |You should have received a copy of the GNU Affero General Public License
+      |along with this program.  If not, see <https://www.gnu.org/licenses/>.
       |
       |3496929815@qq.com
       |""".stripMargin
@@ -73,6 +83,7 @@ object Main {
       val timer = new Timer()
       timer.schedule(BreadFactory.makeBread, 20000)
       timer.schedule(BreadFactory.getMaterial, 25000)
+      timer.schedule(Woodenfishes.autoSave, 120000)
       logger.info("恭喜！启动成功，0Error，至少目前如此，也祝你以后如此")
       if (Terminal.isRunningOnServerLauncher) {
         Terminal.serverLauncherWarn()
