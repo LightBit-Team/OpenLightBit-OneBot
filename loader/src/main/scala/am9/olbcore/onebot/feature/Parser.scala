@@ -3,7 +3,6 @@ package feature
 
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.misc.Terminal
-import am9.olbcore.onebot.onebot.OneBot
 import cn.hutool.json.{JSONObject, JSONUtil}
 import org.jetbrains.annotations.Nullable
 

@@ -4,6 +4,7 @@
  * This generated file contains a sample Scala application project to get you started.
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.7-rc-3/userguide/building_java_projects.html in the Gradle documentation.
  */
+logger.info("OpenLightBit-OneBot build")
 
 plugins {
     // Apply the scala Plugin to add support for Scala.

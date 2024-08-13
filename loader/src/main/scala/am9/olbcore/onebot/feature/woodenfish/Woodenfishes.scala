@@ -56,10 +56,10 @@ object Woodenfishes {
       val stringBuilder = new StringBuilder()
       stringBuilder.append("功德榜\n赛博账号 --- 功德")
       resultEe.forEach((k, v) => {
-        stringBuilder.append("\n" + k + " --- ee" + v)
+        stringBuilder.append("\n" + k + " --- ee" + Math.floor(v * 10000) / 10000)
       })
       resultE.forEach((k, v) => {
-        stringBuilder.append("\n" + k + " --- e" + v)
+        stringBuilder.append("\n" + k + " --- e" + Math.floor(v * 10000) / 10000)
       })
       resultRaw.forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- " + v)
@@ -98,7 +98,7 @@ object Woodenfishes {
       })
       result = MapUtil.sort[Long, Double](result)
       val stringBuilder = new StringBuilder()
-      stringBuilder.append("涅槃榜\\n赛博账号 --- 涅槃值")
+      stringBuilder.append("涅槃榜\n赛博账号 --- 涅槃值")
       result.forEach((k, v) => {
         stringBuilder.append("\n" + k + " --- " + v)
       })
