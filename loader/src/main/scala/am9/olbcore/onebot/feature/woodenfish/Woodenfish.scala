@@ -4,15 +4,14 @@ import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.misc.{Misc, Terminal, YuShengJun}
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
-import com.google.gson.annotations.{Expose, SerializedName}
+import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
-import java.beans.Transient
 import java.util
 import scala.util.control.Breaks.break
 
 class Woodenfish extends YuShengJun {
-  @Expose private var playerid: Long = 0L
+  private var playerid: Long = 0L
   @Expose private var time: Long = 0L
   @Expose private var level: Int = 1
   @Expose var gongde: Int = 0

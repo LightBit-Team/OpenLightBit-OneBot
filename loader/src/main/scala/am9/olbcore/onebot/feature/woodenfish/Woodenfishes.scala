@@ -37,21 +37,21 @@ object Woodenfishes {
   }
   def gongdeLeaderboard(group: Long): Unit = {
     if (!woodenfishes.isEmpty) {
-      var resultEe: util.Map[Long, Double] = new util.HashMap[Long, Double]()
-      var resultE: util.Map[Long, Double] = new util.HashMap[Long, Double]()
-      var resultRaw: util.Map[Long, Int] = new util.HashMap[Long, Int]()
+      var resultEe: util.Map[String, Double] = new util.HashMap[String, Double]()
+      var resultE: util.Map[String, Double] = new util.HashMap[String, Double]()
+      var resultRaw: util.Map[String, Int] = new util.HashMap[String, Int]()
       woodenfishes.forEach((k, v) => {
         if (v.ee > 0) {
-          resultEe.put(k, v.ee)
+          resultEe.put(k.toString, v.ee)
         } else if (v.e > 0) {
-          resultE.put(k, v.e)
+          resultE.put(k.toString, v.e)
         } else if (v.gongde > 0) {
-          resultRaw.put(k, v.gongde)
+          resultRaw.put(k.toString, v.gongde)
         }
       })
-      resultEe = MapUtil.sort[Long, Double](resultEe)
-      resultE = MapUtil.sort[Long, Double](resultE)
-      resultRaw = MapUtil.sort[Long, Int](resultRaw)
+      resultEe = MapUtil.sort[String, Double](resultEe)
+      resultE = MapUtil.sort[String, Double](resultE)
+      resultRaw = MapUtil.sort[String, Int](resultRaw)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("功德榜\n赛博账号 --- 功德")
       resultEe.forEach((k, v) => {
@@ -70,13 +70,13 @@ object Woodenfishes {
   }
   def banLeaderboard(group: Long): Unit = {
     if (!woodenfishes.isEmpty) {
-      var result: util.Map[Long, Int] = new util.HashMap[Long, Int]()
+      var result: util.Map[String, Int] = new util.HashMap[String, Int]()
       woodenfishes.forEach((k, v) => {
         if (v.total_ban > 0) {
-          result.put(k, v.total_ban)
+          result.put(k.toString, v.total_ban)
         }
       })
-      result = MapUtil.sort[Long, Int](result)
+      result = MapUtil.sort[String, Int](result)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("封禁榜\n赛博账号 --- 累计封禁次数")
       result.forEach((k, v) => {
@@ -89,13 +89,13 @@ object Woodenfishes {
   }
   def nirvanaLeaderboard(group: Long): Unit = {
     if (!woodenfishes.isEmpty) {
-      var result: util.Map[Long, Double] = new util.HashMap[Long, Double]()
+      var result: util.Map[String, Double] = new util.HashMap[String, Double]()
       woodenfishes.forEach((k, v) => {
         if (v.nirvana > 1) {
-          result.put(k, v.nirvana)
+          result.put(k.toString, v.nirvana)
         }
       })
-      result = MapUtil.sort[Long, Double](result)
+      result = MapUtil.sort[String, Double](result)
       val stringBuilder = new StringBuilder()
       stringBuilder.append("涅槃榜\n赛博账号 --- 涅槃值")
       result.forEach((k, v) => {
