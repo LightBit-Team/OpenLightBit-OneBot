@@ -1,12 +1,11 @@
 package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.onebot.OneBot
 import cn.hutool.json.JSONObject
 
-import java.util.TimerTask
 import java.io.File
 import java.util
+import java.util.TimerTask
 
 object BreadFactory {
   def init(groupId: Long): Unit = {

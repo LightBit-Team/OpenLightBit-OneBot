@@ -8,11 +8,10 @@ import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
 import java.util
-import scala.util.boundary.Break
 import scala.util.control.Breaks.break
 
 class Woodenfish extends YuShengJun {
-  var playerid: Long = 0L
+  @Expose private var playerid: Long = 0L
   @Expose private var time: Long = 0L
   @Expose private var level: Int = 1
   var gongde: Long = 0L
@@ -81,7 +80,7 @@ class Woodenfish extends YuShengJun {
       Main.oneBot.sendGroup(group, s"宁踏马害没注册？快发送“${p}woodenfish reg”注册罢！")
     }
   }
-  def conversion(): Unit = {
+  private def conversion(): Unit = {
     if (Math.log10(gongde.toDouble) >= 6 && e <= 200) {
       e = Math.log10(Math.pow(10D, e) + gongde.toDouble)
       gongde = 0
@@ -93,7 +92,7 @@ class Woodenfish extends YuShengJun {
       Woodenfishes.woodenfishes.put(playerid, this)
     }
   }
-  def getExpression: Array[String] = {
+  private def getExpression: Array[String] = {
     var expression = ""
     var expressionLow = ""
     var gongdeLocal = ""
@@ -113,7 +112,7 @@ class Woodenfish extends YuShengJun {
     }
     Array[String](expression, expressionLow, gongdeLocal, gongdeLow)
   }
-  def autoNirvana: Boolean = {
+  private def autoNirvana: Boolean = {
     if (ee >= 300) {
       if (nirvana + 0.02 < 5) {
         nirvana += 0.02
@@ -130,7 +129,7 @@ class Woodenfish extends YuShengJun {
       false
     }
   }
-  def getExperience(): Unit = {
+  private def getExperience(): Unit = {
     val timeNow = DateUtil.date().toTimestamp.getTime
     if (ban != 0) return
     val cycleSpeed = Math.ceil(60 * Math.pow(0.978, level - 1))
@@ -234,7 +233,7 @@ class Woodenfish extends YuShengJun {
         Main.oneBot.sendGroup(group, "升级个毛啊？宁踏马被佛祖封号辣（恼）")
       } else if (actualUpgradingLevel <= 0) {
         //此处改为抛出异常
-        throw new IllegalArgumentException("升级个毛啊？宁这数字踏马怎么让我理解？（恼）")
+        throw new NumberFormatException("升级个毛啊？宁这数字踏马怎么让我理解？（恼）")
       }
     } else {
       val p = Main.config.getData.get("command-prefix").toString
