@@ -1,8 +1,8 @@
 package am9.olbcore.onebot
 package feature
 
+import am9.olbcore.onebot.Terminal
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
-import am9.olbcore.onebot.misc.Terminal
 import cn.hutool.json.{JSONObject, JSONUtil}
 import org.jetbrains.annotations.Nullable
 
@@ -42,20 +42,24 @@ object Parser {
             case "heartbeat" => Terminal.debug("We are still alive!")
             case _ => Terminal.debug(str)
         case "notice" =>
-          json.getStr("notice_type") match
-            case "group_upload" => Terminal.debug("群文件上传")
-            case "group_admin" => Terminal.debug("群管理员变动")
-            case "group_decrease" => Terminal.debug("群成员减少")
-            case "group_increase" => Terminal.debug("群成员增加")
-            case "group_ban" => Terminal.debug("群禁言")
-            case "friend_add" => Terminal.debug("添加好友")
-            case "friend_recall" => Terminal.debug("好友撤回")
-            case "group_recall" => Terminal.debug("群消息撤回")
-            case "notify" => Terminal.debug("提醒")
-            case "poke" => feature.OnPoke.doIt(json.getLong("group_id"))
-            case "lucky_king" => Terminal.debug("群红包运气王")
-            case "honor" => Terminal.debug("群荣誉变更")
-            case _ => Terminal.debug(str)
+          //todo
+          //json.getStr("notice_type") match
+          //  case "group_upload" => Terminal.debug("群文件上传")
+          //  case "group_admin" => Terminal.debug("群管理员变动")
+          //  case "group_decrease" => Terminal.debug("群成员减少")
+          //  case "group_increase" => Terminal.debug("群成员增加")
+          //  case "group_ban" => Terminal.debug("群禁言")
+          //  case "friend_add" => Terminal.debug("添加好友")
+          //  case "friend_recall" => Terminal.debug("好友撤回")
+          //  case "group_recall" => Terminal.debug("群消息撤回")
+          //  case "notify" => Terminal.debug("提醒")
+          //  case "poke" => feature.OnPoke.doIt(json.getLong("group_id"))
+          //  case "lucky_king" => Terminal.debug("群红包运气王")
+          //  case "honor" => Terminal.debug("群荣誉变更")
+          //  case _ => Terminal.debug(str)
+          if (json.getStr("notice_type") == "poke") {
+            OnPoke.doIt(json.getLong("group_id"))
+          }
         case _ =>
           if (!(json.getStr("status").equals("ok") || json.getStr("status").equals("await"))) {
             Main.logger.warn(str)

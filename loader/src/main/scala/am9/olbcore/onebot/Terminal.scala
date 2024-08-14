@@ -1,4 +1,4 @@
-package am9.olbcore.onebot.misc
+package am9.olbcore.onebot
 
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.Main.logger

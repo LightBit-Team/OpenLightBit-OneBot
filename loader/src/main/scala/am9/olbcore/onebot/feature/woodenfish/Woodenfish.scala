@@ -1,17 +1,15 @@
 package am9.olbcore.onebot.feature.woodenfish
 
-import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.misc.{Misc, Terminal, YuShengJun}
+import am9.olbcore.onebot.{Main, Terminal}
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
-import java.io.File
 import java.util
 import scala.util.control.Breaks.break
 
-class Woodenfish extends YuShengJun {
+class Woodenfish {
   @Expose private var playerid: Long = 0L
   @Expose private var time: Long = 0L
   @Expose private var level: Int = 1
@@ -214,7 +212,7 @@ class Woodenfish extends YuShengJun {
   }
   def upgrade(group: Long, upgradingLevel: Int | Null): Unit = {
     if (Woodenfishes.getWoodenfish(playerid) != null) {
-      val actualUpgradingLevel = Misc.cond[Int](upgradingLevel.isInstanceOf[Int], upgradingLevel.asInstanceOf[Int], 1)
+      val actualUpgradingLevel = if (upgradingLevel.isInstanceOf[Int]) upgradingLevel.asInstanceOf[Int] else 1
       if (actualUpgradingLevel > 0 && ban == 0) {
         val neededE = level + actualUpgradingLevel + 2
         if (e >= neededE) {

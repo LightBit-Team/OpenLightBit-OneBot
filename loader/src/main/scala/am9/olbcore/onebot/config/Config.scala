@@ -1,7 +1,6 @@
 package am9.olbcore.onebot
 package config
 
-import am9.olbcore.onebot.misc.YuShengJun
 import cn.hutool.json.JSONUtil
 
 import java.io.{File, IOException}
@@ -9,7 +8,7 @@ import java.nio.file.{FileAlreadyExistsException, Files, Paths}
 import java.util
 
 @SuppressWarnings(Array("deprecation"))
-class Config extends YuShengJun {
+class Config {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef]() {
     put("config-version", "1")
     put("bot-name", "OLB")

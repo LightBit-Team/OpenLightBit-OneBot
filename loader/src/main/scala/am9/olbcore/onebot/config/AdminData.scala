@@ -1,15 +1,14 @@
 package am9.olbcore.onebot
 package config
 
-import am9.olbcore.onebot.misc.YuShengJun
-import cn.hutool.json.{JSONObject, JSONUtil}
+import cn.hutool.json.JSONUtil
 
-import java.io.{File, FileNotFoundException, IOException}
+import java.io.{File, IOException}
 import java.nio.file.{Files, NoSuchFileException, Paths}
 import java.util
 
 @SuppressWarnings(Array("deprecation"))
-class AdminData extends YuShengJun {
+class AdminData {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef]() {
     put("admin", util.ArrayList[Long]())
     put("black_list", util.ArrayList[Long]())

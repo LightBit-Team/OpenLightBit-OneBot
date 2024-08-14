@@ -2,7 +2,6 @@ package am9.olbcore.onebot
 
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
-import am9.olbcore.onebot.misc.{Terminal, YuShengJun}
 import cn.hutool.log.{Log, LogFactory}
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -15,7 +14,7 @@ import java.util
 import java.util.Timer
 
 object Main {
-  var logger: Log = LogFactory.get(YuShengJun().getClass)
+  var logger: Log = LogFactory.get(this.getClass)
   var jb: GsonBuilder = new GsonBuilder()
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
   var oneBotWS: OneBotWS = null
