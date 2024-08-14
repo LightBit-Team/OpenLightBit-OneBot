@@ -4,7 +4,9 @@ package feature
 import am9.olbcore.onebot.Terminal
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.onebot.Segment
+import am9.olbcore.onebot.onebot.event.GroupMessage
 import cn.hutool.json.{JSONObject, JSONUtil}
+import com.google.gson.internal.LinkedTreeMap
 import org.jetbrains.annotations.Nullable
 
 import java.util.Random
@@ -18,17 +20,18 @@ object Parser {
           if (json.getStr("message_type") == "private") {
             Main.logger.info("get private message")
           } else {
+            val groupMessage: GroupMessage = Main.json.fromJson[GroupMessage](str, classOf[GroupMessage])
             var message: String = null
             if (json.getStr("message_format") == "array") {
-              val list = json.get("message").asInstanceOf[java.util.List[Segment]]
-              if (list.get(0).theRealType == "text") {
-                list.get(0).data.forEach((k, v) => {
-                  message += v
+              val list = groupMessage.message.asInstanceOf[java.util.List[LinkedTreeMap[String, AnyRef]]]
+              if (list.get(0).get("type").toString == "text") {
+                list.get(0).get("data").asInstanceOf[java.util.Map[String, String]].forEach((k, v) => {
+                  message = v
                 })
               }
-              //Main.logger.info("Array message format: not implemented")
+              //Main.logger.info(str)
             } else {
-              message = json.getStr("message")
+              message = groupMessage.message.toString
             }
             if (message.contains("!")) {
               parseGroupMessage(
