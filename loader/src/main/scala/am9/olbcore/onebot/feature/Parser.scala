@@ -3,6 +3,7 @@ package feature
 
 import am9.olbcore.onebot.Terminal
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
+import am9.olbcore.onebot.onebot.Segment
 import cn.hutool.json.{JSONObject, JSONUtil}
 import org.jetbrains.annotations.Nullable
 
@@ -17,17 +18,25 @@ object Parser {
           if (json.getStr("message_type") == "private") {
             Main.logger.info("get private message")
           } else {
+            var message: String = null
             if (json.getStr("message_format") == "array") {
-              Main.logger.info("Array message format: not implemented")
-            } else {
-              if (json.getStr("message").contains("!")) {
-                parseGroupMessage(
-                  json.getLong("user_id"),
-                  json.getLong("group_id"),
-                  json.getLong("message_id"),
-                  json.getStr("message")
-                )
+              val list = json.get("message").asInstanceOf[java.util.List[Segment]]
+              if (list.get(0).theRealType == "text") {
+                list.get(0).data.forEach((k, v) => {
+                  message += v
+                })
               }
+              //Main.logger.info("Array message format: not implemented")
+            } else {
+              message = json.getStr("message")
+            }
+            if (message.contains("!")) {
+              parseGroupMessage(
+                json.getLong("user_id"),
+                json.getLong("group_id"),
+                json.getLong("message_id"),
+                message
+              )
             }
           }
           BreadFactory.expReward(json.getLong("group_id"))

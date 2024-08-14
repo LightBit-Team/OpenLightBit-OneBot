@@ -22,13 +22,8 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  val version = "0.2.0"
-  val changelog: String =
-    """OpenLightBit 0.2.0：木鱼更新
-      |1.增加木鱼功能，使用!woodenfish help获取帮助
-      |2.优化OneBot11-WebSocket支持
-      |3.清理无用代码
-      |4.使用AGPL3.0""".stripMargin
+  val version = "0.3.0"
+  val changelog: String = "null"
   val splashes: util.List[String] = util.List.of(
     "也试试KuoHuBit罢！Also try KuoHuBit!",
     "也试试2kbit罢！Also try 2kbit!",

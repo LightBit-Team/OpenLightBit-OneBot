@@ -2,11 +2,13 @@ package am9.olbcore.onebot
 package onebot
 
 import am9.olbcore.onebot.feature.Parser
+import am9.olbcore.onebot.onebot.action.SendGroupMsg
 import cn.hutool.json.{JSONObject, JSONUtil}
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 
 import java.net.URI
+import java.util
 
 class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
   val groupSendTemplate: JSONObject = JSONUtil.createObj()
@@ -26,26 +28,21 @@ class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
     Main.logger.error("Error in OneBot-11 WS", ex)
   }
   override def sendGroup(groupId: Long, message: String): Unit = {
-    val json = groupSendTemplate.clone()
-    json.put("params", new JSONObject(true) {
-      put("group_id", groupId)
-      put("message", new JSONObject(true) {
-        put("type", "text")
-        put("data", new JSONObject(true) {
-          put("text", message)
-        })
-      })
-    }
-    )
-    send(json.toString)
+    val segment = new Segment("text", new util.HashMap[String, String](){
+      put("text", message)
+    })
+    val sendGroupMsg = new SendGroupMsg(groupId, segment, false)
+    send(Main.json.toJson(sendGroupMsg))
   }
 
   override def sendGroupWithCqCode(groupId: Long, message: String): Unit = {
-    val json = groupSendTemplate.clone()
-    json.put("params", new JSONObject(true) {
-      put("group_id", groupId)
-      put("message", message)
+    val sendGroupMsg = new SendGroupMsg(groupId, message, false)
+    send(Main.json.toJson(sendGroupMsg))
+  }
+  
+  override def sendFriend(uid: Long, message: String): Unit = {
+    val segment = new Segment("text", new util.HashMap[String, String](){
+      put("text", message)
     })
-    Main.oneBotWS.send(json.toString)
   }
 }

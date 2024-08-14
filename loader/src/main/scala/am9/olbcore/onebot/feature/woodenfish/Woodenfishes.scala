@@ -84,7 +84,7 @@ object Woodenfishes {
   }
   def nirvanaLeaderboard(group: Long): Unit = {
     if (!woodenfishes.isEmpty) {
-      var result: util.Map[Long, java.lang.Double] = new util.HashMap[Long, java.lang.Double]()
+      val result: util.Map[Long, java.lang.Double] = new util.HashMap[Long, java.lang.Double]()
       woodenfishes.forEach((k, v) => {
         if (v.nirvana > 1) {
           result.put(k, v.nirvana)
