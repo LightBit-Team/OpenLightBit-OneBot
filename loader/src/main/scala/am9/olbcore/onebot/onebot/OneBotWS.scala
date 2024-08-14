@@ -3,7 +3,6 @@ package onebot
 
 import am9.olbcore.onebot.feature.Parser
 import am9.olbcore.onebot.onebot.action.SendGroupMsg
-import cn.hutool.json.{JSONObject, JSONUtil}
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 
@@ -11,10 +10,6 @@ import java.net.URI
 import java.util
 
 class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
-  val groupSendTemplate: JSONObject = JSONUtil.createObj()
-    .put("action", "send_group_msg_rate_limited")
-    .put("params", null)
-    .put("auto_escape", false)
   override def onOpen(handshakedata: ServerHandshake): Unit = {
     Main.logger.info("Connected OneBot-11 WS")
   }

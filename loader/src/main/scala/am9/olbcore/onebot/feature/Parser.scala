@@ -3,7 +3,6 @@ package feature
 
 import am9.olbcore.onebot.Terminal
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
-import am9.olbcore.onebot.onebot.Segment
 import am9.olbcore.onebot.onebot.event.GroupMessage
 import cn.hutool.json.{JSONObject, JSONUtil}
 import com.google.gson.internal.LinkedTreeMap
@@ -18,7 +17,7 @@ object Parser {
       json.getStr("post_type") match
         case "message" =>
           if (json.getStr("message_type") == "private") {
-            Main.logger.info("get private message")
+            Main.logger.info("todo: rulai")
           } else {
             val groupMessage: GroupMessage = Main.json.fromJson[GroupMessage](str, classOf[GroupMessage])
             var message: String = null
@@ -29,7 +28,7 @@ object Parser {
                   message = v
                 })
               }
-              //Main.logger.info(str)
+              if (message == null) message = "null"
             } else {
               message = groupMessage.message.toString
             }
@@ -54,7 +53,6 @@ object Parser {
             case "heartbeat" => Terminal.debug("We are still alive!")
             case _ => Terminal.debug(str)
         case "notice" =>
-          //todo
           //json.getStr("notice_type") match
           //  case "group_upload" => Terminal.debug("群文件上传")
           //  case "group_admin" => Terminal.debug("群管理员变动")
