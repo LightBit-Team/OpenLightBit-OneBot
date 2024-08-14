@@ -32,7 +32,6 @@ class Woodenfish extends YuShengJun {
       playerid = id
       time = System.currentTimeMillis
       Woodenfishes.woodenfishes.put(playerid, this)
-      Woodenfishes.write(new File("woodenfish.json"))
       Main.oneBot.sendGroup(group, "注册成功")
     } else {
       Main.oneBot.sendGroup(group, "你已注册过，无需重复注册")

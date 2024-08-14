@@ -7,13 +7,10 @@ object Connect {
 
   def getConnection: OneBot = {
     Main.config.getData.get("onebot-protocol") match
-      case "http" =>
-        ???
       case "ws" =>
         val oneBotWS = new OneBotWS(new URI(s"ws://${Main.config.getData.get("onebot-address")}:${Main.config.getData.get("onebot-port")}/"))
         oneBotWS.connect()
         oneBotWS
-      case "ws-reserved" =>
-        ???
+      case _ => throw new IllegalArgumentException("不支持的协议")
   }
 }

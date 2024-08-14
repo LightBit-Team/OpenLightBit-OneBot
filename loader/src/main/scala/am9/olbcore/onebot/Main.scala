@@ -23,7 +23,7 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  val version = "0.2.0-beta.1"
+  val version = "0.2.0"
   val changelog: String =
     """OpenLightBit 0.2.0：木鱼更新
       |1.增加木鱼功能，使用!woodenfish help获取帮助

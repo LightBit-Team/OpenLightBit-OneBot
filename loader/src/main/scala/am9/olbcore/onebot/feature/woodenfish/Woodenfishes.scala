@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets
 import java.util
 
 object Woodenfishes {
-  var woodenfishes: util.Map[Long, Woodenfish] = new util.HashMap[Long, Woodenfish]()
+  val woodenfishes: util.Map[Long, Woodenfish] = new util.HashMap[Long, Woodenfish]()
   def read(dir: File): Unit = {
     val rawJson = FileUtil.readString(dir, StandardCharsets.UTF_8)
     if (rawJson.nonEmpty) {
