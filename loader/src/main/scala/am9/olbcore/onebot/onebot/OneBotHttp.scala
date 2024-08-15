@@ -7,6 +7,7 @@ import cn.hutool.http.HttpUtil
 import cn.hutool.http.server.SimpleServer
 
 import java.nio.charset.StandardCharsets
+import java.util
 
 class OneBotHttp(getUrl: String, postPort: Int) extends OneBot{
   private val server: SimpleServer = HttpUtil.createServer(postPort).addAction("onebot", (request, response) => {
@@ -38,6 +39,11 @@ class OneBotHttp(getUrl: String, postPort: Int) extends OneBot{
       put("file", s"http://${configMap.get("media-server-host")}:${configMap.get("media-server-port")}/$fileName")
     })
     val sendGroupMsgParams = new SendGroupMsgParams(groupId, segment, false)
+    HttpUtil.post(getUrl + "send_group_msg", Main.json.toJson(sendGroupMsgParams))
+  }
+
+  override def sendGroupWithSegments(groupId: Long, segments: util.List[Segment]): Unit = {
+    val sendGroupMsgParams = new SendGroupMsgParams(groupId, segments, false)
     HttpUtil.post(getUrl + "send_group_msg", Main.json.toJson(sendGroupMsgParams))
   }
 }

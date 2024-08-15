@@ -54,4 +54,9 @@ class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
     val sendGroupMsg = new SendGroupMsg(groupId, segment, false)
     send(Main.json.toJson(sendGroupMsg))
   }
+
+  override def sendGroupWithSegments(groupId: Long, segments: util.List[Segment]): Unit = {
+    val sendGroupMsg = new SendGroupMsg(groupId, segments, false)
+    send(Main.json.toJson(sendGroupMsg))
+  }
 }

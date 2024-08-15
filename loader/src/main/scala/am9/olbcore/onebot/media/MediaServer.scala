@@ -29,4 +29,7 @@ class MediaServer(port: Int) {
     }
     HttpUtil.downloadFile(httpAddress, file)
   }
+  def getFilePath(fileName: String): String = {
+    s"http://${Main.config.getData.get("media-server-host")}:${Main.config.getData.get("media-server-port")}/$fileName"
+  }
 }

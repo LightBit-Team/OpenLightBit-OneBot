@@ -223,6 +223,17 @@ object Parser {
             GetMusic.getMusic(groupId, java.lang.Long.parseLong(args.apply(1)))
           }
         }
+        if (str.startsWith(s"${p}captcha")) {
+          val args = str.split(" ")
+          if (args.length < 3) {
+            Main.oneBot.sendGroup(groupId, "格式错误")
+            return
+          } else {
+            args.apply(1) match
+              case "get" => Captcha.get(groupId, java.lang.Long.parseLong(args.apply(2)))
+              case "check" => Captcha.check(groupId, senderId, args.apply(2))
+          }
+        }
       }
       if (str.startsWith(s"${p}enable")) {
         Admin.enable(groupId, senderId)
