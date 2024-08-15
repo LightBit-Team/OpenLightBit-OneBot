@@ -24,6 +24,8 @@ class Config {
     put("onebot-post-port", "1145")
     //仅http（用于接收事件）/反向ws
     put("onebot-path", "/onebot")
+    put("enable-media-server", "true")
+    put("media-server-port", "19198")
   }
 
   def getData: util.Map[String, AnyRef] = data

@@ -1,13 +1,13 @@
 package am9.olbcore.onebot
 
+import am9.olbcore.onebot.config.{AdminData, Bread, Config}
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
+import am9.olbcore.onebot.media.MediaServer
+import am9.olbcore.onebot.onebot.{Connect, OneBot}
 import cn.hutool.log.{Log, LogFactory}
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import config.{AdminData, Bread, Config}
-import onebot.{Connect, OneBot, OneBotWS}
-import org.jetbrains.annotations.Nullable
+import com.google.gson.{Gson, GsonBuilder}
+import org.jetbrains.annotations.{NonNls, Nullable}
 
 import java.io.File
 import java.util
@@ -15,14 +15,17 @@ import java.util.Timer
 
 object Main {
   var logger: Log = LogFactory.get(this.getClass)
-  var jb: GsonBuilder = new GsonBuilder()
+  private val jb: GsonBuilder = new GsonBuilder()
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
+  var mediaServer: MediaServer = null
   var oneBot: OneBot = null
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  val version = "0.3.0"
+  @NonNls
+  val version = "0.3.0 (QingZhu)"
   val changelog: String = "null"
+  @NonNls
   val splashes: util.List[String] = util.List.of(
     "也试试KuoHuBit罢！Also try KuoHuBit!",
     "也试试2kbit罢！Also try 2kbit!",
@@ -38,6 +41,7 @@ object Main {
     "这条标语虽然没有用，但是是有用的，因为他被加上了标语",
     "使用Scala编写！"
   )
+  @NonNls
   val copyright: String =
     """OpenLightBit-OneBot
       |Copyright（C）2024 Emerald-AM9
@@ -94,10 +98,12 @@ object Main {
       timer.schedule(BreadFactory.makeBread, 20000)
       timer.schedule(BreadFactory.getMaterial, 25000)
       timer.schedule(Woodenfishes.autoSave, 120000)
-      logger.info("恭喜！启动成功，0Error，至少目前如此，也祝你以后如此")
+      mediaServer = new MediaServer(Integer.parseInt(config.getData.get("media-server-port").toString))
+      mediaServer.start()
       if (Terminal.isRunningOnServerLauncher) {
         Terminal.serverLauncherWarn()
       }
+      logger.info("恭喜！启动成功，0Error，至少目前如此，也祝你以后如此")
     } catch {
       case e: Throwable =>
         logger.warn("启动时遇到问题 ", e)
