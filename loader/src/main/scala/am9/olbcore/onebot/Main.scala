@@ -64,7 +64,7 @@ object Main {
   def main(@Nullable args: Array[String]): Unit = {
     try {
       //读取配置文件
-      val configFile = new File("config.json")
+      val configFile = new File("config.properties")
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
       if (configFile.exists()) {

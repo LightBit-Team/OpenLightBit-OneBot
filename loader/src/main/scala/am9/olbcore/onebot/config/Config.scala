@@ -1,7 +1,9 @@
 package am9.olbcore.onebot
 package config
 
+import cn.hutool.core.io.FileUtil
 import cn.hutool.json.JSONUtil
+import cn.hutool.setting.dialect.Props
 
 import java.io.{File, IOException}
 import java.nio.file.{FileAlreadyExistsException, Files, Paths}
@@ -33,10 +35,13 @@ class Config {
   def setData(map: util.Map[String, AnyRef]): Unit = this.data = map
   def getJson: String = JSONUtil.toJsonPrettyStr(data)
   def read(dir: File): this.type = {
-    var json: String = null
     if (dir.exists()) {
-      json = new String(Files.readAllBytes(Paths.get(dir.getPath)))
-      this.setData(JSONUtil.parseObj(json).getRaw)
+      data = new util.TreeMap[String, AnyRef]()
+      new Props(dir).entrySet().forEach(i => {
+        if (i.getKey != null && i.getValue != null) {
+          data.put(i.getKey.toString, i.getValue)
+        }
+      })
       this
     } else {
       throw new NullPointerException("Config file not found!")
@@ -44,8 +49,12 @@ class Config {
   }
   def write(dir: File): Unit = {
     try {
-      Files.createFile(Paths.get(dir.getPath))
-      Files.write(Paths.get(dir.getPath), getJson.getBytes)
+      if (!dir.exists()) FileUtil.touch(dir)
+      val props = new Props(dir)
+      data.forEach((k, v) => {
+        props.put(k, v)
+      })
+      props.store(dir.getPath)
     } catch {
       case e: FileAlreadyExistsException => Main.logger.info("文件已存在，将不覆写")
       case e: IOException => Main.logger.error("写入文件失败", e)
