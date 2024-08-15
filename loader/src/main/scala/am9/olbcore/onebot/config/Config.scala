@@ -6,7 +6,7 @@ import cn.hutool.json.JSONUtil
 import cn.hutool.setting.dialect.Props
 
 import java.io.{File, IOException}
-import java.nio.file.{FileAlreadyExistsException, Files, Paths}
+import java.nio.file.FileAlreadyExistsException
 import java.util
 
 @SuppressWarnings(Array("deprecation"))

@@ -224,7 +224,14 @@ object Parser {
             Main.oneBot.sendGroup(groupId, "格式错误")
             return
           } else {
-            GetMusic.getMusic(groupId, java.lang.Long.parseLong(args.apply(1)))
+            args.apply(1) match
+              case "search" =>
+                if (args.length < 3) {
+                  Main.oneBot.sendGroup(groupId, "格式错误")
+                  return
+                }
+                GetMusic.searchMusic(groupId, args.apply(2), if (args.length < 4) 1 else Integer.parseInt(args.apply(3)))
+              case _ => GetMusic.getMusic(groupId, java.lang.Long.parseLong(args.apply(1)))
           }
         }
         if (str.startsWith(s"${p}captcha")) {
