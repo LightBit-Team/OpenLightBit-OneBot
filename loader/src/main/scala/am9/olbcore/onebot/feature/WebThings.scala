@@ -3,9 +3,11 @@ package am9.olbcore.onebot.feature
 import am9.olbcore.onebot.Main
 import cn.hutool.http.HttpUtil
 import cn.hutool.json.{JSONObject, JSONUtil}
+import com.google.gson.internal.LinkedTreeMap
+import com.google.gson.reflect.TypeToken
 
 import java.nio.charset.StandardCharsets
-import java.util
+import java.{lang, util}
 
 object WebThings {
   @Deprecated
@@ -69,5 +71,34 @@ object WebThings {
       case e: Throwable =>
         ErrorProcess.logGroup(group, e)
     }
+  }
+  def goTrend(group: Long, skip: Int): Unit = {
+    val contents = HttpUtil.get("https://goproxy.cn/stats/trends/latest")
+    val jsonDict = Main.json.fromJson[util.List[LinkedTreeMap[String, String]]](contents, new TypeToken[util.List[LinkedTreeMap[String, String]]](){}.getType)
+    val messageContent = new StringBuilder()
+    messageContent.append("Golang模块排行榜")
+    var skips = skip
+    try {
+      if (skips < 0) {
+        skips = 0
+        Main.oneBot.sendGroup(group, "页码无效！（将默认为第一页）")
+      } else if (skips > 99) {
+        skips = 99
+        Main.oneBot.sendGroup(group, "页码无效！（将默认为最后一页）")
+      }
+    } catch {
+      case e: NumberFormatException =>
+        skips = 0
+        Main.oneBot.sendGroup(group, "页码无效！（将默认为第一页）")
+      case e: IllegalArgumentException =>
+        skips = 0
+        Main.oneBot.sendGroup(group, "页码无效！（将默认为第一页）")
+    }
+    for (i <- 0 until 10) {
+      messageContent.append(s"\n第 ${i + skips * 10 + 1} 名" +
+      s"\n模块路径：${jsonDict.get(i + skips * 10).get("module_path")}" +
+      s"\n下载次数：${jsonDict.get(i + skips * 10).get("download_count")}")
+    }
+    Main.oneBot.sendGroup(group, messageContent.toString)
   }
 }
