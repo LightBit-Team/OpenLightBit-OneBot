@@ -3,7 +3,7 @@ package feature
 
 import am9.olbcore.onebot.Terminal
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
-import am9.olbcore.onebot.onebot.event.GroupMessage
+import am9.olbcore.onebot.onebot.event.{FriendMessage, GroupMessage}
 import cn.hutool.json.{JSONObject, JSONUtil}
 import com.google.gson.internal.LinkedTreeMap
 import org.jetbrains.annotations.Nullable
@@ -17,7 +17,20 @@ object Parser {
       json.getStr("post_type") match
         case "message" =>
           if (json.getStr("message_type") == "private") {
-            Main.logger.info("todo: rulai")
+            val friendMessage: FriendMessage = Main.json.fromJson[FriendMessage](str, classOf[FriendMessage])
+            var message: String = null
+            if (json.getStr("message_format") == "array") {
+              val list = friendMessage.message.asInstanceOf[java.util.List[LinkedTreeMap[String, AnyRef]]]
+              if (list.get(0).get("type").toString == "text") {
+                list.get(0).get("data").asInstanceOf[java.util.Map[String, String]].forEach((k, v) => {
+                  message = v
+                })
+              }
+              if (message == null) message = "null"
+            } else {
+              message = friendMessage.message.toString
+            }
+            Rulai.sendRu(friendMessage.user_id)
           } else {
             val groupMessage: GroupMessage = Main.json.fromJson[GroupMessage](str, classOf[GroupMessage])
             var message: String = null
@@ -156,9 +169,6 @@ object Parser {
         }
         if (str.startsWith(s"${p}query_http")) {
           WebThings.webQuery(str.split(" ").apply(1))
-        }
-        if (str.startsWith(s"${p}shutdown")) {
-          Main.shutdown()
         }
         if (str.startsWith(s"${p}hitokoto")) {
           WebThings.hitokoto(groupId)

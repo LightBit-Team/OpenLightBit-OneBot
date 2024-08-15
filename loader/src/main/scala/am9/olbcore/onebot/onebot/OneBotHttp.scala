@@ -10,24 +10,26 @@ import java.nio.charset.StandardCharsets
 
 class OneBotHttp(getUrl: String, postPort: Int) extends OneBot{
   val server: SimpleServer = HttpUtil.createServer(postPort).addAction("onebot", (request, response) => {
+    Main.logger.info(request.getBody())
     Parser.parse(request.getBody(StandardCharsets.UTF_8))
   })
+  server.start()
   override def sendGroup(groupId: Long, message: String): Unit = {
     val segment = new Segment("text", new java.util.HashMap[String, String](){
       put("text", message)
     })
     val sendGroupMsgParams = new SendGroupMsgParams(groupId, segment, false)
-    HttpUtil.post(getUrl, Main.json.toJson(sendGroupMsgParams))
+    HttpUtil.post(getUrl + "send_group_msg", Main.json.toJson(sendGroupMsgParams))
   }
   override def sendGroupWithCqCode(groupId: Long, message: String): Unit = {
     val sendGroupMsgParams = new SendGroupMsgParams(groupId, message, false)
-    HttpUtil.post(getUrl, Main.json.toJson(sendGroupMsgParams))
+    HttpUtil.post(getUrl + "send_group_msg", Main.json.toJson(sendGroupMsgParams))
   }
   override def sendFriend(uid: Long, message: String): Unit = {
     val segment = new Segment("text", new java.util.HashMap[String, String](){
       put("text", message)
     })
     val sendPrivateMsgParams = new SendPrivateMsgParams(uid, segment, false)
-    HttpUtil.post(getUrl, Main.json.toJson(sendPrivateMsgParams))
+    HttpUtil.post(getUrl + "send_private_msg", Main.json.toJson(sendPrivateMsgParams))
   }
 }

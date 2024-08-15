@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
 import java.util
-import scala.util.control.Breaks.break
+import scala.util.control.Breaks.{break, breakable}
 
 class Woodenfish {
   @Expose private var playerid: Long = 0L
@@ -136,14 +136,12 @@ class Woodenfish {
     if (elapsedTime < cycleSpeed) return
     val cycles = if (level + 11 > Math.floor(elapsedTime / cycleSpeed)) Math.floor(elapsedTime / cycleSpeed).toInt else level + 11
     val actualCycles = if (cycles > 120) 120 else cycles
-    try {
+    breakable {
       for (i <- 0 until actualCycles) {
         if (e >= 200) break
         e = Math.log10(Math.pow(10, e) + gongde) * Math.pow(2.7D, nirvana) + level
         gongde = Math.round(Math.pow(10, e - Math.floor(e))).toInt
       }
-    } catch {
-      case e: Throwable => Terminal.debug("break是抛出的？" + e)
     }
     if (e < 6) {
       e = 0

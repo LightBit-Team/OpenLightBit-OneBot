@@ -12,7 +12,7 @@ object Connect {
         oneBotWS.connect()
         oneBotWS
       case "http" =>
-        val oneBotHttp = new OneBotHttp(s"http://${Main.config.getData.get("onebot-address")}:${Main.config.getData.get("onebot-port")}/", Main.config.getData.get("onebot-port").asInstanceOf[Int])
+        val oneBotHttp = new OneBotHttp(s"http://${Main.config.getData.get("onebot-address")}:${Main.config.getData.get("onebot-port")}/", 1145)
         oneBotHttp
       case _ => throw new IllegalArgumentException("不支持的协议")
   }

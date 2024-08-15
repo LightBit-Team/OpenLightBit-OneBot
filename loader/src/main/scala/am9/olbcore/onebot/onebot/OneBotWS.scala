@@ -2,7 +2,7 @@ package am9.olbcore.onebot
 package onebot
 
 import am9.olbcore.onebot.feature.Parser
-import am9.olbcore.onebot.onebot.action.SendGroupMsg
+import am9.olbcore.onebot.onebot.action.{SendGroupMsg, SendPrivateMsg}
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 
@@ -17,10 +17,14 @@ class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
     Parser.parse(message)
   }
   override def onClose(code: Int, reason: String, remote: Boolean): Unit = {
-    Main.logger.info("Disconnected OneBot-11 WS")
+    Main.logger.info("WebSocket连接中止")
   }
   override def onError(ex: Exception): Unit = {
-    Main.logger.error("Error in OneBot-11 WS", ex)
+    if (!isOpen) {
+      Main.logger.warn("无法连接到WebSocket服务端，将尝试5秒后重新连接...")
+      Thread.sleep(5000)
+      connect()
+    }
   }
   override def sendGroup(groupId: Long, message: String): Unit = {
     val segment = new Segment("text", new util.HashMap[String, String](){
@@ -39,5 +43,7 @@ class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
     val segment = new Segment("text", new util.HashMap[String, String](){
       put("text", message)
     })
+    val sendPrivateMsg = new SendPrivateMsg(uid, segment, false)
+    send(Main.json.toJson(sendPrivateMsg))
   }
 }

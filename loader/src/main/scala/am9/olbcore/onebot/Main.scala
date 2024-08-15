@@ -17,7 +17,6 @@ object Main {
   var logger: Log = LogFactory.get(this.getClass)
   var jb: GsonBuilder = new GsonBuilder()
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
-  var oneBotWS: OneBotWS = null
   var oneBot: OneBot = null
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
@@ -95,11 +94,5 @@ object Main {
       case e: Throwable =>
         logger.warn("启动时遇到问题 ", e)
     }
-  }
-  def restart(groupId: Long): Unit = {
-    shutdown()
-  }
-  def shutdown(): Unit = {
-    oneBotWS.close()
   }
 }
