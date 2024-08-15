@@ -1,35 +1,23 @@
 package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.onebot.OneBot
+import cn.hutool.http.HttpUtil
 import cn.hutool.json.{JSONObject, JSONUtil}
 
-import java.io.{BufferedReader, InputStreamReader}
-import java.net.{HttpURLConnection, URL}
 import java.nio.charset.StandardCharsets
+import java.util
 
 object WebThings {
+  @Deprecated
   def webQuery(url: String): String = {
-    val c: HttpURLConnection = new URL(url).openConnection().asInstanceOf[HttpURLConnection]
-    c.setRequestMethod("GET")
-    c.connect()
-    if (c.getResponseCode < 400) {
-      val reader = new BufferedReader(new InputStreamReader(c.getInputStream, StandardCharsets.UTF_8))
-      var ret = ""
-      var line = reader.readLine()
-      while (line != null) {
-        ret += line
-        line = reader.readLine()
-      }
-      reader.close()
-      ret
-    } else {
-      throw new RuntimeException(s"Request failed ${c.getResponseCode}")
-    }
+    HttpUtil.get(url, StandardCharsets.UTF_8)
   }
   def checkICP(domain: String, group: Long): Unit = {
     try {
-      val json = JSONUtil.parseObj(webQuery(s"https://api.leafone.cn/api/icp?name=${domain}"))
+      val response = HttpUtil.get(s"https://api.leafone.cn/api/icp", new util.HashMap[String, AnyRef](){
+        put("name", domain)
+      })
+      val json = JSONUtil.parseObj(response)
       if (!json.getStr("code").equals("200")) {
         if (json.getStr("code").equals("404")) {
           Main.oneBot.sendGroup(group, "未备案")
@@ -49,7 +37,11 @@ object WebThings {
   }
   def getShortLink(url: String, group: Long): Unit = {
     try {
-      val json = JSONUtil.parseObj(webQuery(s"https://api.uomg.com/api/long2dwz?dwzapi=dwzcn&url=${url}"))
+      val response = HttpUtil.get(s"https://api.uomg.com/api/long2dwz", new util.HashMap[String, AnyRef](){
+        put("dwzapi", "dwzcn")
+        put("url", url)
+      })
+      val json = JSONUtil.parseObj(response)
       if ((!json.getStr("code").equals("1")) || json.getStr("msg").contains("维护")) {
         throw new RuntimeException(s"Request failed ${json.getStr("msg")}")
       } else {
@@ -62,7 +54,8 @@ object WebThings {
   }
   def hitokoto(group: Long): Unit = {
     try {
-      val json = JSONUtil.parseObj(webQuery("https://v1.hitokoto.cn/"))
+      val response = HttpUtil.get("https://v1.hitokoto.cn/", StandardCharsets.UTF_8)
+      val json = JSONUtil.parseObj(response)
       var ret: String = null
       if (json.getStr("from") == null) {
         ret = s"${json.getStr("hitokoto")}    ——${json.getStr("from_who")}"

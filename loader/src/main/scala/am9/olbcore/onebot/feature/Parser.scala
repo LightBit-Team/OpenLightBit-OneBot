@@ -1,7 +1,6 @@
 package am9.olbcore.onebot
 package feature
 
-import am9.olbcore.onebot.Terminal
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.onebot.event.{FriendMessage, GroupMessage}
 import cn.hutool.json.{JSONObject, JSONUtil}
@@ -166,9 +165,6 @@ object Parser {
         }
         if (str.startsWith(s"${p}short_link")) {
           WebThings.getShortLink(str.split(" ").apply(1), groupId)
-        }
-        if (str.startsWith(s"${p}query_http")) {
-          WebThings.webQuery(str.split(" ").apply(1))
         }
         if (str.startsWith(s"${p}hitokoto")) {
           WebThings.hitokoto(groupId)

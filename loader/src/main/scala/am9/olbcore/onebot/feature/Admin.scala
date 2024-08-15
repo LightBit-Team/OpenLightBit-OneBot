@@ -8,8 +8,6 @@ import java.io.File
 object Admin {
   def isOwner(user: Long): Boolean = {
     val owner = java.lang.Long.parseLong(Main.config.getData.get("owner").asInstanceOf[String])
-    Main.logger.debug("owner is " + owner)
-    Main.logger.debug("user is " + user)
     user == owner
   }
   def isAdmin(user: Long): Boolean = {
@@ -17,13 +15,7 @@ object Admin {
     val admins = adminMap.get("admin").asInstanceOf[java.util.List[Long]]
     admins.contains(user)
   }
-
   def isDisabled(groupId: Long): Boolean = {
-    //if (Main.adminData.getData.get("disabled_group") == null) {
-    //  false
-    //} else {
-    //  Main.adminData.getData.get("disabled_group").asInstanceOf[java.util.List[Long]].contains(groupId)
-    //}
     Main.adminData.getData.get("disabled_group").asInstanceOf[java.util.List[Long]].contains(groupId)
   }
   def op(userId: Long, executeGroup: Long, executor: Long): Unit = {

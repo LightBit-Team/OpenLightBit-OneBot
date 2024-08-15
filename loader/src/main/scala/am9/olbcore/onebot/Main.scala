@@ -65,6 +65,14 @@ object Main {
       if (configFile.exists()) {
         logger = LogFactory.get(config.getData.get("logger-name").toString)
         config = config.read(configFile)
+        if (Integer.parseInt(config.getData.get("config-version").toString) < 2) {
+          logger.warn("配置文件版本过低请重新生成配置文件！")
+          System.exit(0)
+        }
+        if (Integer.parseInt(config.getData.get("config-version").toString) > 2) {
+          logger.error("配置文件版本过高，请重新生成配置文件！")
+          System.exit(0)
+        }
       } else {
         config.write(configFile)
         logger.error("请填写配置文件！")

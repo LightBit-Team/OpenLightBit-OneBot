@@ -9,8 +9,7 @@ import cn.hutool.http.server.SimpleServer
 import java.nio.charset.StandardCharsets
 
 class OneBotHttp(getUrl: String, postPort: Int) extends OneBot{
-  val server: SimpleServer = HttpUtil.createServer(postPort).addAction("onebot", (request, response) => {
-    Main.logger.info(request.getBody())
+  private val server: SimpleServer = HttpUtil.createServer(postPort).addAction("onebot", (request, response) => {
     Parser.parse(request.getBody(StandardCharsets.UTF_8))
   })
   server.start()

@@ -10,16 +10,20 @@ import java.util
 @SuppressWarnings(Array("deprecation"))
 class Config {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef]() {
-    put("config-version", "1")
+    put("config-version", "2")
     put("bot-name", "OLB")
     put("logger-name", "OpenLightBit")
     put("debug-enabled", "true")
     put("owner", "10001")
     put("command-prefix", "!")
     put("onebot-address", "localhost")
-    put("onebot-port", "8080")
+    put("onebot-port", "3000")
     put("onebot-secret", "")
     put("onebot-protocol", "ws")
+    //仅http（用于接收事件）/反向ws
+    put("onebot-post-port", "1145")
+    //仅http（用于接收事件）/反向ws
+    put("onebot-path", "/onebot")
   }
 
   def getData: util.Map[String, AnyRef] = data
