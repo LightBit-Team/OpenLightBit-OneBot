@@ -2,6 +2,7 @@ package am9.olbcore.onebot
 
 import am9.olbcore.onebot.config.{AdminData, Bread, Config}
 import am9.olbcore.onebot.feature.BreadFactory
+import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
 import am9.olbcore.onebot.onebot.{Connect, OneBot}
@@ -93,6 +94,9 @@ object Main {
       oneBot = Connect.getConnection
       if (new File("woodenfish.json").exists()) {
         Woodenfishes.read(new File("woodenfish.json"))
+      }
+      if (new File("cave.json").exists()) {
+        Cave.read(new File("cave.json"))
       }
       val timer = new Timer()
       timer.schedule(BreadFactory.makeBread, 20000)

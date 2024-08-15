@@ -1,6 +1,7 @@
 package am9.olbcore.onebot
 package feature
 
+import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.onebot.event.{FriendMessage, GroupMessage}
 import cn.hutool.json.{JSONObject, JSONUtil}
@@ -241,6 +242,16 @@ object Parser {
             args.apply(1) match
               case "get" => Captcha.get(groupId, java.lang.Long.parseLong(args.apply(2)))
               case "check" => Captcha.check(groupId, senderId, args.apply(2))
+          }
+        }
+        if (str.startsWith(s"${p}cave")) {
+          val args = str.split(" ")
+          if (args.length < 2) {
+            Cave.getRandom(groupId)
+          } else {
+            args.apply(1) match
+              case "get" => Cave.get(groupId, java.lang.Integer.parseInt(args.apply(2)))
+              case "write" => Cave.add(groupId, senderId, args.apply(2))
           }
         }
       }

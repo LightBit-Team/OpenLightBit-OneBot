@@ -45,7 +45,7 @@ object Rulai {
       |维特根斯坦说，这个世界上有语言能说的，叫说清楚，这个世界上也有超出语言，说不明白的，维特根斯坦直接用了俩字，闭嘴
       |那没法说嘛
       |所以才有了，如来什么，拈花，迦叶微笑""".stripMargin.split("\n")
-  private var index: java.util.Map[Long, Int] = new java.util.HashMap[Long, Int]()
+  private val index: java.util.Map[Long, Int] = new java.util.HashMap[Long, Int]()
   def sendRu(uid: Long): Unit = {
     if (!index.containsKey(uid)) {
       index.put(uid, 0)

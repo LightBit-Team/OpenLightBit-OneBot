@@ -10,10 +10,6 @@ import java.nio.charset.StandardCharsets
 import java.{lang, util}
 
 object WebThings {
-  @Deprecated
-  def webQuery(url: String): String = {
-    HttpUtil.get(url, StandardCharsets.UTF_8)
-  }
   def checkICP(domain: String, group: Long): Unit = {
     try {
       val response = HttpUtil.get(s"https://api.leafone.cn/api/icp", new util.HashMap[String, AnyRef](){
