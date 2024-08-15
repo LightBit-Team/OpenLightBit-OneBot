@@ -14,7 +14,7 @@ object ErrorProcess {
     })
     if (lineNumber > 3) {
       Main.oneBot.sendGroup(groupId, "出现错误：" + msg + s"\n已折叠 ${lineNumber - 3} 条，请在控制台查看完整信息")
-      Main.logger.error(e)
+      Main.logger.error("完整信息：", e)
     } else {
       Main.oneBot.sendGroup(groupId, "出现错误：" + msg)
     }

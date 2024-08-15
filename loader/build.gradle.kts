@@ -37,6 +37,15 @@ dependencies {
     implementation("org.jetbrains:annotations:24.1.0")
 
     implementation("com.google.code.gson:gson:2.11.0")
+
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
+
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
+
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

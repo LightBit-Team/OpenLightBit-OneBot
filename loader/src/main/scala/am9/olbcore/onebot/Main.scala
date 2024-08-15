@@ -6,16 +6,16 @@ import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
 import am9.olbcore.onebot.onebot.{Connect, OneBot}
-import cn.hutool.log.{Log, LogFactory}
 import com.google.gson.{Gson, GsonBuilder}
 import org.jetbrains.annotations.{NonNls, Nullable}
+import org.slf4j.LoggerFactory
 
 import java.io.File
 import java.util
 import java.util.Timer
 
 object Main {
-  var logger: Log = LogFactory.get(this.getClass)
+  var logger: org.slf4j.Logger = LoggerFactory.getLogger(this.getClass)
   private val jb: GsonBuilder = new GsonBuilder()
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
   var mediaServer: MediaServer = null
@@ -68,7 +68,7 @@ object Main {
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
       if (configFile.exists()) {
-        logger = LogFactory.get(config.getData.get("logger-name").toString)
+        logger = org.slf4j.LoggerFactory.getLogger(config.getData.get("logger-name").toString)
         config = config.read(configFile)
         if (Integer.parseInt(config.getData.get("config-version").toString) < 2) {
           logger.warn("配置文件版本过低请重新生成配置文件！")

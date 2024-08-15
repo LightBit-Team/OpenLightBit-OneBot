@@ -23,21 +23,43 @@ object Cave {
       }
     }
   }
+  def getBottle(index: Int) = {
+    if (bottles.size() == 0) {
+      throw new NullPointerException("没有漂流瓶")
+    } else {
+      try {
+        bottles.get(index - 1)
+      } catch {
+        case e: IndexOutOfBoundsException => throw new NullPointerException("没有漂流瓶: " + e.toString)
+      }
+    }
+  }
   def getRandom(group: Long): Unit = {
     get(group, RandomUtil.randomInt(1, bottles.size() + 1))
   }
   def add(group: Long, user: Long, content: String): Unit = {
-    if (content.length() > 100) {
+    if (content.length > 100) {
       Main.oneBot.sendGroup(group, "漂流瓶内容过长！")
-    } else {
-      val bottle = new Bottle()
-      bottle.sender = user
-      bottle.content = content
-      bottle.comments = new java.util.ArrayList[Comment]()
-      bottles.add(bottle)
-      save(new File("cave.json"))
-      Main.oneBot.sendGroup(group, "添加成功！")
+      return
     }
+    val bottle = new Bottle()
+    bottle.sender = user
+    bottle.content = content
+    bottle.comments = new java.util.ArrayList[Comment]()
+    bottles.add(bottle)
+    save(new File("cave.json"))
+    Main.oneBot.sendGroup(group, "添加成功！")
+  }
+  def addComment(group: Long, user: Long, id: Int, content: String): Unit = {
+    if (content.length > 100) {
+      Main.oneBot.sendGroup(group, "评论过长！")
+      return
+    }
+    val bottle = bottles.get(id - 1)
+    bottle.comments.add(new Comment(user, content))
+    bottles.set(id - 1, bottle)
+    save(new File("cave.json"))
+    Main.oneBot.sendGroup(group, "添加成功！")
   }
   def save(file: File): Unit = {
     FileUtil.writeString(Main.json.toJson(bottles), file, StandardCharsets.UTF_8)

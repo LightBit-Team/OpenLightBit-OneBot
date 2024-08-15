@@ -63,7 +63,7 @@ object Parser {
                 case "enable" => Main.logger.info("机器人已启用")
                 case "disable" => Main.logger.info("机器人已禁用")
                 case _ => Main.logger.info(str)
-            case "heartbeat" => Terminal.debug("We are still alive!")
+            case "heartbeat" => Terminal.debug("接收到心跳！")
             case _ => Terminal.debug(str)
         case "notice" =>
           //json.getStr("notice_type") match
@@ -111,13 +111,7 @@ object Parser {
           Main.oneBot.sendGroup(groupId,
             """OpenLightBit 帮助
               |------------
-              |!version    !deop
-              |!help       !disable
-              |!ping       !bread
-              |!reload     !short_link
-              |!shutdown   !query_http
-              |!echo
-              |!op
+              |
               |------------
               |欢迎使用！""".stripMargin)
         }
@@ -251,7 +245,9 @@ object Parser {
           } else {
             args.apply(1) match
               case "get" => Cave.get(groupId, java.lang.Integer.parseInt(args.apply(2)))
+              case "get_comment" => Cave.getBottle(java.lang.Integer.parseInt(args.apply(2))).showComments(groupId, if (args.length == 3) 1 else java.lang.Integer.parseInt(args.apply(3)))
               case "write" => Cave.add(groupId, senderId, args.apply(2))
+              case "write_comment" => Cave.addComment(groupId, senderId, java.lang.Integer.parseInt(args.apply(2)), args.apply(3))
           }
         }
       }

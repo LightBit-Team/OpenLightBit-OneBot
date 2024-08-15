@@ -10,9 +10,7 @@ import java.net.URI
 import java.util
 
 class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
-  override def onOpen(handshakedata: ServerHandshake): Unit = {
-    Main.logger.info("Connected OneBot-11 WS")
-  }
+  override def onOpen(handshakedata: ServerHandshake): Unit = {}
   override def onMessage(message: String): Unit = {
     Parser.parse(message)
   }
