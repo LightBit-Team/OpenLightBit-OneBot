@@ -31,4 +31,13 @@ class OneBotHttp(getUrl: String, postPort: Int) extends OneBot{
     val sendPrivateMsgParams = new SendPrivateMsgParams(uid, segment, false)
     HttpUtil.post(getUrl + "send_private_msg", Main.json.toJson(sendPrivateMsgParams))
   }
+
+  override def sendGroupRecord(groupId: Long, fileName: String): Unit = {
+    val configMap = Main.config.getData
+    val segment = new Segment("record", new java.util.HashMap[String, String](){
+      put("file", s"http://${configMap.get("media-server-host")}:${configMap.get("media-server-port")}/$fileName")
+    })
+    val sendGroupMsgParams = new SendGroupMsgParams(groupId, segment, false)
+    HttpUtil.post(getUrl + "send_group_msg", Main.json.toJson(sendGroupMsgParams))
+  }
 }

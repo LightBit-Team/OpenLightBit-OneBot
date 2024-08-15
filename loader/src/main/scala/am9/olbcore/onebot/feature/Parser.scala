@@ -214,9 +214,18 @@ object Parser {
                   |!woodenfish nirvana_leaderboard：涅槃榜""".stripMargin)
           }
         }
-        if (str.startsWith(s"${p}enable")) {
-          Admin.enable(groupId, senderId)
+        if (str.startsWith(s"${p}music")) {
+          val args = str.split(" ")
+          if (args.length < 2) {
+            Main.oneBot.sendGroup(groupId, "格式错误")
+            return
+          } else {
+            GetMusic.getMusic(groupId, java.lang.Long.parseLong(args.apply(1)))
+          }
         }
+      }
+      if (str.startsWith(s"${p}enable")) {
+        Admin.enable(groupId, senderId)
       }
     } catch {
         case e: Throwable =>

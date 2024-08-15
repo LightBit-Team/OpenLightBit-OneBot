@@ -5,4 +5,5 @@ trait OneBot {
   def sendGroup(groupId: Long, message: String): Unit
   def sendGroupWithCqCode(groupId: Long, message: String): Unit
   def sendFriend(uid: Long, message: String): Unit
+  def sendGroupRecord(groupId: Long, fileName: String): Unit
 }

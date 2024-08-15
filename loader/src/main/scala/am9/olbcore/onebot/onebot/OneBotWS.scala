@@ -46,4 +46,12 @@ class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
     val sendPrivateMsg = new SendPrivateMsg(uid, segment, false)
     send(Main.json.toJson(sendPrivateMsg))
   }
+  override def sendGroupRecord(groupId: Long, fileName: String): Unit = {
+    val configMap = Main.config.getData
+    val segment = new Segment("record", new java.util.HashMap[String, String]() {
+      put("file", s"http://${configMap.get("media-server-host")}:${configMap.get("media-server-port")}/$fileName")
+    })
+    val sendGroupMsg = new SendGroupMsg(groupId, segment, false)
+    send(Main.json.toJson(sendGroupMsg))
+  }
 }
