@@ -1,7 +1,7 @@
 package am9.olbcore.onebot
 package onebot
 
-import am9.olbcore.onebot.feature.Parser
+import am9.olbcore.onebot.feature.parser.MessageParser
 import am9.olbcore.onebot.onebot.action.{SendGroupMsg, SendPrivateMsg}
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
@@ -12,7 +12,7 @@ import java.util
 class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
   override def onOpen(handshakedata: ServerHandshake): Unit = {}
   override def onMessage(message: String): Unit = {
-    Parser.parse(message)
+    MessageParser.parse(message)
   }
   override def onClose(code: Int, reason: String, remote: Boolean): Unit = {
     Main.logger.info("WebSocket连接中止")

@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.onebot
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.feature.Parser
+import am9.olbcore.onebot.feature.parser.MessageParser
 import am9.olbcore.onebot.onebot.action.params.{SendGroupMsgParams, SendPrivateMsgParams}
 import cn.hutool.http.HttpUtil
 import cn.hutool.http.server.SimpleServer
@@ -11,7 +11,7 @@ import java.util
 
 class OneBotHttp(getUrl: String, postPort: Int) extends OneBot{
   private val server: SimpleServer = HttpUtil.createServer(postPort).addAction("onebot", (request, response) => {
-    Parser.parse(request.getBody(StandardCharsets.UTF_8))
+    MessageParser.parse(request.getBody(StandardCharsets.UTF_8))
   })
   server.start()
   override def sendGroup(groupId: Long, message: String): Unit = {

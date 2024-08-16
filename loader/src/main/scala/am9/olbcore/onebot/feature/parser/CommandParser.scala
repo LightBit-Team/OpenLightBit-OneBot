@@ -1,99 +1,18 @@
-package am9.olbcore.onebot
-package feature
+package am9.olbcore.onebot.feature.parser
 
+import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
-import am9.olbcore.onebot.onebot.event.{FriendMessage, GroupMessage}
+import am9.olbcore.onebot.feature.{Admin, BreadFactory, Broadcast, Captcha, ErrorProcess, GetMusic, WebThings}
 import cn.hutool.core.thread.ThreadUtil
-import cn.hutool.json.{JSONObject, JSONUtil}
-import com.google.gson.internal.LinkedTreeMap
+import cn.hutool.core.util.RandomUtil
 import org.jetbrains.annotations.Nullable
 
-import java.util.Random
+import java.{lang, util}
 
-object Parser {
-  def parse(str: String): Unit = {
-    val json: JSONObject = JSONUtil.parseObj(str)
-    try {
-      json.getStr("post_type") match
-        case "message" =>
-          if (json.getStr("message_type") == "private") {
-            val friendMessage: FriendMessage = Main.json.fromJson[FriendMessage](str, classOf[FriendMessage])
-            var message: String = null
-            if (json.getStr("message_format") == "array") {
-              val list = friendMessage.message.asInstanceOf[java.util.List[LinkedTreeMap[String, AnyRef]]]
-              if (list.get(0).get("type").toString == "text") {
-                list.get(0).get("data").asInstanceOf[java.util.Map[String, String]].forEach((k, v) => {
-                  message = v
-                })
-              }
-              if (message == null) message = "null"
-            } else {
-              message = friendMessage.message.toString
-            }
-            Rulai.sendRu(friendMessage.user_id)
-          } else {
-            val groupMessage: GroupMessage = Main.json.fromJson[GroupMessage](str, classOf[GroupMessage])
-            var message: String = null
-            if (json.getStr("message_format") == "array") {
-              val list = groupMessage.message.asInstanceOf[java.util.List[LinkedTreeMap[String, AnyRef]]]
-              if (list.get(0).get("type").toString == "text") {
-                list.get(0).get("data").asInstanceOf[java.util.Map[String, String]].forEach((k, v) => {
-                  message = v
-                })
-              }
-              if (message == null) message = "null"
-            } else {
-              message = groupMessage.message.toString
-            }
-            if (message.contains("!")) {
-              parseGroupMessage(
-                json.getLong("user_id"),
-                json.getLong("group_id"),
-                json.getLong("message_id"),
-                message
-              )
-            }
-          }
-          BreadFactory.expReward(json.getLong("group_id"))
-        case "meta_event" =>
-          json.getStr("meta_event_type") match
-            case "lifecycle" =>
-              json.getStr("sub_type") match
-                case "connect" => Main.logger.info("Hello, OpenLightBit!")
-                case "enable" => Main.logger.info("机器人已启用")
-                case "disable" => Main.logger.info("机器人已禁用")
-                case _ => Main.logger.info(str)
-            case "heartbeat" => Terminal.debug("接收到心跳！")
-            case _ => Terminal.debug(str)
-        case "notice" =>
-          //json.getStr("notice_type") match
-          //  case "group_upload" => Terminal.debug("群文件上传")
-          //  case "group_admin" => Terminal.debug("群管理员变动")
-          //  case "group_decrease" => Terminal.debug("群成员减少")
-          //  case "group_increase" => Terminal.debug("群成员增加")
-          //  case "group_ban" => Terminal.debug("群禁言")
-          //  case "friend_add" => Terminal.debug("添加好友")
-          //  case "friend_recall" => Terminal.debug("好友撤回")
-          //  case "group_recall" => Terminal.debug("群消息撤回")
-          //  case "notify" => Terminal.debug("提醒")
-          //  case "poke" => feature.OnPoke.doIt(json.getLong("group_id"))
-          //  case "lucky_king" => Terminal.debug("群红包运气王")
-          //  case "honor" => Terminal.debug("群荣誉变更")
-          //  case _ => Terminal.debug(str)
-          if (json.getStr("notice_type") == "poke") {
-            OnPoke.doIt(json.getLong("group_id"))
-          }
-        case _ =>
-          if (!(json.getStr("status").equals("ok") || json.getStr("status").equals("await"))) {
-            Main.logger.warn(str)
-          }
-    } catch {
-      case e: MatchError => Main.logger.info("invalid event", e)
-    }
-  }
+object CommandParser {
 
-  private def parseGroupMessage(senderId: Long, groupId: Long, msgId: Long, str: String): Unit = {
+  def parseCommand(senderId: Long, groupId: Long, msgId: Long, str: String): Unit = {
     val p = Main.config.getData.get("command-prefix").toString
     try {
       if (!Admin.isDisabled(groupId)) {
@@ -107,12 +26,11 @@ object Parser {
           })
         }
         if (str.startsWith(s"${p}version")) {
-          val rd = new Random()
           Main.oneBot.sendGroup(groupId,
             s"""OpenLightBit version ${Main.version}
                |更新内容：${Main.changelog}
                |------------
-               |${Main.splashes.get((rd.nextDouble() * (Main.splashes.size() - 1)).round.toInt)}""".stripMargin)
+               |${Main.splashes.get(RandomUtil.randomInt(0, Main.splashes.size))}""".stripMargin)
         }
         if (str.startsWith(s"${p}help")) {
           Main.oneBot.sendGroup(groupId,
@@ -264,6 +182,18 @@ object Parser {
               case "write" => Cave.add(groupId, senderId, args.apply(2))
               case "write_comment" => Cave.addComment(groupId, senderId, java.lang.Integer.parseInt(args.apply(2)), args.apply(3))
           }
+        }
+        if (str.startsWith(s"${p}broadcast")) {
+          val args = str.split(" ")
+          if (args.length < 3) {
+            Main.oneBot.sendGroup(groupId, "格式错误")
+            return
+          }
+          val groupList: util.List[Long] = new util.ArrayList[Long]()
+          for (i <- 2 until args.length - 1) {
+            groupList.add(lang.Long.parseLong(args.apply(i)))
+          }
+          Broadcast.broadcast(senderId, groupId, args.apply(1), groupList)
         }
       }
       if (str.startsWith(s"${p}enable")) {
