@@ -28,10 +28,12 @@ object GetMusic {
     }), classOf[SearchResponse])
     val sb: StringBuilder = new StringBuilder()
     sb.append(s"歌曲名${musicName}的搜索结果如下：")
-    sb.append("\n名称 --- 播放命令")
+    sb.append("\n名称 - 作者 - 歌曲id")
     for (i <- (page - 1) * 3 until page * 3) {
       val song = result.result.songs.get(i)
-      sb.append(s"\n${song.name} --- !music ${song.id}")
+      sb.append(s"\n${song.name} - ")
+      song.artists.forEach(artist => sb.append(artist.name).append(" "))
+      sb.append(s"- ${song.id}")
     }
     Main.oneBot.sendGroup(group, sb.toString)
   }

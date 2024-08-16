@@ -231,7 +231,8 @@ object Parser {
                   return
                 }
                 GetMusic.searchMusic(groupId, args.apply(2), if (args.length < 4) 1 else Integer.parseInt(args.apply(3)))
-              case _ => GetMusic.getMusic(groupId, java.lang.Long.parseLong(args.apply(1)))
+              case "play" => GetMusic.getMusic(groupId, java.lang.Long.parseLong(args.apply(2)))
+              case _ => Main.oneBot.sendGroup(groupId, "格式错误")
           }
         }
         if (str.startsWith(s"${p}captcha")) {
