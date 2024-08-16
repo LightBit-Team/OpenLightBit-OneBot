@@ -2,12 +2,12 @@ package am9.olbcore.onebot
 package config
 
 import cn.hutool.json.JSONUtil
+import com.google.gson.reflect.TypeToken
 
 import java.io.{File, IOException}
 import java.nio.file.{Files, NoSuchFileException, Paths}
 import java.util
 
-@SuppressWarnings(Array("deprecation"))
 class AdminData {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef]() {
     put("admin", util.ArrayList[Long]())
@@ -19,12 +19,13 @@ class AdminData {
 
   def getData: util.Map[String, AnyRef] = data
   def setData(map: util.Map[String, AnyRef]): Unit = this.data = map
-  def getJson: String = JSONUtil.toJsonPrettyStr(data)
+  def getJson: String = Main.json.toJson(data)
   def read(dir: File): this.type = {
     var json: String = null
     if (dir.exists()) {
       json = new String(Files.readAllBytes(Paths.get(dir.getPath)))
-      this.setData(JSONUtil.parseObj(json).getRaw)
+      this.setData(Main.json.fromJson[util.HashMap[String, AnyRef]](json,
+        new TypeToken[util.HashMap[String, AnyRef]](){}.getType))
       this
     } else {
       throw new NullPointerException("Config file not found!")

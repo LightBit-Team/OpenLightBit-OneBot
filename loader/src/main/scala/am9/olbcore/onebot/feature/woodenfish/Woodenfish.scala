@@ -1,6 +1,6 @@
 package am9.olbcore.onebot.feature.woodenfish
 
-import am9.olbcore.onebot.{Main, Terminal}
+import am9.olbcore.onebot.Main
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose

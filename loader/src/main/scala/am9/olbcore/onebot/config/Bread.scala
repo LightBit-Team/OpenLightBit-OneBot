@@ -8,13 +8,12 @@ import java.io.{File, IOException}
 import java.nio.file.{Files, NoSuchFileException, Paths}
 import java.util
 
-@SuppressWarnings(Array("deprecation"))
 class Bread {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef](){}
 
   def getData: util.Map[String, AnyRef] = data
   def setData(map: util.Map[String, AnyRef]): Unit = this.data = map
-  def getJson: String = JSONUtil.toJsonPrettyStr(data)
+  def getJson: String = Main.json.toJson(data)
   def read(dir: File): this.type = {
     var json: String = null
     if (dir.exists()) {

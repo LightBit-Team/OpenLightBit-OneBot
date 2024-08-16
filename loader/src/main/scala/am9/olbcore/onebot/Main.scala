@@ -6,11 +6,14 @@ import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
 import am9.olbcore.onebot.onebot.{Connect, OneBot}
+import cn.hutool.core.io.FileUtil
+import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
 import org.jetbrains.annotations.{NonNls, Nullable}
 import org.slf4j.LoggerFactory
 
 import java.io.File
+import java.nio.charset.StandardCharsets
 import java.util
 import java.util.Timer
 
@@ -71,7 +74,7 @@ object Main {
         logger = org.slf4j.LoggerFactory.getLogger(config.getData.get("logger-name").toString)
         config = config.read(configFile)
         if (Integer.parseInt(config.getData.get("config-version").toString) < 2) {
-          logger.warn("配置文件版本过低请重新生成配置文件！")
+          logger.warn("配置文件版本过低，请重新生成配置文件！")
           System.exit(0)
         }
         if (Integer.parseInt(config.getData.get("config-version").toString) > 2) {
@@ -79,9 +82,25 @@ object Main {
           System.exit(0)
         }
       } else {
-        config.write(configFile)
-        logger.error("请填写配置文件！")
-        System.exit(0)
+        if (FileUtil.exist("config.json")) {
+          val map = json.fromJson[util.HashMap[String, AnyRef]](
+            FileUtil.readString(FileUtil.file("config,json"), StandardCharsets.UTF_8),
+            new TypeToken[util.HashMap[String, AnyRef]](){}.getType)
+          map.put("config-version", "2")
+          map.put("onebot-post-port", "1145")
+          map.put("onebot-path", "/onebot")
+          map.put("enable-media-server", "true")
+          map.put("media-server-host", "localhost")
+          map.put("media-server-port", "19198")
+          config.setData(map)
+          config.write(configFile)
+          FileUtil.del("config.json")
+          logger.info("已升级配置文件！")
+        } else {
+          config.write(configFile)
+          logger.error("请填写配置文件！")
+          System.exit(0)
+        }
       }
       if (!adminConfigFile.exists()) {
         adminData.write(adminConfigFile)

@@ -11,14 +11,14 @@ object BreadFactory {
   def init(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) == null) {
-      breadMap.put(groupId.toString, new JSONObject(true) {
-        put("exp", 0)
-        put("level", 1)
-        put("bread", 0)
-        put("flour", 0)
-        put("yeast", 0)
+      breadMap.put(groupId.toString, new java.util.HashMap[String, AnyRef](){
+        put("exp", Integer.valueOf(0))
+        put("level", Integer.valueOf(1))
+        put("bread", Integer.valueOf(0))
+        put("flour", Integer.valueOf(0))
+        put("yeast", Integer.valueOf(0))
         put("mode", "default")
-        put("bread_max", 300)
+        put("bread_max", Integer.valueOf(300))
       })
       Main.bread.setData(breadMap)
       Main.bread.write(new File("bread.json"))
@@ -30,10 +30,10 @@ object BreadFactory {
   def getBread(groupId: Long, number: Int): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
-      val json = breadMap.get(groupId.toString).asInstanceOf[JSONObject]
-      if (json.getStr("mode") == "default") {
-        if (json.getInt("bread") >= number && number < 100) {
-          json.set("bread", json.getInt("bread") - number)
+      val json = breadMap.get(groupId.toString).asInstanceOf[java.util.HashMap[String, AnyRef]]
+      if (json.get("mode") == "default") {
+        if (json.get("bread").asInstanceOf[Int] >= number && number < 100) {
+          json.put("bread", Integer.valueOf(json.get("bread").asInstanceOf[Int] - number))
           Main.oneBot.sendGroup(groupId, s"成功获取${number}个面包！")
         } else {
           Main.oneBot.sendGroup(groupId, "面包不够！")
@@ -43,13 +43,14 @@ object BreadFactory {
       }
     }
   }
+  //todo
   def getInfo(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
       val json = breadMap.get(groupId.toString).asInstanceOf[JSONObject]
       if (json.getStr("mode") == "default") {
         Main.oneBot.sendGroup(groupId,
-          s"""群号：${groupId}
+          s"""群号：$groupId
              |面包数量：${json.getInt("bread")}
              |面包最大值：${json.getInt("bread_max")}
              |面粉：${json.getInt("flour")}
