@@ -3,7 +3,7 @@ package am9.olbcore.onebot.feature.parser
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
-import am9.olbcore.onebot.feature.{Admin, BreadFactory, Broadcast, Captcha, ErrorProcess, GetMusic, WebThings}
+import am9.olbcore.onebot.feature.{Admin, BreadFactory, Broadcast, Captcha, ErrorProcess, GetMusic, Info, WebThings}
 import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.core.util.RandomUtil
 import org.jetbrains.annotations.Nullable
@@ -194,6 +194,9 @@ object CommandParser {
             groupList.add(lang.Long.parseLong(args.apply(i)))
           }
           Broadcast.broadcast(senderId, groupId, args.apply(1), groupList)
+        }
+        if (str.startsWith(s"${p}status")) {
+          Info.showInfo(groupId)
         }
       }
       if (str.startsWith(s"${p}enable")) {

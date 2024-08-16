@@ -26,6 +26,7 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
+  val startTime: Long = System.currentTimeMillis
   @NonNls
   val version = "0.3.0 (QingZhu)"
   val changelog: String = "null"
@@ -33,17 +34,23 @@ object Main {
   val splashes: util.List[String] = util.List.of(
     "也试试KuoHuBit罢！Also try KuoHuBit!",
     "也试试2kbit罢！Also try 2kbit!",
+    "使用Scala编写！",
+    "誓死捍卫微软苏维埃！",
+    "要把反革命分子的恶臭思想，扫进历史的垃圾堆！",
     "PHP是世界上最好的编程语言（雾）",
+    "社会主义好，社会主义好~",
     "Minecraft很好玩，但也可以试试Terraria！",
     "So Nvidia, f**k you!",
+    "战无不胜的马克思列宁主义万岁！",
     "Bug是杀不完的，你杀死了一个Bug，就会有千千万万个Bug站起来！",
     "跟张浩扬博士一起来学Jvav罢！",
     "哼哼哼，啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊",
     "你知道吗？其实你什么都不知道！",
     "Tips:这是一条烫...烫..烫知识（）",
+    "你知道成功的秘诀吗？我告诉你成功的秘诀就是：我操你妈的大臭逼",
     "有时候ctmd不一定是骂人 可能是传统美德",
+    "python不一定是编程语言 也可能是屁眼通红",
     "这条标语虽然没有用，但是是有用的，因为他被加上了标语",
-    "使用Scala编写！"
   )
   @NonNls
   val copyright: String =
