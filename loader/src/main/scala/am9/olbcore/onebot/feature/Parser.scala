@@ -4,6 +4,7 @@ package feature
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.onebot.event.{FriendMessage, GroupMessage}
+import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.json.{JSONObject, JSONUtil}
 import com.google.gson.internal.LinkedTreeMap
 import org.jetbrains.annotations.Nullable
@@ -97,7 +98,13 @@ object Parser {
     try {
       if (!Admin.isDisabled(groupId)) {
         if (str.startsWith(s"${p}test")) {
-          Main.oneBot.sendGroup(groupId, "Hello, World!")
+          ThreadUtil.execAsync(new Runnable(){
+            override def run(): Unit = {
+              Main.oneBot.sendGroup(groupId, "Hello, World!")
+              Thread.sleep(1000)
+              Main.oneBot.sendGroup(groupId, "Hello, World!")
+            }
+          })
         }
         if (str.startsWith(s"${p}version")) {
           val rd = new Random()

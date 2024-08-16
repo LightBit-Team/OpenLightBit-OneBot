@@ -2,6 +2,7 @@ package am9.olbcore.onebot.media
 
 import am9.olbcore.onebot.Main
 import cn.hutool.core.io.FileUtil
+import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.http.HttpUtil
 
 class MediaServer(port: Int) {
@@ -12,13 +13,8 @@ class MediaServer(port: Int) {
 
   def start(): Unit = {
     if (java.lang.Boolean.parseBoolean(Main.config.getData.get("enable-media-server").toString)) {
-      if (!FileUtil.file("temp").exists()) {
-        FileUtil.mkdir("temp")
-      } else if (!FileUtil.isDirectory("temp")) {
-        Main.logger.error("temp不是文件夹，将删除temp并创建同名文件夹")
-        FileUtil.del("temp")
-        FileUtil.mkdir("temp")
-      }
+      FileUtil.del("temp")
+      FileUtil.mkdir("temp")
       server.start()
       started = true
     }
