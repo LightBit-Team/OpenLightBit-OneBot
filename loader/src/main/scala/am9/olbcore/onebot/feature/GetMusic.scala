@@ -2,7 +2,6 @@ package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.neteasemusic.SearchResponse
-import am9.olbcore.onebot.media.MediaServer
 import cn.hutool.core.io.FileUtil
 import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.http.HttpUtil
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.NotNull
 
 import java.io.File
 import java.util
-import scala.util.control.Breaks.{break, breakable}
 
 object GetMusic {
   def getMusic(group: Long, @NotNull musicId: Long): Unit = {

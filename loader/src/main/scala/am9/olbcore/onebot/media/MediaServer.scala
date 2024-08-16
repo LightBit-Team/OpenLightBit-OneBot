@@ -2,7 +2,6 @@ package am9.olbcore.onebot.media
 
 import am9.olbcore.onebot.Main
 import cn.hutool.core.io.FileUtil
-import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.http.HttpUtil
 
 class MediaServer(port: Int) {
