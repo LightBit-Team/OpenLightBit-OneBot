@@ -1,22 +1,18 @@
-package am9.olbcore.onebot.onebot.event
+package am9.olbcore.onebot.platform.onebot.event
 
-import am9.olbcore.onebot.onebot.Sender
+import am9.olbcore.onebot.platform.onebot.Sender
 import com.google.gson.annotations.Expose
 
-class GroupMessage extends Event {
+class FriendMessage extends Event {
   post_type = "message"
   @Expose
-  var message_type: String = "group"
+  var message_type: String = "private"
   @Expose
   var sub_type: String = null
   @Expose
   var message_id: Int = 0
   @Expose
-  var group_id: Long = 0
-  @Expose
   var user_id: Long = 0
-  @Expose
-  var anonymous: AnyRef = null
   @Expose
   var message_format: String = null
   @Expose

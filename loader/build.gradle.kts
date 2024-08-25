@@ -20,14 +20,14 @@ plugins {
 
 repositories {
     // Use Maven Central for resolving dependencies.
-    mavenCentral()
+    //mavenCentral()
+    maven {
+        url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/")
+    }
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.scala-lang/scala3-library
-    implementation("org.scala-lang:scala3-library_3:3.6.0-RC1-bin-20240712-97a711c-NIGHTLY")
-
-    // https://mvnrepository.com/artifact/cn.hutool/hutool-all
+    implementation("org.scala-lang:scala3-library_3:3.6.0-RC1-bin-20240822-d490d13-NIGHTLY")
     implementation("cn.hutool:hutool-bom:5.8.31") {
         exclude(group = "cn.hutool", module = "hutool-log")
         exclude(group = "cn.hutool", module = "hutool-socket")
@@ -41,27 +41,14 @@ dependencies {
         exclude(group = "cn.hutool", module = "hutool-crypto")
         exclude(group = "cn.hutool", module = "hutool-cache")
     }
-
-
-
-    // https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket
     implementation("org.java-websocket:Java-WebSocket:1.5.7")
-
-    // This dependency is used by the application.
     implementation(libs.guava)
-
     implementation("org.jetbrains:annotations:24.1.0")
-
     implementation("com.google.code.gson:gson:2.11.0")
-
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
-
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
-
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
-
-
+    implementation("me.zhenxin:qqbot-sdk:1.3.2-dev")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -77,4 +64,5 @@ application {
 }
 
 project.extra["scalaMajorVersion"] = "3"
-project.extra["scalaVersion"] = "${project.extra["scalaMajorVersion"]}.5.0-RC2"
+project.extra["scalaVersion"] = "${project.extra["scalaMajorVersion"]}.6.0-RC1-bin-20240822-d490d13-NIGHTLY-nonbootstrapped-git-d490d13"
+

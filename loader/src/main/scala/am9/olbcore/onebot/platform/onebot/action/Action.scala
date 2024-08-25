@@ -1,6 +1,6 @@
-package am9.olbcore.onebot.onebot.action
+package am9.olbcore.onebot.platform.onebot.action
 
-import am9.olbcore.onebot.onebot.action.params.Params
+import am9.olbcore.onebot.platform.onebot.action.params.Params
 import com.google.gson.annotations.Expose
 
 abstract class Action {

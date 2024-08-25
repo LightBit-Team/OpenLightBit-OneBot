@@ -1,8 +1,8 @@
-package am9.olbcore.onebot.onebot
+package am9.olbcore.onebot.platform.onebot
 
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.parser.MessageParser
-import am9.olbcore.onebot.onebot.action.params.{SendGroupMsgParams, SendPrivateMsgParams}
+import am9.olbcore.onebot.platform.onebot.action.params.{SendGroupMsgParams, SendPrivateMsgParams}
 import cn.hutool.http.HttpUtil
 import cn.hutool.http.server.SimpleServer
 

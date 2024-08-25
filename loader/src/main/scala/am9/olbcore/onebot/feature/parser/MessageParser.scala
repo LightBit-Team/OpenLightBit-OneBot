@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.feature.parser
 
 import am9.olbcore.onebot.feature.*
-import am9.olbcore.onebot.onebot.event.{FriendMessage, GroupMessage}
+import am9.olbcore.onebot.platform.onebot.event.{FriendMessage, GroupMessage}
 import am9.olbcore.onebot.{Main, Terminal}
 import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.json.{JSONObject, JSONUtil}

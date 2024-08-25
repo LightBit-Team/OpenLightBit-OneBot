@@ -1,4 +1,4 @@
-package am9.olbcore.onebot.onebot.event
+package am9.olbcore.onebot.platform.onebot.event
 
 import com.google.gson.annotations.Expose
 

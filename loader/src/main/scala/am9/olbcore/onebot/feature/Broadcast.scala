@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.onebot.Segment
+import am9.olbcore.onebot.platform.onebot.Segment
 import cn.hutool.core.thread.ThreadUtil
 
 import java.util

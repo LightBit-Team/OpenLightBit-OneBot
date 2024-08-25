@@ -1,6 +1,6 @@
-package am9.olbcore.onebot.onebot.action.params
+package am9.olbcore.onebot.platform.onebot.action.params
 
-import am9.olbcore.onebot.onebot.Segment
+import am9.olbcore.onebot.platform.onebot.Segment
 import com.google.gson.annotations.Expose
 
 class SendGroupMsgParams(

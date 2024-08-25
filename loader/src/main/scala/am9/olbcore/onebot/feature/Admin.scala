@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.onebot.OneBot
+import am9.olbcore.onebot.platform.onebot.OneBot
 
 import java.io.File
 

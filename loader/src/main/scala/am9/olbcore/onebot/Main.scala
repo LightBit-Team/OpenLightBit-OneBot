@@ -5,7 +5,7 @@ import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
-import am9.olbcore.onebot.onebot.{Connect, OneBot}
+import am9.olbcore.onebot.platform.onebot.{Connect, OneBot}
 import cn.hutool.core.io.FileUtil
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}

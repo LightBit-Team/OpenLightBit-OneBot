@@ -1,8 +1,8 @@
-package am9.olbcore.onebot
-package onebot
+package am9.olbcore.onebot.platform.onebot
 
+import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.parser.MessageParser
-import am9.olbcore.onebot.onebot.action.{SendGroupMsg, SendPrivateMsg}
+import am9.olbcore.onebot.platform.onebot.action.{SendGroupMsg, SendPrivateMsg}
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 

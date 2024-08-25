@@ -1,4 +1,4 @@
-package am9.olbcore.onebot.onebot
+package am9.olbcore.onebot.platform.onebot
 
 import com.google.gson.annotations.Expose
 
