@@ -43,21 +43,20 @@ object BreadFactory {
       }
     }
   }
-  //todo
   def getInfo(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
-      val json = breadMap.get(groupId.toString).asInstanceOf[JSONObject]
-      if (json.getStr("mode") == "default") {
+      val json = breadMap.get(groupId.toString).asInstanceOf[util.Map[String, AnyRef]]
+      if (json.get("mode").toString == "default") {
         Main.oneBot.sendGroup(groupId,
           s"""群号：$groupId
-             |面包数量：${json.getInt("bread")}
-             |面包最大值：${json.getInt("bread_max")}
-             |面粉：${json.getInt("flour")}
-             |酵母：${json.getInt("yeast")}
-             |等级：${json.getInt("level")}
-             |经验：${json.getInt("exp")}
-             |升级所需经验：${(json.getInt("level") + 1).*(300)}
+             |面包数量：${json.get("bread").toString}
+             |面包最大值：${json.get("bread_max").toString}
+             |面粉：${json.get("flour").toString}
+             |酵母：${json.get("yeast").toString}
+             |等级：${json.get("level")}
+             |经验：${json.get("exp")}
+             |升级所需经验：${(Integer.parseInt(json.get("level").toString) + 1) * 300}
              |""".stripMargin)
       }
     } else {
@@ -67,13 +66,13 @@ object BreadFactory {
   def upgrade(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
-      val json = breadMap.get(groupId.toString).asInstanceOf[JSONObject]
-      if (json.getStr("mode") == "default" && json.getInt("level") < 5) {
-        if (json.getInt("exp") >= (json.getInt("level") + 1).*(300)) {
-          json.set("level", json.getInt("level") + 1)
-          json.set("bread_max", json.getInt("level") * 300)
+      val json = breadMap.get(groupId.toString).asInstanceOf[util.HashMap[String, AnyRef]]
+      if (json.get("mode").toString == "default" && Integer.parseInt(json.get("level").toString) < 5) {
+        if (Integer.parseInt(json.get("exp").toString) >= (Integer.parseInt(json.get("level").toString) + 1).*(300)) {
+          json.put("level", (Integer.parseInt(json.get("level").toString) + 1).toString)
+          json.put("bread_max", (Integer.parseInt(json.get("level").toString) * 300).toString)
         } else {
-          Main.oneBot.sendGroup(groupId, s"没有足够经验，要求${(json.getInt("level") + 1).*(300)}")
+          Main.oneBot.sendGroup(groupId, s"没有足够经验，要求${(Integer.parseInt(json.get("level").toString) + 1).*(300)}")
         }
       } else {
         Main.oneBot.sendGroup(groupId, "不支持的操作！！")
@@ -88,14 +87,15 @@ object BreadFactory {
   def expReward(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
-      val json = breadMap.get(groupId.toString).asInstanceOf[JSONObject]
-      if (json.getStr("mode") == "default") {
-        json.set("exp", json.getInt("exp") + 2)
+      val json = breadMap.get(groupId.toString).asInstanceOf[util.HashMap[String, AnyRef]]
+      if (json.get("mode").toString == "default") {
+        json.put("exp", (Integer.parseInt(json.get("exp").toString) + 2).toString)
         Main.bread.setData(breadMap)
         Main.bread.write(new File("bread.json"))
       }
     }
   }
+  //todo
   val makeBread: TimerTask = new TimerTask {
     override def run(): Unit = {
       val newData = new util.HashMap[String, AnyRef]()

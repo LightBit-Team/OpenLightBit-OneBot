@@ -1,7 +1,10 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.Main.logger
+import kotlin.jvm.Throws
 import org.jetbrains.annotations.NotNull
+
+import java.util
 
 object Terminal {
   def serverLauncherWarn(): Unit = {
@@ -20,5 +23,18 @@ object Terminal {
     if (Main.config.getData.get("debug-enabled").toString.toBoolean) {
       Main.logger.debug(msg.toString)
     }
+  }
+  @Throws(exceptionClasses = Array[Class[? <: Throwable]](classOf[IllegalAccessException]))
+  def bean2Map(obj: AnyRef): util.Map[String, AnyRef] = {
+    val map = new util.HashMap[String, AnyRef]()
+    val cls = obj.getClass
+    cls.getDeclaredFields.foreach(i => {
+      i.setAccessible(true)
+      val value = i.get(obj)
+      if (value != null) {
+        map.put(i.getName, value)
+      }
+    })
+    map
   }
 }
