@@ -2,7 +2,7 @@ package am9.olbcore.onebot.feature.neteasemusic
 
 import com.google.gson.annotations.Expose
 
-class Song {
+class Song extends Serializable{
   @Expose
   var id: Long = 0
   @Expose

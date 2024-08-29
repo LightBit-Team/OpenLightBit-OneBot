@@ -2,7 +2,7 @@ package am9.olbcore.onebot.feature.neteasemusic
 
 import com.google.gson.annotations.Expose
 
-class SearchResponse {
+class SearchResponse extends Serializable{
   @Expose
   var result: Result = null
   @Expose

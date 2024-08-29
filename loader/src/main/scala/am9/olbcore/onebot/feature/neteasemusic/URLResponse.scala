@@ -2,10 +2,9 @@ package am9.olbcore.onebot.feature.neteasemusic
 
 import com.google.gson.annotations.Expose
 
-class Result extends Serializable{
+class URLResponse extends Serializable{
   @Expose
-  var songs: java.util.List[Song] = null
+  var data: java.util.List[Data] = null
   @Expose
-  var songCount: Int = 0
-
+  var code: Int = 0
 }
