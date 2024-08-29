@@ -7,14 +7,12 @@ import java.util
 import java.util.Scanner
 import java.util.function.Consumer
 
-class NativeOptimized {
-  @JvmStatic
+object NativeOptimized {
   def optimize(): Unit = {
     
   }
-  @JvmStatic
-  def use(closable: AutoCloseable, function: Consumer[AutoCloseable]): Unit = {
-    function.accept(closable)
-    closable.close()
-  }
+  //def use(closable: AutoCloseable, function: Consumer[AutoCloseable]): Unit = {
+  //  function.accept(closable)
+  //  closable.close()
+  //}
 }

@@ -2,6 +2,7 @@ package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
 import cn.hutool.json.JSONObject
+import com.google.gson.internal.LinkedTreeMap
 
 import java.io.File
 import java.util
@@ -87,9 +88,9 @@ object BreadFactory {
   def expReward(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
-      val json = breadMap.get(groupId.toString).asInstanceOf[util.HashMap[String, AnyRef]]
+      val json = breadMap.get(groupId.toString).asInstanceOf[LinkedTreeMap[String, AnyRef]]
       if (json.get("mode").toString == "default") {
-        json.put("exp", (Integer.parseInt(json.get("exp").toString) + 2).toString)
+        json.put("exp", (java.lang.Double.parseDouble(json.get("exp").toString) + 2).toString)
         Main.bread.setData(breadMap)
         Main.bread.write(new File("bread.json"))
       }

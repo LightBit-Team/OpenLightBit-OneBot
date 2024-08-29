@@ -2,7 +2,9 @@ package am9.olbcore.onebot
 package config
 
 
-import cn.hutool.json.JSONUtil
+//import cn.hutool.json.JSONUtil
+
+import com.google.gson.reflect.TypeToken
 
 import java.io.{File, IOException}
 import java.nio.file.{Files, NoSuchFileException, Paths}
@@ -18,7 +20,7 @@ class Bread {
     var json: String = null
     if (dir.exists()) {
       json = new String(Files.readAllBytes(Paths.get(dir.getPath)))
-      this.setData(JSONUtil.parseObj(json).getRaw)
+      this.setData(Main.json.fromJson[util.HashMap[String, AnyRef]](json, new TypeToken[util.HashMap[String, AnyRef]](){}))
       this
     } else {
       throw new NullPointerException("Config file not found!")

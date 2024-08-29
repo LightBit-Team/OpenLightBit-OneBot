@@ -1,7 +1,6 @@
 package am9.olbcore.onebot
 package config
 
-import cn.hutool.json.JSONUtil
 import com.google.gson.reflect.TypeToken
 
 import java.io.{File, IOException}
@@ -16,7 +15,6 @@ class AdminData {
     put("ignore_list", util.ArrayList[Long]())
     put("disabled_group", util.ArrayList[Long]())
   }
-
   def getData: util.Map[String, AnyRef] = data
   def setData(map: util.Map[String, AnyRef]): Unit = this.data = map
   def getJson: String = Main.json.toJson(data)

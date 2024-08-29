@@ -3,7 +3,7 @@ package am9.olbcore.onebot.feature.parser
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
-import am9.olbcore.onebot.feature.{Admin, BreadFactory, Broadcast, Captcha, ErrorProcess, GetMusic, Info, WebThings}
+import am9.olbcore.onebot.feature.{Admin, BreadFactory, Broadcast, Captcha, ErrorProcess, GetMusic, Info, WebThings, Zhuan}
 import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.core.util.RandomUtil
 import org.jetbrains.annotations.Nullable
@@ -197,6 +197,18 @@ object CommandParser {
         }
         if (str.startsWith(s"${p}status")) {
           Info.showInfo(groupId)
+        }
+        if (str.startsWith(s"${p}add_listen_group")) {
+          Zhuan.addListenGroup(lang.Long.parseLong(str.split(" ").apply(1)), groupId)
+        }
+        if (str.startsWith(s"${p}del_listen_group")) {
+          Zhuan.removeListenGroup(lang.Long.parseLong(str.split(" ").apply(1)), groupId)
+        }
+        if (str.startsWith(s"${p}add_target_group")) {
+          Zhuan.addTargetGroup(lang.Long.parseLong(str.split(" ").apply(1)), groupId)
+        }
+        if (str.startsWith(s"${p}del_target_group")) {
+          Zhuan.removeTargetGroup(lang.Long.parseLong(str.split(" ").apply(1)), groupId)
         }
       }
       if (str.startsWith(s"${p}enable")) {

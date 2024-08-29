@@ -1,6 +1,6 @@
 package am9.olbcore.onebot
 
-import am9.olbcore.onebot.config.{AdminData, Bread, Config}
+import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanJson}
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
@@ -26,6 +26,7 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
+  var zhuanJson: ZhuanJson = new ZhuanJson()
   val startTime: Long = System.currentTimeMillis
   @NonNls
   val version = "0.3.0 (QingZhu)"
@@ -77,6 +78,7 @@ object Main {
       val configFile = new File("config.properties")
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
+      val zhuanFile = new File("zhuan.properties")
       if (configFile.exists()) {
         logger = org.slf4j.LoggerFactory.getLogger(config.getData.get("logger-name").toString)
         config = config.read(configFile)
@@ -117,6 +119,10 @@ object Main {
         bread.write(breadFile)
       }
       bread = bread.read(breadFile)
+      if (!zhuanFile.exists()) {
+        zhuanJson.write(zhuanFile)
+      }
+      zhuanJson = zhuanJson.read(zhuanFile)
       oneBot = Connect.getConnection
       if (new File("woodenfish.json").exists()) {
         Woodenfishes.read(new File("woodenfish.json"))
@@ -125,8 +131,8 @@ object Main {
         Cave.read(new File("cave.json"))
       }
       val timer = new Timer()
-      timer.schedule(BreadFactory.makeBread, 20000)
-      timer.schedule(BreadFactory.getMaterial, 25000)
+      //timer.schedule(BreadFactory.makeBread, 20000)
+      //timer.schedule(BreadFactory.getMaterial, 25000)
       timer.schedule(Woodenfishes.autoSave, 120000)
       mediaServer = new MediaServer(Integer.parseInt(config.getData.get("media-server-port").toString))
       mediaServer.start()
