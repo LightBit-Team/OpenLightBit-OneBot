@@ -37,4 +37,18 @@ object Terminal {
     })
     map
   }
+  def iAmNotACompiler(input: Byte): Byte = {
+    var a: Byte = input
+    var b: Byte = 5
+    var c: Byte = 0
+    while (a > 0) {
+      if (a >= (b ^ 2)) {
+        a = (a - (b ^ 2)).toByte
+        c = (c + 1).toByte
+      } else {
+        b = (b - 2).toByte
+      }
+    }
+    c
+  }
 }

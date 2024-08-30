@@ -42,7 +42,6 @@ dependencies {
         exclude(group = "cn.hutool", module = "hutool-cache")
     }
     implementation("org.java-websocket:Java-WebSocket:1.5.7")
-    implementation(libs.guava)
     implementation("org.jetbrains:annotations:24.1.0")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")

@@ -35,7 +35,7 @@ object MessageParser {
                 var message: String = null
                 if (json.getStr("message_format") == "array") {
                   val list = groupMessage.message.asInstanceOf[java.util.List[LinkedTreeMap[String, AnyRef]]]
-                  Zhuan.zhuan(groupMessage.group_id, groupMessage.user_id, list)
+                  Zhuan.zhuan(groupMessage.group_id, groupMessage.user_id, list, groupMessage.sender.role)
                   if (list.get(0).get("type").toString == "text") {
                     list.get(0).get("data").asInstanceOf[java.util.Map[String, String]].forEach((k, v) => {
                       message = v
@@ -43,7 +43,7 @@ object MessageParser {
                   }
                   if (message == null) message = "null"
                 } else {
-                  Zhuan.zhuan(groupMessage.group_id, groupMessage.user_id, message)
+                  Zhuan.zhuan(groupMessage.group_id, groupMessage.user_id, message, groupMessage.sender.role)
                   message = groupMessage.message.toString
                 }
                 if (message.contains("!")) {

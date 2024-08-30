@@ -11,4 +11,6 @@ class Sender {
   var sex: String = null
   @Expose
   var age: Int = 0
+  @Expose
+  var role: String = null
 }

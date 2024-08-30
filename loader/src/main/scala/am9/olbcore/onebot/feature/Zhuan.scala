@@ -8,12 +8,16 @@ import java.io.File
 import java.util
 
 object Zhuan {
-  def zhuan(group: Long, sender: Long, msg: util.List[LinkedTreeMap[String, AnyRef]]): Unit = {
+  def zhuan(group: Long, sender: Long, msg: util.List[LinkedTreeMap[String, AnyRef]], role: String): Unit = {
     if (Main.zhuanJson.getData.get("listen-group").contains(group)) {
       val newSegments = new util.ArrayList[Segment]()
+      val roleText = role match
+        case "owner" => "群主"
+        case "admin" => "管理员"
+        case "member" => "群友"
       newSegments.add(
         new Segment("text", new util.HashMap[String, String]() {
-          put("text", s"${group}的群友${sender}发送了消息：\n")
+          put("text", s"${group}的$roleText${sender}发送了消息：\n")
         })
       )
       msg.forEach(i => {
@@ -25,9 +29,13 @@ object Zhuan {
       })
     }
   }
-  def zhuan(group: Long, sender: Long, msg: String): Unit = {
+  def zhuan(group: Long, sender: Long, msg: String, role: String): Unit = {
     if (Main.zhuanJson.getData.get("listen-group").contains(group)) {
-      val content = s"${group}的群友${sender}发送了消息：\n$msg"
+      val roleText = role match
+        case "owner" => "群主"
+        case "admin" => "管理员"
+        case "member" => "群友"
+      val content = s"${group}的$roleText${sender}发送了消息：\n$msg"
       Main.zhuanJson.getData.get("target-group").forEach(i => {
         Main.oneBot.sendGroupWithCqCode(i, content)
       })

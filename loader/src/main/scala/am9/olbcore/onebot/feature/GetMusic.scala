@@ -15,9 +15,11 @@ object GetMusic {
   def getMusic(group: Long, @NotNull musicId: Long): Unit = {
     ThreadUtil.execute(new Runnable() {
       override def run(): Unit = {
-        val json = HttpUtil.get(s"${neteaseCloudMusicApi}/song/url", new util.HashMap[String, AnyRef](){
-          put("id", musicId.toString)
-        })
+        val request = HttpUtil
+          .createGet(s"${neteaseCloudMusicApi}/song/url?id=$musicId", true)
+          .execute(true)
+        ThreadUtil.safeSleep(1000)
+        val json = request.body()
         val response = Main.json.fromJson[URLResponse](json, classOf[URLResponse])
         if (response.code != 200) {
           Main.oneBot.sendGroup(group, "获取歌曲失败！")
@@ -32,11 +34,13 @@ object GetMusic {
   def searchMusic(group: Long, musicName: String, page: Int): Unit = {
     ThreadUtil.execute(new Runnable() {
       override def run(): Unit = {
-        val result: SearchResponse = Main.json.fromJson[SearchResponse](
-          HttpUtil.get(s"${neteaseCloudMusicApi}/search", new util.HashMap[String, AnyRef]() {
-            put("keywords", musicName)
-            put("limit", (3 * page).toString)
-          }), classOf[SearchResponse])
+        val response = HttpUtil
+          .createGet(s"${neteaseCloudMusicApi}/search?keywords=$musicName?limit=${3 * page}", true)
+          .execute(true)
+        ThreadUtil.safeSleep(1000)
+        val json = response.body()
+            //.header("Location"))
+        val result: SearchResponse = Main.json.fromJson[SearchResponse](json, classOf[SearchResponse])
         val sb: StringBuilder = new StringBuilder()
         sb.append(s"歌曲名${musicName}的搜索结果如下：")
         sb.append("\n名称 - 作者 - 歌曲id")
