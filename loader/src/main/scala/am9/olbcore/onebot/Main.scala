@@ -1,7 +1,6 @@
 package am9.olbcore.onebot
 
-import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanJson}
-import am9.olbcore.onebot.feature.BreadFactory
+import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanProp}
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
@@ -26,7 +25,7 @@ object Main {
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
-  var zhuanJson: ZhuanJson = new ZhuanJson()
+  var zhuanProp: ZhuanProp = new ZhuanProp()
   val startTime: Long = System.currentTimeMillis
   @NonNls
   val version = "0.3.0 (QingZhu)"
@@ -120,9 +119,9 @@ object Main {
       }
       bread = bread.read(breadFile)
       if (!zhuanFile.exists()) {
-        zhuanJson.write(zhuanFile)
+        zhuanProp.write(zhuanFile)
       }
-      zhuanJson = zhuanJson.read(zhuanFile)
+      zhuanProp = zhuanProp.read(zhuanFile)
       oneBot = Connect.getConnection
       if (new File("woodenfish.json").exists()) {
         Woodenfishes.read(new File("woodenfish.json"))

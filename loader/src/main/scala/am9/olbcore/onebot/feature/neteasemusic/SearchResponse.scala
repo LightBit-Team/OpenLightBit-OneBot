@@ -7,5 +7,4 @@ class SearchResponse extends Serializable{
   var result: Result = null
   @Expose
   var code: Int = 0
-
 }

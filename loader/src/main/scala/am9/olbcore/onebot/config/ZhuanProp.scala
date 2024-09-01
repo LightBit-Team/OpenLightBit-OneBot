@@ -6,7 +6,7 @@ import java.io.File
 import java.nio.file.{Files, Paths}
 import java.{lang, util}
 
-class ZhuanJson {
+class ZhuanProp {
   var data: util.HashMap[String, util.List[Long]] = new util.HashMap[String, util.List[Long]](){
     put("listen-group", new util.ArrayList[Long]())
     put("target-group", new util.ArrayList[Long]())
