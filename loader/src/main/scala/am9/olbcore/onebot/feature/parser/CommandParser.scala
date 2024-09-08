@@ -3,6 +3,7 @@ package am9.olbcore.onebot.feature.parser
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.feature.*
+import am9.olbcore.onebot.feature.moyu.Fish
 import am9.olbcore.onebot.{Main, Terminal}
 import cn.hutool.core.date.{DateTime, DateUtil}
 import cn.hutool.core.thread.ThreadUtil
