@@ -77,7 +77,7 @@ object Main {
       val configFile = new File("config.properties")
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
-      val zhuanFile = new File("zhuan.properties")
+      val zhuanFile = new File("zhuan.json")
       if (configFile.exists()) {
         logger = org.slf4j.LoggerFactory.getLogger(config.getData.get("logger-name").toString)
         config = config.read(configFile)
@@ -92,7 +92,7 @@ object Main {
       } else {
         if (FileUtil.exist("config.json")) {
           val map = json.fromJson[util.HashMap[String, AnyRef]](
-            FileUtil.readString(FileUtil.file("config,json"), StandardCharsets.UTF_8),
+            FileUtil.readString(FileUtil.file("config.json"), StandardCharsets.UTF_8),
             new TypeToken[util.HashMap[String, AnyRef]](){}.getType)
           map.put("config-version", "2")
           map.put("onebot-post-port", "1145")

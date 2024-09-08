@@ -216,6 +216,9 @@ object CommandParser {
         if (str.startsWith(s"${p}del_target_group")) {
           Zhuan.removeTargetGroup(lang.Long.parseLong(str.split(" ").apply(1)), groupId)
         }
+        if (str.startsWith(s"${p}fish")) {
+          Fish.fish(groupId, senderId)
+        }
         if (RandomUtil.randomInt(0, 10) == 9) {
           System.gc()
         }

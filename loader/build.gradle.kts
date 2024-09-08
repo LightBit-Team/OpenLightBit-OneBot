@@ -14,6 +14,7 @@ plugins {
     application
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("org.graalvm.buildtools.native") version "0.10.2"
 }
 
 project.version = "0.3.0"
@@ -86,6 +87,7 @@ tasks.named<Jar>("jar") {
 }
 
 tasks.named<ShadowJar>("shadowJar") {
+
     dependsOn("copyFile")
 }
 

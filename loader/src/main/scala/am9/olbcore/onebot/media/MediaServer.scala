@@ -11,9 +11,9 @@ class MediaServer(port: Int) {
   def isStarted: Boolean = started
 
   def start(): Unit = {
+    FileUtil.del("temp")
+    FileUtil.mkdir("temp")
     if (java.lang.Boolean.parseBoolean(Main.config.getData.get("enable-media-server").toString)) {
-      FileUtil.del("temp")
-      FileUtil.mkdir("temp")
       server.start()
       started = true
     }
@@ -24,6 +24,7 @@ class MediaServer(port: Int) {
     }
     HttpUtil.downloadFile(httpAddress, file)
   }
+  def addRemoteFile(httpAddress: String, file: String): Unit = addRemoteFile(httpAddress, new java.io.File(file))
   def getFilePath(fileName: String): String = {
     s"http://${Main.config.getData.get("media-server-host")}:${Main.config.getData.get("media-server-port")}/$fileName"
   }

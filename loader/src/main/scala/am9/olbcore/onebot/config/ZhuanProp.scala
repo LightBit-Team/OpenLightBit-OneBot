@@ -1,51 +1,34 @@
 package am9.olbcore.onebot.config
 
-import cn.hutool.setting.dialect.Props
+import am9.olbcore.onebot.Main
+import cn.hutool.core.io.FileUtil
+import com.google.gson.reflect.TypeToken
 
 import java.io.File
-import java.nio.file.{Files, Paths}
+import java.nio.charset.StandardCharsets
 import java.{lang, util}
 
 class ZhuanProp {
-  var data: util.HashMap[String, util.List[Long]] = new util.HashMap[String, util.List[Long]](){
+  private var data: util.HashMap[String, util.List[Long]] = new util.HashMap[String, util.List[Long]](){
     put("listen-group", new util.ArrayList[Long]())
     put("target-group", new util.ArrayList[Long]())
   }
   def getData: util.HashMap[String, util.List[Long]] = data
   def setData(data: util.HashMap[String, util.List[Long]]): Unit = this.data = data
   def read(dir: File): this.type = {
-    var json: String = null
     if (dir.exists()) {
-      try {
-        data.clear()
-        new Props(dir).forEach((k, v) => {
-          k.toString match {
-            case "listen-group" | "target-group" =>
-              val numberList = new util.ArrayList[Long]()
-              v.toString.split("and").foreach(i => {
-                if (i.nonEmpty) numberList.add(lang.Long.parseLong(i))
-              })
-              data.put(k.toString, numberList)
-          }
-        })
-      } catch {
-        case e: NumberFormatException =>
-          throw new RuntimeException(e)
-        case e: MatchError =>
-          throw new RuntimeException(e)
-      }
+      data = Main.json.fromJson[util.HashMap[String, util.List[Long]]](
+        FileUtil.readString(dir, StandardCharsets.UTF_8),
+        new TypeToken[util.HashMap[String, util.List[Long]]](){}
+      )
       this
     } else {
       throw new NullPointerException("Config file not found!")
     }
   }
   def write(dir: File): Unit = {
-    if (dir.exists()) Files.delete(Paths.get(dir.getPath))
-    Files.createFile(Paths.get(dir.getPath))
-    val props = new Props()
-    data.forEach((k, v) => {
-      props.put(k, String.join("and", v.stream().map(i => i.toString).toList))
-    })
-    props.store(dir.getPath)
+    if (dir.exists()) FileUtil.del(dir)
+    FileUtil.touch(dir)
+    FileUtil.writeString(Main.json.toJson(data), dir, StandardCharsets.UTF_8)
   }
 }
