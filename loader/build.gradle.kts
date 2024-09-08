@@ -42,6 +42,9 @@ dependencies {
         exclude(group = "cn.hutool", module = "hutool-dfa")
         exclude(group = "cn.hutool", module = "hutool-crypto")
         exclude(group = "cn.hutool", module = "hutool-cache")
+        exclude(group = "cn.hutool", module = "hutool-json")
+        exclude(group = "cn.hutool", module = "hutool-cron")
+        exclude(group = "cn.hutool", module = "hutool-extra")
     }
     implementation("org.java-websocket:Java-WebSocket:1.5.7")
     implementation("org.jetbrains:annotations:24.1.0")
@@ -49,6 +52,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
+    implementation("com.github.oshi:oshi-core-java11:6.6.3")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

@@ -2,7 +2,6 @@ package am9.olbcore.onebot
 package config
 
 import cn.hutool.core.io.FileUtil
-import cn.hutool.json.JSONUtil
 import cn.hutool.setting.dialect.Props
 
 import java.io.{File, IOException}
@@ -33,7 +32,6 @@ class Config {
 
   def getData: util.Map[String, AnyRef] = data
   def setData(map: util.Map[String, AnyRef]): Unit = this.data = map
-  def getJson: String = JSONUtil.toJsonPrettyStr(data)
   def read(dir: File): this.type = {
     if (dir.exists()) {
       data = new util.TreeMap[String, AnyRef]()

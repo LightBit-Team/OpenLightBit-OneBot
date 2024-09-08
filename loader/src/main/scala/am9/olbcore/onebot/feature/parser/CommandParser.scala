@@ -86,12 +86,6 @@ object CommandParser {
             case e: MatchError => Main.oneBot.sendGroup(groupId, "格式错误")
           }
         }
-        if (str.startsWith(s"${p}icp")) {
-          WebThings.checkICP(str.split(" ").apply(1), groupId)
-        }
-        if (str.startsWith(s"${p}short_link")) {
-          WebThings.getShortLink(str.split(" ").apply(1), groupId)
-        }
         if (str.startsWith(s"${p}hitokoto")) {
           WebThings.hitokoto(groupId)
         }

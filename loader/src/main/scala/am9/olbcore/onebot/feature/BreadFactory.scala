@@ -1,7 +1,6 @@
 package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
-import cn.hutool.json.JSONObject
 import com.google.gson.internal.LinkedTreeMap
 
 import java.io.File
@@ -33,8 +32,8 @@ object BreadFactory {
     if (breadMap.get(groupId.toString) != null) {
       val json = breadMap.get(groupId.toString).asInstanceOf[java.util.HashMap[String, AnyRef]]
       if (json.get("mode") == "default") {
-        if (json.get("bread").asInstanceOf[Int] >= number && number < 100) {
-          json.put("bread", Integer.valueOf(json.get("bread").asInstanceOf[Int] - number))
+        if (java.lang.Double.parseDouble(json.get("bread").toString) >= number && number < 100) {
+          json.put("bread", Integer.valueOf(java.lang.Double.parseDouble(json.get("bread").toString).toInt - number))
           Main.oneBot.sendGroup(groupId, s"成功获取${number}个面包！")
         } else {
           Main.oneBot.sendGroup(groupId, "面包不够！")
@@ -88,7 +87,7 @@ object BreadFactory {
   def expReward(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
-      val json = breadMap.get(groupId.toString).asInstanceOf[util.HashMap[String, AnyRef]]
+      val json = breadMap.get(groupId.toString).asInstanceOf[LinkedTreeMap[String, AnyRef]]
       if (json.get("mode").toString == "default") {
         json.put("exp", (java.lang.Double.parseDouble(json.get("exp").toString) + 2).toString)
         Main.bread.setData(breadMap)
@@ -102,12 +101,12 @@ object BreadFactory {
       Main.bread.getData.forEach((groupId, info) => {
         val json = info.asInstanceOf[LinkedTreeMap[String, AnyRef]]
         if (json.get("mode").toString == "default"
-          && Integer.parseInt(json.get("yeast").toString) > 0
-          && Integer.parseInt(json.get("flour").toString) > 3) {
-          json.put("bread", Integer.valueOf(Integer.parseInt(json.get("bread").toString) + 1))
-          json.put("yeast", Integer.valueOf(Integer.parseInt(json.get("yeast").toString) - 1))
-          json.put("flour", Integer.valueOf(Integer.parseInt(json.get("flour").toString) - 4))
-          if (Integer.parseInt(json.get("bread").toString) > Integer.parseInt(json.get("bread_max").toString)) {
+          && java.lang.Double.parseDouble(json.get("yeast").toString) > 0
+          && java.lang.Double.parseDouble(json.get("flour").toString) > 3) {
+          json.put("bread", Integer.valueOf(java.lang.Double.parseDouble(json.get("bread").toString).toInt + 1))
+          json.put("yeast", Integer.valueOf(java.lang.Double.parseDouble(json.get("yeast").toString).toInt - 1))
+          json.put("flour", Integer.valueOf(java.lang.Double.parseDouble(json.get("flour").toString).toInt - 4))
+          if (java.lang.Double.parseDouble(json.get("bread").toString) > java.lang.Double.parseDouble(json.get("bread_max").toString)) {
             json.put("bread", json.get("bread_max"))
           }
         }
@@ -122,8 +121,8 @@ object BreadFactory {
       val newData = new util.HashMap[String, AnyRef]()
       Main.bread.getData.forEach((groupId, info) => {
         val json = info.asInstanceOf[LinkedTreeMap[String, AnyRef]]
-        json.put("yeast", Integer.valueOf(Integer.parseInt(json.get("yeast").toString) + 2))
-        json.put("flour", Integer.valueOf(Integer.parseInt(json.get("flour").toString) + 6))
+        json.put("yeast", Integer.valueOf(java.lang.Double.parseDouble(json.get("yeast").toString).toInt + 2))
+        json.put("flour", Integer.valueOf(java.lang.Double.parseDouble(json.get("flour").toString).toInt + 6))
         newData.put(groupId, json)
       })
       Main.bread.setData(newData)
