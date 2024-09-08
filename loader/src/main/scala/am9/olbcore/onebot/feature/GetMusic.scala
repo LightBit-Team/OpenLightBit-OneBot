@@ -39,7 +39,6 @@ object GetMusic {
           .execute(true)
         ThreadUtil.safeSleep(1000)
         val json = response.body()
-            //.header("Location"))
         val result: SearchResponse = Main.json.fromJson[SearchResponse](json, classOf[SearchResponse])
         val sb: StringBuilder = new StringBuilder()
         sb.append(s"歌曲名${musicName}的搜索结果如下：")

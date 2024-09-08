@@ -1,11 +1,13 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanProp}
+import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
 import am9.olbcore.onebot.platform.onebot.{Connect, OneBot}
 import cn.hutool.core.io.FileUtil
+import cn.hutool.core.thread.ThreadUtil
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
 import org.jetbrains.annotations.{NonNls, Nullable}
@@ -129,10 +131,12 @@ object Main {
       if (new File("cave.json").exists()) {
         Cave.read(new File("cave.json"))
       }
-      val timer = new Timer()
-      //timer.schedule(BreadFactory.makeBread, 20000)
-      //timer.schedule(BreadFactory.getMaterial, 25000)
-      timer.schedule(Woodenfishes.autoSave, 120000)
+      ThreadUtil.execute(() => {
+        val timer = new Timer()
+        timer.schedule(BreadFactory.makeBread, 20000)
+        timer.schedule(BreadFactory.getMaterial, 25000)
+        timer.schedule(Woodenfishes.autoSave, 120000)
+      })
       mediaServer = new MediaServer(Integer.parseInt(config.getData.get("media-server-port").toString))
       mediaServer.start()
       if (Terminal.isRunningOnServerLauncher) {

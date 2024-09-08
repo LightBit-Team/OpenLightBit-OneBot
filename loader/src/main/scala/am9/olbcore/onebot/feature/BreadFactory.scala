@@ -88,7 +88,7 @@ object BreadFactory {
   def expReward(groupId: Long): Unit = {
     val breadMap = Main.bread.getData
     if (breadMap.get(groupId.toString) != null) {
-      val json = breadMap.get(groupId.toString).asInstanceOf[LinkedTreeMap[String, AnyRef]]
+      val json = breadMap.get(groupId.toString).asInstanceOf[util.HashMap[String, AnyRef]]
       if (json.get("mode").toString == "default") {
         json.put("exp", (java.lang.Double.parseDouble(json.get("exp").toString) + 2).toString)
         Main.bread.setData(breadMap)
@@ -96,20 +96,19 @@ object BreadFactory {
       }
     }
   }
-  //todo
   val makeBread: TimerTask = new TimerTask {
     override def run(): Unit = {
       val newData = new util.HashMap[String, AnyRef]()
       Main.bread.getData.forEach((groupId, info) => {
-        val json = info.asInstanceOf[JSONObject]
-        if (json.getStr("mode") == "default"
-          && json.getInt("yeast") > 0
-          && json.getInt("flour") > 3) {
-          json.set("bread", json.getInt("bread") + 1)
-          json.set("yeast", json.getInt("yeast") - 1)
-          json.set("flour", json.getInt("flour") - 4)
-          if (json.getInt("bread") > json.getInt("bread_max")) {
-            json.set("bread", json.getInt("bread_max"))
+        val json = info.asInstanceOf[LinkedTreeMap[String, AnyRef]]
+        if (json.get("mode").toString == "default"
+          && Integer.parseInt(json.get("yeast").toString) > 0
+          && Integer.parseInt(json.get("flour").toString) > 3) {
+          json.put("bread", Integer.valueOf(Integer.parseInt(json.get("bread").toString) + 1))
+          json.put("yeast", Integer.valueOf(Integer.parseInt(json.get("yeast").toString) - 1))
+          json.put("flour", Integer.valueOf(Integer.parseInt(json.get("flour").toString) - 4))
+          if (Integer.parseInt(json.get("bread").toString) > Integer.parseInt(json.get("bread_max").toString)) {
+            json.put("bread", json.get("bread_max"))
           }
         }
         newData.put(groupId, json)
@@ -122,9 +121,9 @@ object BreadFactory {
     override def run(): Unit = {
       val newData = new util.HashMap[String, AnyRef]()
       Main.bread.getData.forEach((groupId, info) => {
-        val json = info.asInstanceOf[JSONObject]
-        json.set("yeast", json.getInt("yeast") + 2)
-        json.set("flour", json.getInt("flour") + 6)
+        val json = info.asInstanceOf[LinkedTreeMap[String, AnyRef]]
+        json.put("yeast", Integer.valueOf(Integer.parseInt(json.get("yeast").toString) + 2))
+        json.put("flour", Integer.valueOf(Integer.parseInt(json.get("flour").toString) + 6))
         newData.put(groupId, json)
       })
       Main.bread.setData(newData)

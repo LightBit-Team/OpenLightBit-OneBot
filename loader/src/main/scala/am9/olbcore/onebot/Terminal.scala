@@ -1,12 +1,10 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.Main.logger
-import cn.hutool.core.io.FileUtil
+import cn.hutool.core.io.resource.ClassPathResource
 import cn.hutool.setting.dialect.Props
 import org.jetbrains.annotations.NotNull
 
-import java.io.{BufferedReader, InputStreamReader}
-import java.nio.charset.StandardCharsets
 import java.util
 
 object Terminal {
@@ -54,27 +52,9 @@ object Terminal {
     c
   }
   def readBuildInfo: Props = {
-    var buildInfo = ""
-    val buildInfoInputStream = this.getClass.getClassLoader.getResourceAsStream("META-INF/b-info")
-    if (buildInfoInputStream != null) {
-      val reader = new BufferedReader(new InputStreamReader(buildInfoInputStream))
-      try {
-        var rline: String = reader.readLine()
-        while (rline != null) {
-          buildInfo = s"$buildInfo${if (buildInfo.isEmpty) rline else "\n" + rline}"
-          rline = reader.readLine()
-        }
-      } finally {
-        reader.close()
-        buildInfoInputStream.close()
-      }
-    } else {
-      Main.logger.info("Resource not found.")
-    }
-    FileUtil.touch("temp/b-info")
-    FileUtil.writeString(buildInfo, "temp/b-info", StandardCharsets.UTF_8)
-    val buildInfoMap = new Props("temp/b-info")
-    FileUtil.del("temp/b-info")
-    buildInfoMap
+    val resource = new ClassPathResource("META-INF/b-info")
+    val props = new Props()
+    props.load(resource.getStream)
+    props
   }
 }
