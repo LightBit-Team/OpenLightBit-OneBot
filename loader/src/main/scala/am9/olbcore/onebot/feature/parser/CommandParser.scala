@@ -1,9 +1,10 @@
 package am9.olbcore.onebot.feature.parser
 
-import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
-import am9.olbcore.onebot.feature.{Admin, BreadFactory, Broadcast, Captcha, ErrorProcess, GetMusic, Info, WebThings, Zhuan}
+import am9.olbcore.onebot.feature.*
+import am9.olbcore.onebot.{Main, Terminal}
+import cn.hutool.core.date.{DateTime, DateUtil}
 import cn.hutool.core.thread.ThreadUtil
 import cn.hutool.core.util.RandomUtil
 import org.jetbrains.annotations.Nullable
@@ -26,8 +27,13 @@ object CommandParser {
           })
         }
         if (str.startsWith(s"${p}version")) {
+          val buildInfoMap = Terminal.readBuildInfo
+          val buildTimeString = DateUtil.formatDateTime(new DateTime(lang.Long.parseLong(buildInfoMap.get("build-time").toString)))
+          val version = buildInfoMap.get("version").toString
+          val prettyName = buildInfoMap.get("pretty-name").toString
           Main.oneBot.sendGroup(groupId,
-            s"""OpenLightBit version ${Main.version}
+            s"""OpenLightBit version $version($prettyName 24-9-8)
+               |构建时间：$buildTimeString
                |更新内容：${Main.changelog}
                |------------
                |${Main.splashes.get(RandomUtil.randomInt(0, Main.splashes.size))}""".stripMargin)
@@ -209,6 +215,9 @@ object CommandParser {
         }
         if (str.startsWith(s"${p}del_target_group")) {
           Zhuan.removeTargetGroup(lang.Long.parseLong(str.split(" ").apply(1)), groupId)
+        }
+        if (RandomUtil.randomInt(0, 10) == 9) {
+          System.gc()
         }
       }
       if (str.startsWith(s"${p}enable")) {

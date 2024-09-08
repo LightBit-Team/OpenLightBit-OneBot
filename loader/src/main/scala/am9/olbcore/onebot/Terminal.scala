@@ -1,9 +1,12 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.Main.logger
-import kotlin.jvm.Throws
+import cn.hutool.core.io.FileUtil
+import cn.hutool.setting.dialect.Props
 import org.jetbrains.annotations.NotNull
 
+import java.io.{BufferedReader, InputStreamReader}
+import java.nio.charset.StandardCharsets
 import java.util
 
 object Terminal {
@@ -24,7 +27,6 @@ object Terminal {
       Main.logger.debug(msg.toString)
     }
   }
-  @Throws(exceptionClasses = Array[Class[? <: Throwable]](classOf[IllegalAccessException]))
   def bean2Map(obj: AnyRef): util.Map[String, AnyRef] = {
     val map = new util.HashMap[String, AnyRef]()
     val cls = obj.getClass
@@ -37,18 +39,42 @@ object Terminal {
     })
     map
   }
-  def iAmNotACompiler(input: Byte): Byte = {
-    var a: Byte = input
-    var b: Byte = 5
-    var c: Byte = 0
+  def iAmNotACompiler(input: Int): Int = {
+    var a: Int = input
+    var b: Int = 5
+    var c: Int = 0
     while (a > 0) {
       if (a >= (b ^ 2)) {
-        a = (a - (b ^ 2)).toByte
-        c = (c + 1).toByte
+        a -= b ^ 2
+        c += 1
       } else {
-        b = (b - 2).toByte
+        b -= 2
       }
     }
     c
+  }
+  def readBuildInfo: Props = {
+    var buildInfo = ""
+    val buildInfoInputStream = this.getClass.getClassLoader.getResourceAsStream("META-INF/b-info")
+    if (buildInfoInputStream != null) {
+      val reader = new BufferedReader(new InputStreamReader(buildInfoInputStream))
+      try {
+        var rline: String = reader.readLine()
+        while (rline != null) {
+          buildInfo = s"$buildInfo${if (buildInfo.isEmpty) rline else "\n" + rline}"
+          rline = reader.readLine()
+        }
+      } finally {
+        reader.close()
+        buildInfoInputStream.close()
+      }
+    } else {
+      Main.logger.info("Resource not found.")
+    }
+    FileUtil.touch("temp/b-info")
+    FileUtil.writeString(buildInfo, "temp/b-info", StandardCharsets.UTF_8)
+    val buildInfoMap = new Props("temp/b-info")
+    FileUtil.del("temp/b-info")
+    buildInfoMap
   }
 }
