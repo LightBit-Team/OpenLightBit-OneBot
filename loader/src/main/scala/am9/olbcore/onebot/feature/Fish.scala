@@ -13,7 +13,7 @@ object Fish {
         put("qq", qq.toString)
       }),
       new Segment("image", new util.HashMap[String, String]() {
-        put("file", Main.mediaServer.getFilePath("https://api.vvhan.com/api/moyu"))
+        put("file", "https://api.vvhan.com/api/moyu")
       })
     ))
   }

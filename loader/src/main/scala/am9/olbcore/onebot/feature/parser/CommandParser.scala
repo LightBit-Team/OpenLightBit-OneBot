@@ -15,6 +15,7 @@ object CommandParser {
 
   def parseCommand(senderId: Long, groupId: Long, msgId: Long, str: String): Unit = {
     val p = Main.config.getData.get("command-prefix").toString
+    Terminal.debug(s"$senderId（$groupId）执行了命令$str")
     try {
       if (!Admin.isDisabled(groupId)) {
         if (str.startsWith(s"${p}test")) {

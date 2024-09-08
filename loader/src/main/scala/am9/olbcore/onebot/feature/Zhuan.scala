@@ -47,8 +47,10 @@ object Zhuan {
     if (!listenGroups.contains(group)) {
       listenGroups.add(group)
       map.put("listen-group", listenGroups)
-      Main.zhuanProp.write(new File("zhuan.properties"))
-      Main.oneBot.sendGroupWithCqCode(sendGroup, s"已添加被转发群：$group")
+      Main.zhuanProp.write(new File("zhuan.json"))
+      Main.oneBot.sendGroup(sendGroup, s"已添加被转发群：$group")
+    } else {
+      Main.oneBot.sendGroup(sendGroup, s"$group 已经在被转发群列表中")
     }
   }
   def removeListenGroup(group: Long, sendGroup: Long): Unit = {
@@ -57,8 +59,10 @@ object Zhuan {
     if (listenGroups.contains(group)) {
       listenGroups.remove(group)
       map.put("listen-group", listenGroups)
-      Main.zhuanProp.write(new File("zhuan.properties"))
-      Main.oneBot.sendGroupWithCqCode(sendGroup, s"已删除被转发群：$group")
+      Main.zhuanProp.write(new File("zhuan.json"))
+      Main.oneBot.sendGroup(sendGroup, s"已删除被转发群：$group")
+    } else {
+      Main.oneBot.sendGroup(sendGroup, s"$group 不在被转发群列表中")
     }
   }
   def addTargetGroup(group: Long, sendGroup: Long): Unit = {
@@ -67,8 +71,10 @@ object Zhuan {
     if (!targetGroups.contains(group)) {
       targetGroups.add(group)
       map.put("target-group", targetGroups)
-      Main.zhuanProp.write(new File("zhuan.properties"))
-      Main.oneBot.sendGroupWithCqCode(sendGroup, s"已添加转发群：$group")
+      Main.zhuanProp.write(new File("zhuan.json"))
+      Main.oneBot.sendGroup(sendGroup, s"已添加转发群：$group")
+    } else {
+      Main.oneBot.sendGroup(sendGroup, s"$group 已经在转发群列表中")
     }
   }
   def removeTargetGroup(group: Long, sendGroup: Long): Unit = {
@@ -77,8 +83,10 @@ object Zhuan {
     if (targetGroups.contains(group)) {
       targetGroups.remove(group)
       map.put("target-group", targetGroups)
-      Main.zhuanProp.write(new File("zhuan.properties"))
-      Main.oneBot.sendGroupWithCqCode(sendGroup, s"已删除转发群：$group")
+      Main.zhuanProp.write(new File("zhuan.json"))
+      Main.oneBot.sendGroup(sendGroup, s"已删除转发群：$group")
+    } else {
+      Main.oneBot.sendGroup(sendGroup, s"$group 不在转发群列表中")
     }
   }
 }

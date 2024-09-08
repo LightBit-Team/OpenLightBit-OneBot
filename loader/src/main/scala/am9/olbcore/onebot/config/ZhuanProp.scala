@@ -14,7 +14,10 @@ class ZhuanProp {
     put("target-group", new util.ArrayList[Long]())
   }
   def getData: util.HashMap[String, util.List[Long]] = data
-  def setData(data: util.HashMap[String, util.List[Long]]): Unit = this.data = data
+  def setData(data: util.HashMap[String, util.List[Long]]): Unit = {
+    this.data = data
+    write(new File("zhuan.json"))
+  }
   def read(dir: File): this.type = {
     if (dir.exists()) {
       data = Main.json.fromJson[util.HashMap[String, util.List[Long]]](
