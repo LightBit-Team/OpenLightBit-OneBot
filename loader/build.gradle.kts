@@ -15,10 +15,13 @@ plugins {
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.graalvm.buildtools.native") version "0.10.2"
+    id("xyz.wagyourtail.jvmdowngrader") version "1.0.0"
 }
 
 project.version = "0.3.0"
 val prettyName = "QingZhu"
+val javaVersion = JavaVersion.VERSION_17
+jvmdg.downgradeTo = JavaVersion.VERSION_1_8
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -60,6 +63,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 }
 
 application {
@@ -93,6 +98,11 @@ tasks.named<Jar>("jar") {
 tasks.named<ShadowJar>("shadowJar") {
 
     dependsOn("copyFile")
+}
+
+tasks.named<ScalaCompile>("compileScala") {
+    sourceCompatibility = javaVersion.toString()
+    targetCompatibility = javaVersion.toString()
 }
 
 project.extra["scalaMajorVersion"] = "3"
