@@ -14,10 +14,7 @@ class ZhuanProp {
     put("target-group", new util.ArrayList[Long]())
   }
   def getData: util.HashMap[String, util.List[Long]] = data
-  def setData(data: util.HashMap[String, util.List[Long]]): Unit = {
-    this.data = data
-    write(new File("zhuan.json"))
-  }
+  def setData(data: util.HashMap[String, util.List[Long]]): Unit = this.data = data
   def read(dir: File): this.type = {
     if (dir.exists()) {
       data = Main.json.fromJson[util.HashMap[String, util.List[Long]]](
@@ -32,6 +29,12 @@ class ZhuanProp {
   def write(dir: File): Unit = {
     if (dir.exists()) FileUtil.del(dir)
     FileUtil.touch(dir)
-    FileUtil.writeString(Main.json.toJson(data), dir, StandardCharsets.UTF_8)
+    val jsonString = Main.json.toJson(data)
+    Main.json.fromJson(jsonString, new TypeToken[util.HashMap[String, util.List[String]]](){}).values().forEach(i => {
+      if (i.contains("E")) {
+        throw new RuntimeException("群号包含双精度小数！")
+      }
+    })
+    FileUtil.writeString(jsonString, dir, StandardCharsets.UTF_8)
   }
 }
