@@ -17,9 +17,8 @@ class Bread {
   def setData(map: util.Map[String, AnyRef]): Unit = this.data = map
   def getJson: String = Main.json.toJson(data)
   def read(dir: File): this.type = {
-    var json: String = null
     if (dir.exists()) {
-      json = new String(Files.readAllBytes(Paths.get(dir.getPath)))
+      val json = new String(Files.readAllBytes(Paths.get(dir.getPath)))
       this.setData(Main.json.fromJson[util.HashMap[String, AnyRef]](json, new TypeToken[util.HashMap[String, AnyRef]](){}))
       this
     } else {

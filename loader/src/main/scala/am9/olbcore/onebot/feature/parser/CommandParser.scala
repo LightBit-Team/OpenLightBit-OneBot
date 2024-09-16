@@ -34,7 +34,7 @@ object CommandParser {
           val version = buildInfoMap.get("version").toString
           val prettyName = buildInfoMap.get("pretty-name").toString
           Main.oneBot.sendGroup(groupId,
-            s"""OpenLightBit version $version($prettyName 24-9-8)
+            s"""OpenLightBit version $version($prettyName)
                |构建时间：$buildTimeString
                |更新内容：${Main.changelog}
                |------------

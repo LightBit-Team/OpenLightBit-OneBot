@@ -1,5 +1,6 @@
 package am9.olbcore.onebot
 
+import am9.olbcore.onebot.config.group.GroupDataConfig
 import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanProp}
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
@@ -28,6 +29,7 @@ object Main {
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
   var zhuanProp: ZhuanProp = new ZhuanProp()
+  var groupDataConfig: GroupDataConfig = new GroupDataConfig()
   val startTime: Long = System.currentTimeMillis
   @NonNls
   val version = "0.3.0 (QingZhu)"
@@ -80,6 +82,7 @@ object Main {
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
       val zhuanFile = new File("zhuan.json")
+      val groupDataFile = new File("group_data.json")
       if (configFile.exists()) {
         logger = org.slf4j.LoggerFactory.getLogger(config.getData.get("logger-name").toString)
         config = config.read(configFile)
@@ -124,6 +127,10 @@ object Main {
         zhuanProp.write(zhuanFile)
       }
       zhuanProp = zhuanProp.read(zhuanFile)
+      if (!groupDataFile.exists()) {
+        groupDataConfig.write(groupDataFile)
+      }
+      groupDataConfig = groupDataConfig.read(groupDataFile)
       oneBot = Connect.getConnection
       if (new File("woodenfish.json").exists()) {
         Woodenfishes.read(new File("woodenfish.json"))

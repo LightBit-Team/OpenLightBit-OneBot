@@ -1,6 +1,7 @@
 package am9.olbcore.onebot.feature.parser
 
 import am9.olbcore.onebot.feature.*
+import am9.olbcore.onebot.feature.event.NameChange
 import am9.olbcore.onebot.platform.onebot.event.{FriendMessage, GroupMessage}
 import am9.olbcore.onebot.{Main, Terminal}
 import cn.hutool.core.thread.ThreadUtil
@@ -53,6 +54,7 @@ object MessageParser {
                   message
                 )
               }
+              NameChange.check(groupMessage.group_id, groupMessage.sender)
             }
             BreadFactory.expReward(java.lang.Double.parseDouble(json.get("group_id").toString).toLong)
           case "meta_event" =>
@@ -66,21 +68,6 @@ object MessageParser {
               case "heartbeat" => Terminal.debug("Heartbeat")
               case _ => Terminal.debug(str)
           case "notice" =>
-          //json.getStr("notice_type") match
-          //  case "group_upload" => Terminal.debug("群文件上传")
-          //  case "group_admin" => Terminal.debug("群管理员变动")
-          //  case "group_decrease" => Terminal.debug("群成员减少")
-          //  case "group_increase" => Terminal.debug("群成员增加")
-          //  case "group_ban" => Terminal.debug("群禁言")
-          //  case "friend_add" => Terminal.debug("添加好友")
-          //  case "friend_recall" => Terminal.debug("好友撤回")
-          //  case "group_recall" => Terminal.debug("群消息撤回")
-          //  case "notify" => Terminal.debug("提醒")
-          //  case "poke" => feature.OnPoke.doIt(json.getLong("group_id"))
-          //  case "lucky_king" => Terminal.debug("群红包运气王")
-          //  case "honor" => Terminal.debug("群荣誉变更")
-          //  case "poke" => Terminal.debug("1")
-          //  case _ => Terminal.debug(str)
           case _ =>
             if (!(json.get("status").equals("ok") || json.get("status").equals("await"))) {
               Main.logger.warn(str)
