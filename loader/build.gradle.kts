@@ -15,7 +15,7 @@ plugins {
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.graalvm.buildtools.native") version "0.10.2"
-    id("xyz.wagyourtail.jvmdowngrader") version "1.0.0"
+    id("xyz.wagyourtail.jvmdowngrader") version "1.1.3"
 }
 
 project.version = "0.3.0"
@@ -56,6 +56,8 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
     implementation("com.github.oshi:oshi-core-java11:6.6.3")
+    compileOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader:1.1.3")
+    runtimeOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:1.1.3:downgraded-8")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -89,6 +91,8 @@ tasks.register<Copy>("copyFile") {
 tasks.named<ScalaCompile>("compileScala") {
     finalizedBy("generateFile")
     finalizedBy("copyFile")
+    sourceCompatibility = javaVersion.toString()
+    targetCompatibility = javaVersion.toString()
 }
 
 tasks.named<Jar>("jar") {
@@ -98,11 +102,6 @@ tasks.named<Jar>("jar") {
 tasks.named<ShadowJar>("shadowJar") {
 
     dependsOn("copyFile")
-}
-
-tasks.named<ScalaCompile>("compileScala") {
-    sourceCompatibility = javaVersion.toString()
-    targetCompatibility = javaVersion.toString()
 }
 
 project.extra["scalaMajorVersion"] = "3"
