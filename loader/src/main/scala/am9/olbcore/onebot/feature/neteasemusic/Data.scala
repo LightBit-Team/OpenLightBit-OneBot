@@ -7,4 +7,6 @@ class Data extends Serializable{
   var id: Long = 0
   @Expose
   var url: String = null
+  @Expose
+  var fee: Int = 0
 }

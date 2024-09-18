@@ -11,16 +11,16 @@ import cn.hutool.core.io.FileUtil
 import cn.hutool.core.thread.ThreadUtil
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
-import org.jetbrains.annotations.{NonNls, Nullable}
+import org.jetbrains.annotations.{NonNls, NotNull, Nullable}
 import org.slf4j.LoggerFactory
 
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util
-import java.util.Timer
+import java.util.{Objects, Timer}
 
 object Main {
-  var logger: org.slf4j.Logger = LoggerFactory.getLogger(this.getClass)
+  var logger: org.slf4j.Logger = null
   private val jb: GsonBuilder = new GsonBuilder()
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
   var mediaServer: MediaServer = null
@@ -75,16 +75,15 @@ object Main {
       |
       |3496929815@qq.com
       |""".stripMargin
-  def main(@Nullable args: Array[String]): Unit = {
+  def start(@NotNull lg: org.slf4j.Logger): Unit = {
     try {
-      //读取配置文件
       val configFile = new File("config.properties")
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
       val zhuanFile = new File("zhuan.json")
       val groupDataFile = new File("group_data.json")
+      logger = lg
       if (configFile.exists()) {
-        logger = org.slf4j.LoggerFactory.getLogger(config.getData.get("logger-name").toString)
         config = config.read(configFile)
         if (Integer.parseInt(config.getData.get("config-version").toString) < 2) {
           logger.warn("配置文件版本过低，请重新生成配置文件！")
@@ -154,5 +153,8 @@ object Main {
       case e: Throwable =>
         logger.warn("启动时遇到问题 ", e)
     }
+  }
+  def main(args: Array[String]): Unit = {
+    start(LoggerFactory.getLogger(this.getClass))
   }
 }

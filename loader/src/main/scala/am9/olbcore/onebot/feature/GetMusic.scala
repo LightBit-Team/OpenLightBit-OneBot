@@ -26,6 +26,9 @@ object GetMusic {
             Main.oneBot.sendGroup(group, "获取歌曲失败！")
             return
           }
+          if (response.data.get(0).fee == 1) {
+            Main.oneBot.sendGroup(group, "不支持完整播放收费歌曲！")
+          }
           FileUtil.del("temp/music.mp3")
           Main.mediaServer.addRemoteFile(response.data.get(0).url, new File("temp/music.mp3"))
           Main.oneBot.sendGroupRecord(group, "music.mp3")

@@ -3,6 +3,7 @@ package am9.olbcore.onebot.feature.parser
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.feature.*
+import am9.olbcore.onebot.feature.helps.{HelpMenu, Helps}
 import am9.olbcore.onebot.feature.moyu.Fish
 import am9.olbcore.onebot.{Main, Terminal}
 import cn.hutool.core.date.{DateTime, DateUtil}
@@ -41,12 +42,12 @@ object CommandParser {
                |${Main.splashes.get(RandomUtil.randomInt(0, Main.splashes.size))}""".stripMargin)
         }
         if (str.startsWith(s"${p}help")) {
-          Main.oneBot.sendGroup(groupId,
-            """OpenLightBit 帮助
-              |------------
-              |
-              |------------
-              |欢迎使用！""".stripMargin)
+          try {
+            HelpMenu.helpMenu(groupId, Helps.valueOf(str.split(" ").apply(1).toUpperCase))
+          } catch {
+            case e: IndexOutOfBoundsException => HelpMenu.helpMenu(groupId, Helps.HELP)
+            case e: MatchError => HelpMenu.helpMenu(groupId, Helps.HELP)
+          }
         }
         if (str.startsWith(s"${p}ping")) {
           Main.oneBot.sendGroup(groupId, "Pong!")

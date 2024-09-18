@@ -19,7 +19,7 @@ plugins {
 }
 
 project.version = "0.3.0"
-val prettyName = "QingZhu"
+val prettyName = "QingZhu 24-9-16"
 val javaVersion = JavaVersion.VERSION_17
 jvmdg.downgradeTo = JavaVersion.VERSION_1_8
 

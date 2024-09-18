@@ -1,7 +1,6 @@
 # OpenLightBit-OneBot
 ## todo（无先后顺序）
 反向ws协议支持<br />
-拆分OneBot适配和olb功能(1.0.0)<br />
 更好的事件监测<br />
 群管功能<br />
 交互式入群配置
