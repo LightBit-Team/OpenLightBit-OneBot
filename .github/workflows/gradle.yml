@@ -40,13 +40,13 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@main
       with:
-        - name: OpenLightBit
-        - path: ./loader/build/libs/loader-0.3.0-all.
+          name: OpenLightBit
+          path: ./loader/build/libs/loader-0.3.0-all.
     - name: Upload JDK8
       uses: actions/upload-artifact@main
       with:
-        - name: OpenLightBit-JDK8
-        - path: ./loader/build/libs/loader-0.3.0-downgraded.jar
+          name: OpenLightBit-JDK8
+          path: ./loader/build/libs/loader-0.3.0-downgraded.jar
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
     #
