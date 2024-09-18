@@ -62,9 +62,6 @@ dependencies {
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(23)
-    }
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 }
@@ -105,5 +102,6 @@ tasks.named<ShadowJar>("shadowJar") {
 }
 
 project.extra["scalaMajorVersion"] = "3"
-project.extra["scalaVersion"] = "${project.extra["scalaMajorVersion"]}.6.0-RC1-bin-20240822-d490d13-NIGHTLY-nonbootstrapped-git-d490d13"
+project.extra["scalaVersion"] = "${project.extra["scalaMajorVersion"]}.6.0-RC1-bin-20240915-ad8c21a-NIGHTLY"
+
 
