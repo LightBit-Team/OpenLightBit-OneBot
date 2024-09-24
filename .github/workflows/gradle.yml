@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@main
       with:
           name: OpenLightBit
-          path: ./loader/build/libs/loader-0.3.0-all.
+          path: ./loader/build/libs/loader-0.3.0-all.jar
     - name: Upload JDK8
       uses: actions/upload-artifact@main
       with:

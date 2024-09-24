@@ -19,8 +19,8 @@ object Info {
         |系统：${osInfo.getFamily} ${osInfo.getVersionInfo.getVersion} (${osInfo.getVersionInfo.getCodeName}) ${osInfo.getBitness}位
         |运行环境：${jvmInfo.getVendor} ${jvmInfo.getVersion}
         |运行时长：${DateUtil.formatBetween(timeElapsed)}
-        |CPU：${cpuInfo.getCpuModel} * ${cpuInfo.getCpuNum}
-        |内存：${globalMemory.getAvailable / 1048576} / ${globalMemory.getTotal / 1048576}
+        |CPU：GENERIC * ${cpuInfo.getCpuNum}
+        |内存：${globalMemory.getAvailable / 1048576} MiB / ${globalMemory.getTotal / 1048576} MiB
         |""".stripMargin)
   }
 }

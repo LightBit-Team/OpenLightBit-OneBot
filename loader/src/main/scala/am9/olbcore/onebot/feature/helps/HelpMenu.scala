@@ -22,7 +22,16 @@ object HelpMenu {
       case Helps.BREAD =>
         "todo"
       case Helps.WOODENFISH =>
-        "todo"
+        """木鱼帮助
+          |!woodenfish reg：注册赛博账号（给我木鱼）
+          |!woodenfish hit：敲木鱼
+          |!woodenfish info：查询木鱼信息
+          |!woodenfish upgrade <等级数，默认为1>：升级木鱼
+          |!woodenfish nirvana：涅槃重生
+          |!woodenfish jue：撅佛祖
+          |!woodenfish leaderboard：功德榜
+          |!woodenfish ban_leaderboard：封禁榜
+          |!woodenfish nirvana_leaderboard：涅槃榜""".stripMargin
       case Helps.MUSIC =>
         """!music search <string> <int> - 搜索歌曲（歌名不带空格）
           |!music play <int> - 播放指定id的歌曲""".stripMargin
