@@ -3,6 +3,8 @@ package am9.olbcore.onebot.feature.parser
 import am9.olbcore.onebot.feature.*
 import am9.olbcore.onebot.feature.event.NameChange
 import am9.olbcore.onebot.platform.onebot.event.{FriendMessage, GroupMessage}
+import am9.olbcore.onebot.script.ScriptLoader
+import am9.olbcore.onebot.script.api.ApiGroupMessageEvent
 import am9.olbcore.onebot.{Main, Terminal}
 import cn.hutool.core.thread.ThreadUtil
 import com.google.gson.internal.LinkedTreeMap
@@ -45,6 +47,9 @@ object MessageParser {
               } else {
                 Zhuan.zhuan(groupMessage.group_id, groupMessage.user_id, message, groupMessage.sender.role)
                 message = groupMessage.message.toString
+              }
+              if (Main.config.getData.get("debug-enabled").toString.toBoolean) {
+                ScriptLoader.loadScript(new ApiGroupMessageEvent(groupMessage), ScriptLoader.getAllScripts)
               }
               if (message.contains("!")) {
                 CommandParser.parseCommand(

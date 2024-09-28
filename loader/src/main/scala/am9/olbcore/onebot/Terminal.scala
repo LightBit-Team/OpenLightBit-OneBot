@@ -5,6 +5,7 @@ import cn.hutool.core.io.resource.ClassPathResource
 import cn.hutool.setting.dialect.Props
 import org.jetbrains.annotations.NotNull
 
+import java.nio.charset.StandardCharsets
 import java.util
 
 object Terminal {
@@ -56,5 +57,9 @@ object Terminal {
     val props = new Props()
     props.load(resource.getStream)
     props
+  }
+  def readClasspathFile(path: String): String = {
+    val resource = new ClassPathResource(path)
+    resource.readStr(StandardCharsets.UTF_8)
   }
 }

@@ -20,15 +20,6 @@ object CommandParser {
     Terminal.debug(s"$senderId（$groupId）执行了命令$str")
     try {
       if (!Admin.isDisabled(groupId)) {
-        if (str.startsWith(s"${p}test")) {
-          ThreadUtil.execAsync(new Runnable(){
-            override def run(): Unit = {
-              Main.oneBot.sendGroup(groupId, "Hello, World!")
-              Thread.sleep(1000)
-              Main.oneBot.sendGroup(groupId, "Hello, World!")
-            }
-          })
-        }
         if (str.startsWith(s"${p}version")) {
           val buildInfoMap = Terminal.readBuildInfo
           val buildTimeString = DateUtil.formatDateTime(new DateTime(lang.Long.parseLong(buildInfoMap.get("build-time").toString)))

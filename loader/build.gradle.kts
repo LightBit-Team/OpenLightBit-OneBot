@@ -18,7 +18,7 @@ plugins {
     id("xyz.wagyourtail.jvmdowngrader") version "1.1.3"
 }
 
-project.version = "0.3.0"
+project.version = "0.3.1"
 val prettyName = "QingZhu"
 val javaVersion = JavaVersion.VERSION_17
 jvmdg.downgradeTo = JavaVersion.VERSION_1_8
@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.scala-lang:scala3-library_3:3.6.0-RC1-bin-20240822-d490d13-NIGHTLY")
+    implementation("org.scala-lang:scala3-library_3:3.6.0-RC1-bin-20240915-ad8c21a-NIGHTLY")
     implementation("cn.hutool:hutool-bom:5.8.31") {
         exclude(group = "cn.hutool", module = "hutool-log")
         exclude(group = "cn.hutool", module = "hutool-socket")
@@ -56,6 +56,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
     implementation("com.github.oshi:oshi-core-java11:6.6.3")
+    implementation("org.apache.groovy:groovy:5.0.0-alpha-9")
     compileOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader:1.1.3")
     runtimeOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:1.1.3:downgraded-8")
 }
