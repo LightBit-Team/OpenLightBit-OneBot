@@ -18,8 +18,8 @@ plugins {
     id("xyz.wagyourtail.jvmdowngrader") version "1.1.3"
 }
 
-project.version = "0.3.1"
-val prettyName = "QingZhu"
+project.version = "0.4.0"
+val prettyName = "Sun Qingqing"
 val javaVersion = JavaVersion.VERSION_17
 jvmdg.downgradeTo = JavaVersion.VERSION_1_8
 
@@ -49,14 +49,13 @@ dependencies {
         exclude(group = "cn.hutool", module = "hutool-cron")
         exclude(group = "cn.hutool", module = "hutool-extra")
     }
-    implementation("org.java-websocket:Java-WebSocket:1.5.7")
+    implementation("com.neovisionaries:nv-websocket-client:2.14")
     implementation("org.jetbrains:annotations:24.1.0")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
     implementation("com.github.oshi:oshi-core-java11:6.6.3")
-    implementation("org.apache.groovy:groovy:5.0.0-alpha-9")
     compileOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader:1.1.3")
     runtimeOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:1.1.3:downgraded-8")
 }

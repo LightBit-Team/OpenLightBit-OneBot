@@ -3,6 +3,7 @@ package am9.olbcore.onebot.feature.parser
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.feature.*
+import am9.olbcore.onebot.feature.kousuan.Kousuan
 import am9.olbcore.onebot.feature.helps.{HelpMenu, Helps}
 import am9.olbcore.onebot.feature.moyu.Fish
 import am9.olbcore.onebot.{Main, Terminal}
@@ -196,6 +197,20 @@ object CommandParser {
         }
         if (str.startsWith(s"${p}fish")) {
           Fish.fish(groupId, senderId)
+        }
+        if (str.startsWith(s"${p}kousuan")) {
+          val args = str.split(" ")
+          if (args.length < 2) {
+            Main.oneBot.sendGroup(groupId, "格式错误")
+          } else {
+            args.apply(1) match {
+              case "create" => Kousuan.create(groupId)
+              case ">" => Kousuan.moreThan(groupId)
+              case "<" => Kousuan.lessThan(groupId)
+              case "=" => Kousuan.eq(groupId)
+              case _ => Main.oneBot.sendGroup(groupId, "格式错误")
+            }
+          }
         }
         if (RandomUtil.randomInt(0, 10) == 9) {
           System.gc()

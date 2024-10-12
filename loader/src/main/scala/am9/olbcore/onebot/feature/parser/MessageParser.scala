@@ -48,9 +48,6 @@ object MessageParser {
                 Zhuan.zhuan(groupMessage.group_id, groupMessage.user_id, message, groupMessage.sender.role)
                 message = groupMessage.message.toString
               }
-              if (Main.config.getData.get("debug-enabled").toString.toBoolean) {
-                ScriptLoader.loadScript(new ApiGroupMessageEvent(groupMessage), ScriptLoader.getAllScripts)
-              }
               if (message.contains("!")) {
                 CommandParser.parseCommand(
                   java.lang.Double.parseDouble(json.get("user_id").toString).toLong,

@@ -3,38 +3,25 @@ package am9.olbcore.onebot.platform.onebot
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.parser.MessageParser
 import am9.olbcore.onebot.platform.onebot.action.{SendGroupMsg, SendPrivateMsg}
-import org.java_websocket.client.WebSocketClient
-import org.java_websocket.handshake.ServerHandshake
+import com.neovisionaries.ws.client.{WebSocket, WebSocketAdapter, WebSocketFactory}
 
+import java.util.concurrent.CompletableFuture
 import java.net.URI
 import java.util
 
-class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
-  override def onOpen(handshakedata: ServerHandshake): Unit = {}
-  override def onMessage(message: String): Unit = {
-    MessageParser.parse(message)
-  }
-  override def onClose(code: Int, reason: String, remote: Boolean): Unit = {
-    Main.logger.info("WebSocket连接中止")
-  }
-  override def onError(ex: Exception): Unit = {
-    if (!isOpen) {
-      Main.logger.warn("无法连接到WebSocket服务端，将尝试5秒后重新连接...")
-      Thread.sleep(5000)
-      connect()
-    }
-  }
+class OneBotWS(serverUri: URI) extends OneBot {
+  private val websocket: WebSocket = new WebSocketFactory().createSocket(serverUri).addListener(new LightbitAdapter()).connect()
   override def sendGroup(groupId: Long, message: String): Unit = {
     val segment = new Segment("text", new util.HashMap[String, String](){
       put("text", message)
     })
     val sendGroupMsg = new SendGroupMsg(groupId, segment, false)
-    send(Main.json.toJson(sendGroupMsg))
+    websocket.sendText(Main.json.toJson(sendGroupMsg))
   }
 
   override def sendGroupWithCqCode(groupId: Long, message: String): Unit = {
     val sendGroupMsg = new SendGroupMsg(groupId, message, false)
-    send(Main.json.toJson(sendGroupMsg))
+    websocket.sendText(Main.json.toJson(sendGroupMsg))
   }
   
   override def sendFriend(uid: Long, message: String): Unit = {
@@ -42,7 +29,7 @@ class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
       put("text", message)
     })
     val sendPrivateMsg = new SendPrivateMsg(uid, segment, false)
-    send(Main.json.toJson(sendPrivateMsg))
+    websocket.sendText(Main.json.toJson(sendPrivateMsg))
   }
   override def sendGroupRecord(groupId: Long, fileName: String): Unit = {
     val configMap = Main.config.getData
@@ -50,11 +37,17 @@ class OneBotWS(serverUri: URI) extends WebSocketClient(serverUri), OneBot{
       put("file", s"http://${configMap.get("media-server-host")}:${configMap.get("media-server-port")}/$fileName")
     })
     val sendGroupMsg = new SendGroupMsg(groupId, segment, false)
-    send(Main.json.toJson(sendGroupMsg))
+    websocket.sendText(Main.json.toJson(sendGroupMsg))
   }
 
   override def sendGroupWithSegments(groupId: Long, segments: util.List[Segment]): Unit = {
     val sendGroupMsg = new SendGroupMsg(groupId, segments, false)
-    send(Main.json.toJson(sendGroupMsg))
+    websocket.sendText(Main.json.toJson(sendGroupMsg))
+  }
+}
+
+private class LightbitAdapter extends WebSocketAdapter {
+  override def onTextMessage(websocket: WebSocket, text: String): Unit = {
+    MessageParser.parse(text)
   }
 }

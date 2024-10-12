@@ -13,7 +13,6 @@ object Connect {
     Main.config.getData.get("onebot-protocol") match
       case "ws" =>
         val oneBotWS = new OneBotWS(new URI(s"ws://${Main.config.getData.get("onebot-address")}:${Main.config.getData.get("onebot-port")}/"))
-        oneBotWS.connect()
         oneBotWS
       case "http" =>
         val oneBotHttp = new OneBotHttp(s"http://${Main.config.getData.get("onebot-address")}:${Main.config.getData.get("onebot-port")}/",

@@ -7,5 +7,4 @@ class Artist extends Serializable{
   var id: Long = 0
   @Expose
   var name: String = null
-  //todo
 }
