@@ -6,9 +6,9 @@ abstract class AbstractModule(val name: String,
                       val description: String,
                       val version: String,
                       val authors: java.util.List[String]) {
-  def onEnable(): Unit
-  def onDisable(): Unit
-  def onLoad(): Unit
+  def onEnable(): Unit = {}
+  def onDisable(): Unit = {}
+  def onLoad(): Unit = {}
   final def registerEvent(processor: EventProcessor): Unit = {
     Main.eventProcessors.add(processor)
     Main.logger.info(s"${this.name}模块注册了事件处理器${processor.getClass.getName}")

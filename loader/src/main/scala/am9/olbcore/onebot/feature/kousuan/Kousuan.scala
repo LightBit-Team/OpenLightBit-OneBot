@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.feature.kousuan
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.script.api.async.AsyncUtil
+import cn.hutool.core.thread.ThreadUtil
 
 import java.util
 
@@ -20,7 +20,7 @@ object Kousuan {
     val game: KousuanGame = games.get(group)
     val currentProblem = game.currentProblem
     if (currentProblem.getInt1 < currentProblem.getInt2) {
-      AsyncUtil.async(() => {
+      ThreadUtil.execAsync(() => {
         Main.oneBot.sendGroup(group, "回答正确")
         Thread.sleep(2000)
         if (game.count == 10) {
@@ -31,7 +31,7 @@ object Kousuan {
           games.put(group, game)
           Main.oneBot.sendGroup(group, s"${problem.getInt1} ( ) ${problem.getInt2}".stripMargin)
         }
-      })
+      }.asInstanceOf[Runnable])
     } else {
       Main.oneBot.sendGroup(group, "回答错误")
     }
@@ -40,7 +40,7 @@ object Kousuan {
     val game: KousuanGame = games.get(group)
     val currentProblem = game.currentProblem
     if (currentProblem.getInt1 > currentProblem.getInt2) {
-      AsyncUtil.async(() => {
+      ThreadUtil.execAsync(() => {
         Main.oneBot.sendGroup(group, "回答正确")
         Thread.sleep(2000)
         if (game.count == 10) {
@@ -51,7 +51,7 @@ object Kousuan {
           games.put(group, game)
           Main.oneBot.sendGroup(group, s"${problem.getInt1} ( ) ${problem.getInt2}".stripMargin)
         }
-      })
+      }.asInstanceOf[Runnable])
     } else {
       Main.oneBot.sendGroup(group, "回答错误")
     }
@@ -60,7 +60,7 @@ object Kousuan {
     val game: KousuanGame = games.get(group)
     val currentProblem = game.currentProblem
     if (currentProblem.getInt1 == currentProblem.getInt2) {
-      AsyncUtil.async(() => {
+      ThreadUtil.execAsync(() => {
         Main.oneBot.sendGroup(group, "回答正确")
         Thread.sleep(2000)
         if (game.count == 10) {
@@ -71,7 +71,7 @@ object Kousuan {
           games.put(group, game)
           Main.oneBot.sendGroup(group, s"${problem.getInt1} ( ) ${problem.getInt2}".stripMargin)
         }
-      })
+      }.asInstanceOf[Runnable])
     } else {
       Main.oneBot.sendGroup(group, "回答错误")
     }
