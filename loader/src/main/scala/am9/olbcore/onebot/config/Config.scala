@@ -34,11 +34,9 @@ class Config {
   def setData(map: util.Map[String, AnyRef]): Unit = this.data = map
   def read(dir: File): this.type = {
     if (dir.exists()) {
-      data = new util.TreeMap[String, AnyRef]()
-      new Props(dir).entrySet().forEach(i => {
-        if (i.getKey != null && i.getValue != null) {
-          data.put(i.getKey.toString, i.getValue)
-        }
+      data.clear()
+      new Props(dir).forEach((k, v) => {
+        data.put(k.toString, v)
       })
       this
     } else {

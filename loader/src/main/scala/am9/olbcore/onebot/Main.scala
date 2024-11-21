@@ -6,6 +6,7 @@ import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
+import am9.olbcore.onebot.newapi.{EventProcessor, AbstractModule}
 import am9.olbcore.onebot.platform.onebot.{Connect, OneBot}
 import cn.hutool.core.io.FileUtil
 import cn.hutool.core.thread.ThreadUtil
@@ -31,6 +32,8 @@ object Main {
   var zhuanProp: ZhuanProp = new ZhuanProp()
   var groupDataConfig: GroupDataConfig = new GroupDataConfig()
   val startTime: Long = System.currentTimeMillis
+  val eventProcessors = new util.ArrayList[EventProcessor]()
+  val modules = new util.ArrayList[AbstractModule]()
   @NonNls
   val version = "0.3.0 (QingZhu)"
   val changelog: String = "null"
@@ -137,6 +140,7 @@ object Main {
       if (new File("cave.json").exists()) {
         Cave.read(new File("cave.json"))
       }
+      modules.forEach(i => i.onLoad())
       ThreadUtil.execute(() => {
         val timer = new Timer()
         timer.schedule(BreadFactory.makeBread, 20000)

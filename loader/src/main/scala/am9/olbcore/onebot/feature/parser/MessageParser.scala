@@ -2,9 +2,8 @@ package am9.olbcore.onebot.feature.parser
 
 import am9.olbcore.onebot.feature.*
 import am9.olbcore.onebot.feature.event.NameChange
+import am9.olbcore.onebot.newapi.ApiGroupMessageEvent
 import am9.olbcore.onebot.platform.onebot.event.{FriendMessage, GroupMessage}
-import am9.olbcore.onebot.script.ScriptLoader
-import am9.olbcore.onebot.script.api.ApiGroupMessageEvent
 import am9.olbcore.onebot.{Main, Terminal}
 import cn.hutool.core.thread.ThreadUtil
 import com.google.gson.internal.LinkedTreeMap
@@ -56,6 +55,8 @@ object MessageParser {
                   message
                 )
               }
+              val apiGroupMessageEvent = new ApiGroupMessageEvent(groupMessage)
+              Main.eventProcessors.forEach(i => i.onEvent(apiGroupMessageEvent))
               NameChange.check(groupMessage.group_id, groupMessage.sender)
             }
             BreadFactory.expReward(java.lang.Double.parseDouble(json.get("group_id").toString).toLong)

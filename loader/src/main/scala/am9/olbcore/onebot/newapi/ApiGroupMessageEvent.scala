@@ -1,8 +1,9 @@
-package am9.olbcore.onebot.script.api
+package am9.olbcore.onebot.newapi
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.platform.onebot.{Segment, Sender}
+import am9.olbcore.onebot.newapi.ApiEvent
 import am9.olbcore.onebot.platform.onebot.event.GroupMessage
+import am9.olbcore.onebot.platform.onebot.{Segment, Sender}
 import com.google.gson.internal.LinkedTreeMap
 
 import java.util

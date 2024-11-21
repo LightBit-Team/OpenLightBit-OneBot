@@ -85,6 +85,13 @@ tasks.register<Copy>("copyFile") {
     into("$buildDir/classes/java/main/META-INF")
 }
 
+tasks.named<JavaCompile>("compileJava") {
+    finalizedBy("generateFile")
+    finalizedBy("copyFile")
+    sourceCompatibility = javaVersion.toString()
+    targetCompatibility = javaVersion.toString()
+}
+
 tasks.named<ScalaCompile>("compileScala") {
     finalizedBy("generateFile")
     finalizedBy("copyFile")

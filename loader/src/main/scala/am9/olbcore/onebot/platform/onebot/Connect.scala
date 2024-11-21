@@ -1,7 +1,6 @@
 package am9.olbcore.onebot.platform.onebot
 
 import am9.olbcore.onebot.Main
-import am9.olbcore.onebot.config.GuildConfig
 import cn.hutool.core.thread.ThreadUtil
 
 import java.io.File

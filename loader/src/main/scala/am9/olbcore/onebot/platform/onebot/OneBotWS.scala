@@ -5,7 +5,6 @@ import am9.olbcore.onebot.feature.parser.MessageParser
 import am9.olbcore.onebot.platform.onebot.action.{SendGroupMsg, SendPrivateMsg}
 import com.neovisionaries.ws.client.{WebSocket, WebSocketAdapter, WebSocketFactory}
 
-import java.util.concurrent.CompletableFuture
 import java.net.URI
 import java.util
 
