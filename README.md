@@ -1,9 +1,4 @@
 # OpenLightBit-OneBot
-## todo（无先后顺序）
-反向ws协议支持<br />
-更好的事件监测<br />
-群管功能<br />
-交互式入群配置
 
 # 其他的机器人
 

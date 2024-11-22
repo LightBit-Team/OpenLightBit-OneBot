@@ -6,19 +6,20 @@ import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
 import am9.olbcore.onebot.media.MediaServer
-import am9.olbcore.onebot.newapi.{EventProcessor, AbstractModule}
+import am9.olbcore.onebot.newapi.modules.{Kousuan, ModuleManager, XiuXian}
+import am9.olbcore.onebot.newapi.{AbstractModule, EventProcessor}
 import am9.olbcore.onebot.platform.onebot.{Connect, OneBot}
 import cn.hutool.core.io.FileUtil
 import cn.hutool.core.thread.ThreadUtil
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
-import org.jetbrains.annotations.{NonNls, NotNull, Nullable}
+import org.jetbrains.annotations.{NonNls, NotNull}
 import org.slf4j.LoggerFactory
 
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util
-import java.util.{Objects, Timer}
+import java.util.Timer
 
 object Main {
   var logger: org.slf4j.Logger = null
@@ -80,43 +81,11 @@ object Main {
       |""".stripMargin
   def start(@NotNull lg: org.slf4j.Logger): Unit = {
     try {
-      val configFile = new File("config.properties")
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
       val zhuanFile = new File("zhuan.json")
       val groupDataFile = new File("group_data.json")
       logger = lg
-      if (configFile.exists()) {
-        config = config.read(configFile)
-        if (Integer.parseInt(config.getData.get("config-version").toString) < 2) {
-          logger.warn("配置文件版本过低，请重新生成配置文件！")
-          System.exit(0)
-        }
-        if (Integer.parseInt(config.getData.get("config-version").toString) > 2) {
-          logger.error("配置文件版本过高，请重新生成配置文件！")
-          System.exit(0)
-        }
-      } else {
-        if (FileUtil.exist("config.json")) {
-          val map = json.fromJson[util.HashMap[String, AnyRef]](
-            FileUtil.readString(FileUtil.file("config.json"), StandardCharsets.UTF_8),
-            new TypeToken[util.HashMap[String, AnyRef]](){}.getType)
-          map.put("config-version", "2")
-          map.put("onebot-post-port", "1145")
-          map.put("onebot-path", "/onebot")
-          map.put("enable-media-server", "true")
-          map.put("media-server-host", "localhost")
-          map.put("media-server-port", "19198")
-          config.setData(map)
-          config.write(configFile)
-          FileUtil.del("config.json")
-          logger.info("已升级配置文件！")
-        } else {
-          config.write(configFile)
-          logger.error("请填写配置文件！")
-          System.exit(0)
-        }
-      }
       if (!adminConfigFile.exists()) {
         adminData.write(adminConfigFile)
       }
@@ -140,7 +109,10 @@ object Main {
       if (new File("cave.json").exists()) {
         Cave.read(new File("cave.json"))
       }
-      modules.forEach(i => i.onLoad())
+      AbstractModule.loadModule(classOf[XiuXian])
+      AbstractModule.loadModule(classOf[ModuleManager])
+      AbstractModule.loadModule(classOf[Kousuan])
+      modules.forEach(_.onLoad())
       ThreadUtil.execute(() => {
         val timer = new Timer()
         timer.schedule(BreadFactory.makeBread, 20000)
@@ -152,6 +124,7 @@ object Main {
       if (Terminal.isRunningOnServerLauncher) {
         Terminal.serverLauncherWarn()
       }
+      modules.forEach(_.onEnable())
       logger.info("恭喜！启动成功，0Error，至少目前如此，也祝你以后如此")
     } catch {
       case e: Throwable =>
@@ -160,5 +133,56 @@ object Main {
   }
   def main(args: Array[String]): Unit = {
     start(LoggerFactory.getLogger(this.getClass))
+  }
+  def upgradeConfig(): Unit = {
+    val configFile = new File("config.properties")
+    if (configFile.exists()) {
+        config = config.read(configFile)
+        if (Integer.parseInt(config.getData.get("config-version").toString) < 2) {
+          logger.warn("配置文件版本过低，请重新生成配置文件！")
+          System.exit(0)
+        }
+        if (Integer.parseInt(config.getData.get("config-version").toString) > 2) {
+          logger.error("配置文件版本过高，请重新生成配置文件！")
+          System.exit(0)
+        }
+      } else {
+        if (FileUtil.exist("config.json")) {
+          //from olb 0.2-
+          val map = json.fromJson[util.HashMap[String, AnyRef]](
+            FileUtil.readString(FileUtil.file("config.json"), StandardCharsets.UTF_8),
+            new TypeToken[util.HashMap[String, AnyRef]](){}.getType)
+          map.put("config-version", "2")
+          map.put("onebot-post-port", "1145")
+          map.put("onebot-path", "/onebot")
+          map.put("enable-media-server", "true")
+          map.put("media-server-host", "localhost")
+          map.put("media-server-port", "19198")
+          config.setData(map)
+          config.write(configFile)
+          FileUtil.del("config.json")
+          logger.info("已升级配置文件！")
+        } else if (FileUtil.exist("config.yaml")) {
+          import org.virtuslab.yaml.*
+          //from KuoHuBit
+          logger.warn("找到config.yaml，正在尝试作为KuoHuBit配置文件读取并转化")
+          logger.warn("注意：OpenLightBit-OneBot仅支持OneBot")
+          logger.warn("请在转化完毕后自行配置OneBot")
+          FileUtil.readString("config.yaml", StandardCharsets.UTF_8).as[Map[String, Any]] match {
+            case Left(error) => throw error
+            case Right(yaml) =>
+              val newData = config.getData
+              newData.put("owner", yaml.get("su"))
+              config.setData(newData)
+              config.write(configFile)
+              logger.info("已升级配置文件！")
+              System.exit(0)
+          }
+        } else {
+          config.write(configFile)
+          logger.error("请填写配置文件！")
+          System.exit(0)
+        }
+      }
   }
 }

@@ -11,18 +11,15 @@ abstract class AbstractModule(val name: String,
   def onLoad(): Unit = {}
   final def registerEvent(processor: EventProcessor): Unit = {
     Main.eventProcessors.add(processor)
-    Main.logger.info(s"${this.name}模块注册了事件处理器${processor.getClass.getName}")
+    //Main.logger.info(s"${this.name}模块注册了事件处理器${processor.getClass.getName}")
   }
 }
 object AbstractModule {
   def loadModule(clazz: Class[?]): Unit = {
     try {
-      clazz match
-        case module1: Class[AbstractModule] =>
-          Main.modules.add(module1.getDeclaredConstructor().newInstance())
-        case null => Main.logger.warn(s"$clazz 不是一个合法的模块类")    
+      Main.modules.add(clazz.asInstanceOf[Class[AbstractModule]].getDeclaredConstructor().newInstance())
     } catch {
-      case _: MatchError => Main.logger.warn(s"$clazz 不是一个合法的模块类")
+      case _: ClassCastException => Main.logger.warn(s"$clazz 不是一个合法的模块类")
     }
   }
 

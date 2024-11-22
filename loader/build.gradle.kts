@@ -49,8 +49,9 @@ dependencies {
         exclude(group = "cn.hutool", module = "hutool-cron")
         exclude(group = "cn.hutool", module = "hutool-extra")
     }
+    implementation("org.virtuslab:scala-yaml_3:0.3.0")
     implementation("com.neovisionaries:nv-websocket-client:2.14")
-    implementation("org.jetbrains:annotations:24.1.0")
+    implementation("org.jetbrains:annotations:26.0.0")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
