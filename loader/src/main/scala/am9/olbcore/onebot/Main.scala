@@ -86,6 +86,7 @@ object Main {
       val zhuanFile = new File("zhuan.json")
       val groupDataFile = new File("group_data.json")
       logger = lg
+      this.upgradeConfig()
       if (!adminConfigFile.exists()) {
         adminData.write(adminConfigFile)
       }
@@ -134,7 +135,7 @@ object Main {
   def main(args: Array[String]): Unit = {
     start(LoggerFactory.getLogger(this.getClass))
   }
-  def upgradeConfig(): Unit = {
+  private def upgradeConfig(): Unit = {
     val configFile = new File("config.properties")
     if (configFile.exists()) {
         config = config.read(configFile)

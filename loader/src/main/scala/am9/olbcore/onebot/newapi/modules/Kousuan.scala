@@ -29,6 +29,7 @@ class Kousuan extends AbstractModule(
             }
           }
         }
+      case _ =>
     }
   }
   private def create(group: Long): Unit = {
@@ -105,8 +106,8 @@ class Kousuan extends AbstractModule(
     var currentProblem: Problem = Problem(0, 0)
     def append: Problem = {
       count += 1
-      currentProblem = Problem(RandomUtil.randomInt(0, 21), RandomUtil.randomInt(0, 21))   
-      currentProblem 
+      currentProblem = Problem(RandomUtil.randomInt(0, 21), RandomUtil.randomInt(0, 21))
+      currentProblem
     }
   }
   private case class Problem(int1: Int, int2: Int) {
