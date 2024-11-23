@@ -33,8 +33,12 @@ repositories {
 dependencies {
     implementation("org.scala-lang:scala3-library_3:${project.extra["scalaVersion"]}")
     implementation("org.dromara.hutool:hutool-core:6.0.0-M18")
-    implementation("org.dromara.hutool:hutool-http:6.0.0-M18")
-    implementation("org.dromara.hutool:hutool-setting:6.0.0-M18")
+    implementation("org.dromara.hutool:hutool-http:6.0.0-M18") {
+        exclude(group = "org.dromara.hutool", module = "hutool-log")
+    }
+    implementation("org.dromara.hutool:hutool-setting:6.0.0-M18") {
+        exclude(group = "org.dromara.hutool", module = "hutool-log")
+    }
     implementation("com.github.valskalla:odin-core_3:0.13.0")
     implementation("org.typelevel:cats-effect_3:3.6-ecf93db")
     implementation("org.virtuslab:scala-yaml_3:0.3.0")

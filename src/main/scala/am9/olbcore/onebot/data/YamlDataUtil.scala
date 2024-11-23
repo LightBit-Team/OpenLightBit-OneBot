@@ -63,7 +63,7 @@ class YamlDataUtil extends util.AbstractMap[String, util.AbstractMap[String, Any
   }
 
   override def put(key: String, value: util.AbstractMap[String, AnyRef]): util.AbstractMap[String, AnyRef] = {
-    FileUtil.writeUtf8String(mapToNoded(value.asScala.toMap[String, AnyRef]).asYaml, s"./data/$key.json")
+    FileUtil.writeUtf8String(mapToNoded(value.asScala.toMap[String, AnyRef]).asYaml, s"./data/$key.yaml")
     value
   }
   

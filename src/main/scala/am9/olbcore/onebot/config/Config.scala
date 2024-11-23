@@ -8,14 +8,14 @@ import java.io.{File, IOException}
 import java.nio.file.FileAlreadyExistsException
 import java.util
 
-@SuppressWarnings(Array("deprecation"))
 class Config {
   private var data: util.Map[String, AnyRef] = new util.TreeMap[String, AnyRef]() {
-    put("config-version", "2")
+    put("config-version", "3")
     put("bot-name", "OLB")
     put("logger-name", "OpenLightBit")
     put("debug-enabled", "true")
     put("owner", "10001")
+    put("data-format", "json")
     put("command-prefix", "!")
     put("onebot-address", "localhost")
     put("onebot-port", "3000")

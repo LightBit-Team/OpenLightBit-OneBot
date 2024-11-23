@@ -1,16 +1,16 @@
 package am9.olbcore.onebot.data
 
-import am9.olbcore.onebot.Main
+import org.dromara.hutool.core.io.file
 import org.dromara.hutool.core.io.file.FileUtil
 import org.dromara.hutool.core.xml
 import org.dromara.hutool.core.xml.XmlUtil
 import org.jetbrains.annotations.NotNull
-import org.w3c.dom.NamedNodeMap
 
-import java.nio.charset.StandardCharsets
 import java.util
+import javax.xml.parsers.DocumentBuilderFactory
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.collection.mutable
+import scala.jdk.CollectionConverters.{MapHasAsScala, MutableMapHasAsJava}
 import scala.util.control.Breaks.breakable
 
 //todo
@@ -20,7 +20,7 @@ class XmlDataUtil extends util.AbstractMap[String, util.AbstractMap[String, AnyR
     val ret = new util.HashSet[util.Map.Entry[String, util.AbstractMap[String, AnyRef]]]()
     breakable {
       for (i <- FileUtil.loopFiles("./data/").asScala) {
-        if (i.getName.contains(".json")) {
+        if (i.getName.contains(".xml")) {
           val tableName = i.getName.split(".")(0)
           ret.add(new util.Map.Entry[String, util.AbstractMap[String, AnyRef]](){
 
@@ -28,19 +28,18 @@ class XmlDataUtil extends util.AbstractMap[String, util.AbstractMap[String, AnyR
 
             override def getValue: util.AbstractMap[String, AnyRef] = new util.AbstractMap[String, AnyRef]{
 
-              override def entrySet(): util.Set[util.Map.Entry[String, AnyRef]] = null
-                //Main.json.fromJson(FileUtil.readUtf8String(i), new TypeToken[util.HashMap[String, AnyRef]](){}).entrySet()
+              override def entrySet(): util.Set[util.Map.Entry[String, AnyRef]] = xml2Map(FileUtil.readUtf8String(i)).asJava.entrySet()
 
               override def put(key: String, value: AnyRef): AnyRef = {
-                //val map = Main.json.fromJson(FileUtil.readUtf8String(i), new TypeToken[util.HashMap[String, AnyRef]](){})
-                //map.put(key, value)
-                //FileUtil.writeUtf8String(Main.json.toJson(map), i)
+                val map = xml2Map(FileUtil.readUtf8String(i))
+                map.put(key, value)
+                FileUtil.writeUtf8String(map2Xml(map), i)
                 value
               }
             }
 
             override def setValue(v: util.AbstractMap[String, AnyRef]): util.AbstractMap[String, AnyRef] = {
-              //FileUtil.writeUtf8String(Main.json.toJson(v), i)
+              FileUtil.writeUtf8String(map2Xml(v.asScala), i)
               v
             }
           })
@@ -51,7 +50,7 @@ class XmlDataUtil extends util.AbstractMap[String, util.AbstractMap[String, AnyR
   }
 
   override def put(key: String, value: util.AbstractMap[String, AnyRef]): util.AbstractMap[String, AnyRef] = {
-    //XmlUtil.toStr(NamedNodeMap, true)
+    FileUtil.writeUtf8String(map2Xml(value.asScala), s"./data/$key.xml")
     value
   }
 
@@ -66,5 +65,21 @@ class XmlDataUtil extends util.AbstractMap[String, util.AbstractMap[String, AnyR
       }
     }
     ret
+  }
+  private def map2Xml(@NotNull map: mutable.Map[String, AnyRef]): String = {
+    val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument
+    val root = document.createElement("xml")
+    document.appendChild(root)
+    for ((k, v) <- map) {
+      val element = document.createElement(k)
+      element.appendChild(document.createCDATASection(v match {
+        case i: String => i
+        case i: Number => i.toString
+        case i: Boolean => i.toString
+        case _ => throw new IllegalArgumentException("Unsupported type by W3C DOM")
+      }))
+      root.appendChild(element)
+    }
+    XmlUtil.toStr(document, true)
   }
 }

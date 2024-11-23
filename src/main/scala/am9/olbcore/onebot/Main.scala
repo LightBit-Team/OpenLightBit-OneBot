@@ -1,6 +1,7 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanProp}
+import am9.olbcore.onebot.data.{JsonDataUtil, XmlDataUtil, YamlDataUtil}
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
@@ -27,6 +28,7 @@ object Main extends IOApp.Simple {
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
   var mediaServer: MediaServer = null
   var oneBot: OneBot = null
+  var dataUtil: util.AbstractMap[String, util.AbstractMap[String, AnyRef]] = new util.HashMap()
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
@@ -86,14 +88,20 @@ object Main extends IOApp.Simple {
       val configFile = new File("config.properties")
       if (configFile.exists()) {
         config = config.read(configFile)
+        if (Integer.parseInt(config.getData.get("config-version").toString) < 3) {
+          val data = config.getData
+          data.put("config-version", "3")
+          data.put("data-format", "json")
+        }
         if (Integer.parseInt(config.getData.get("config-version").toString) < 2) {
           logger.warn("配置文件版本过低，请重新生成配置文件！")
           System.exit(0)
         }
-        if (Integer.parseInt(config.getData.get("config-version").toString) > 2) {
+        if (Integer.parseInt(config.getData.get("config-version").toString) > 3) {
           logger.error("配置文件版本过高，请重新生成配置文件！")
           System.exit(0)
         }
+        config.write(configFile)
       } else {
         if (FileUtil.exists("config.json")) {
         //from olb 0.2-
@@ -131,6 +139,12 @@ object Main extends IOApp.Simple {
           logger.error("请填写配置文件！")
           System.exit(0)
         }
+      }
+      config.getData.get("data-format") match {
+        case "json" => dataUtil = new JsonDataUtil()
+        case "yaml" => dataUtil = new YamlDataUtil()
+        case "xml" => dataUtil = new XmlDataUtil()
+        case _ => throw new IllegalArgumentException("Unsupported data format")
       }
       if (!adminConfigFile.exists()) {
         adminData.write(adminConfigFile)
