@@ -86,7 +86,9 @@ tasks.named<ScalaCompile>("compileScala") {
 }
 
 tasks.named<Jar>("jar") {
-    from("$buildDir/classes/java/main/META-INF")
+    //from("$buildDir/classes/java/main/META-INF")
+    dependsOn("copyFile")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.named<ShadowJar>("shadowJar") {
