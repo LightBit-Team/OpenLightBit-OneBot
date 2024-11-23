@@ -38,7 +38,6 @@ dependencies {
     implementation("com.github.valskalla:odin-core_3:0.13.0")
     implementation("org.typelevel:cats-effect_3:3.6-ecf93db")
     implementation("org.virtuslab:scala-yaml_3:0.3.0")
-    implementation("com.neovisionaries:nv-websocket-client:2.14")
     implementation("org.jetbrains:annotations:26.0.0")
     implementation("com.google.code.gson:gson:2.11.0")
 }
