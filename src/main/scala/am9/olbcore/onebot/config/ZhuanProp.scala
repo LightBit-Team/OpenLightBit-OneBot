@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.config
 
 import am9.olbcore.onebot.Main
-import cn.hutool.core.io.FileUtil
+import org.dromara.hutool.core.io.file.FileUtil
 import com.google.gson.reflect.TypeToken
 
 import java.io.File

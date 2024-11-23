@@ -6,8 +6,8 @@ import am9.olbcore.onebot.feature.helps.{HelpMenu, Helps}
 import am9.olbcore.onebot.feature.moyu.Fish
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.{Main, Terminal}
-import cn.hutool.core.date.{DateTime, DateUtil}
-import cn.hutool.core.util.RandomUtil
+import org.dromara.hutool.core.date.{DateTime, DateUtil}
+import org.dromara.hutool.core.util.RandomUtil
 import org.jetbrains.annotations.Nullable
 
 import java.{lang, util}
@@ -129,17 +129,6 @@ object CommandParser {
                 GetMusic.searchMusic(groupId, args.apply(2), if (args.length < 4) 1 else Integer.parseInt(args.apply(3)))
               case "play" => GetMusic.getMusic(groupId, java.lang.Long.parseLong(args.apply(2)))
               case _ => Main.oneBot.sendGroup(groupId, "格式错误")
-          }
-        }
-        if (str.startsWith(s"${p}captcha")) {
-          val args = str.split(" ")
-          if (args.length < 3) {
-            Main.oneBot.sendGroup(groupId, "格式错误")
-            return
-          } else {
-            args.apply(1) match
-              case "get" => Captcha.get(groupId, java.lang.Long.parseLong(args.apply(2)))
-              case "check" => Captcha.check(groupId, senderId, args.apply(2))
           }
         }
         if (str.startsWith(s"${p}cave")) {

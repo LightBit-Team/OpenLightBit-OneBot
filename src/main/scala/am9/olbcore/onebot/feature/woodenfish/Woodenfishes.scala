@@ -1,10 +1,10 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
-import cn.hutool.core.map.MapUtil
+import org.dromara.hutool.core.map.MapUtil
 
 import java.util.TimerTask
-import cn.hutool.core.io.FileUtil
+import org.dromara.hutool.core.io.file.FileUtil
 import com.google.gson.reflect.TypeToken
 import org.jetbrains.annotations.Nullable
 

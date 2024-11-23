@@ -2,8 +2,8 @@ package am9.olbcore.onebot.newapi.modules
 
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.newapi.{AbstractModule, ApiGroupMessageEvent}
-import cn.hutool.core.thread.ThreadUtil
-import cn.hutool.core.util.RandomUtil
+import org.dromara.hutool.core.thread.ThreadUtil
+import org.dromara.hutool.core.util.RandomUtil
 
 import scala.collection.mutable
 

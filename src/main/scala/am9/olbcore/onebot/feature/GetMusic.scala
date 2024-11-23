@@ -2,9 +2,9 @@ package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.neteasemusic.{SearchResponse, URLResponse}
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.thread.ThreadUtil
-import cn.hutool.http.HttpUtil
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.core.thread.ThreadUtil
+import org.dromara.hutool.http.HttpUtil
 import org.jetbrains.annotations.NotNull
 
 import java.io.File
@@ -17,10 +17,9 @@ object GetMusic {
       ThreadUtil.execute(new Runnable() {
         override def run(): Unit = {
           val request = HttpUtil
-            .createGet(s"${neteaseCloudMusicApi}/song/url?id=$musicId", true)
-            .execute(true)
+            .createGet(s"${neteaseCloudMusicApi}/song/url?id=$musicId")
           ThreadUtil.safeSleep(1000)
-          val json = request.body()
+          val json = request.body().toString
           val response = Main.json.fromJson[URLResponse](json, classOf[URLResponse])
           if (response.code != 200) {
             Main.oneBot.sendGroup(group, "获取歌曲失败！")

@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.feature.moyu
 
 import am9.olbcore.onebot.Main
-import cn.hutool.http.HttpUtil
+import org.dromara.hutool.http.HttpUtil
 import com.google.gson.JsonSyntaxException
 
 object Fish {

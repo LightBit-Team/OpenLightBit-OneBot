@@ -1,6 +1,5 @@
 package am9.olbcore.onebot
 
-import am9.olbcore.onebot.config.group.GroupDataConfig
 import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanProp}
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
@@ -10,8 +9,8 @@ import am9.olbcore.onebot.newapi.modules.{Kousuan, ModuleManager, WebThings, Xiu
 import am9.olbcore.onebot.newapi.{AbstractModule, ApiConsoleTypeEvent, EventProcessor}
 import am9.olbcore.onebot.platform.onebot.{Connect, OneBot}
 import cats.effect.{IO, IOApp}
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.thread.ThreadUtil
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.core.thread.ThreadUtil
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
 import io.odin.*
@@ -32,7 +31,6 @@ object Main extends IOApp.Simple {
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
   var zhuanProp: ZhuanProp = new ZhuanProp()
-  var groupDataConfig: GroupDataConfig = new GroupDataConfig()
   val startTime: Long = System.currentTimeMillis
   val eventProcessors = new util.ArrayList[EventProcessor]()
   val modules = new util.ArrayList[AbstractModule]()
@@ -97,7 +95,7 @@ object Main extends IOApp.Simple {
           System.exit(0)
         }
       } else {
-        if (FileUtil.exist("config.json")) {
+        if (FileUtil.exists("config.json")) {
         //from olb 0.2-
         val map = json.fromJson[util.HashMap[String, AnyRef]](
           FileUtil.readString(FileUtil.file("config.json"), StandardCharsets.UTF_8),
@@ -112,7 +110,7 @@ object Main extends IOApp.Simple {
         config.write(configFile)
         FileUtil.del("config.json")
         logger.info("已升级配置文件！")
-        } else if (FileUtil.exist("config.yaml")) {
+        } else if (FileUtil.exists("config.yaml")) {
           import org.virtuslab.yaml.*
         //from KuoHuBit
           logger.warn("找到config.yaml，正在尝试作为KuoHuBit配置文件读取并转化")

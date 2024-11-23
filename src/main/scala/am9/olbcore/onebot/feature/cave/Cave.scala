@@ -1,8 +1,8 @@
 package am9.olbcore.onebot.feature.cave
 
 import am9.olbcore.onebot.Main
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.util.RandomUtil
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.core.util.RandomUtil
 import com.google.gson.reflect.TypeToken
 
 import java.io.File

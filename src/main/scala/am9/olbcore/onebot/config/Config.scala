@@ -1,8 +1,8 @@
 package am9.olbcore.onebot
 package config
 
-import cn.hutool.core.io.FileUtil
-import cn.hutool.setting.dialect.Props
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.setting.props.Props
 
 import java.io.{File, IOException}
 import java.nio.file.FileAlreadyExistsException

@@ -20,33 +20,21 @@ project.version = "0.4.0"
 val prettyName = "Sun Qingqing"
 val javaVersion = JavaVersion.VERSION_17
 
+project.extra["scalaMajorVersion"] = "3"
+project.extra["scalaVersion"] = "3.6.4-RC1-bin-20241121-5d1d274-NIGHTLY"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     //mavenCentral()
-    maven {
-        url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/")
-    }
+    maven("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/")
+    mavenCentral()
 }
 
 dependencies {
-    implementation("org.scala-lang:scala3-library_3:3.6.0-RC1-bin-20240915-ad8c21a-NIGHTLY")
-    implementation("org.scala-lang:scala-library:2.13.15")
-    implementation("cn.hutool:hutool-bom:5.8.31") {
-        exclude(group = "cn.hutool", module = "hutool-log")
-        exclude(group = "cn.hutool", module = "hutool-socket")
-        exclude(group = "cn.hutool", module = "hutool-poi")
-        exclude(group = "cn.hutool", module = "hutool-jwt")
-        exclude(group = "cn.hutool", module = "hutool-script")
-        exclude(group = "cn.hutool", module = "hutool-aop")
-        exclude(group = "cn.hutool", module = "hutool-db")
-        exclude(group = "cn.hutool", module = "hutool-bloomFilter")
-        exclude(group = "cn.hutool", module = "hutool-dfa")
-        exclude(group = "cn.hutool", module = "hutool-crypto")
-        exclude(group = "cn.hutool", module = "hutool-cache")
-        exclude(group = "cn.hutool", module = "hutool-json")
-        exclude(group = "cn.hutool", module = "hutool-cron")
-        exclude(group = "cn.hutool", module = "hutool-extra")
-    }
+    implementation("org.scala-lang:scala3-library_3:${project.extra["scalaVersion"]}")
+    implementation("org.dromara.hutool:hutool-core:6.0.0-M18")
+    implementation("org.dromara.hutool:hutool-http:6.0.0-M18")
+    implementation("org.dromara.hutool:hutool-setting:6.0.0-M18")
     implementation("com.github.valskalla:odin-core_3:0.13.0")
     implementation("org.typelevel:cats-effect_3:3.6-ecf93db")
     implementation("org.virtuslab:scala-yaml_3:0.3.0")
@@ -102,8 +90,3 @@ tasks.named<ShadowJar>("shadowJar") {
 
     dependsOn("copyFile")
 }
-
-project.extra["scalaMajorVersion"] = "3"
-project.extra["scalaVersion"] = "${project.extra["scalaMajorVersion"]}.6.0-RC1-bin-20240915-ad8c21a-NIGHTLY"
-
-

@@ -1,9 +1,6 @@
 package am9.olbcore.onebot
 package config
 
-
-//import cn.hutool.json.JSONUtil
-
 import com.google.gson.reflect.TypeToken
 
 import java.io.{File, IOException}

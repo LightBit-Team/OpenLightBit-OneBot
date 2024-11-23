@@ -1,8 +1,8 @@
 package am9.olbcore.onebot.media
 
-import am9.olbcore.onebot.Main
-import cn.hutool.core.io.FileUtil
-import cn.hutool.http.HttpUtil
+import am9.olbcore.onebot.{Main, Terminal}
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.http.HttpUtil
 
 class MediaServer(port: Int) {
   private val server = HttpUtil.createServer(port).setRoot("temp")
@@ -22,7 +22,7 @@ class MediaServer(port: Int) {
     if (!java.lang.Boolean.parseBoolean(Main.config.getData.get("enable-media-server").toString)) {
       throw new IllegalStateException("媒体服务器未启用")
     }
-    HttpUtil.downloadFile(httpAddress, file)
+    Terminal.downloadFile(httpAddress, file)
   }
   def addRemoteFile(httpAddress: String, file: String): Unit = addRemoteFile(httpAddress, new java.io.File(file))
   def getFilePath(fileName: String): String = {

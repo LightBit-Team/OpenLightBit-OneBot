@@ -2,7 +2,7 @@ package am9.olbcore.onebot.feature
 
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.platform.onebot.Segment
-import cn.hutool.core.thread.ThreadUtil
+import org.dromara.hutool.core.thread.ThreadUtil
 
 import java.util
 

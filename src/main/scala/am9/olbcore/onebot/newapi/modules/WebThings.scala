@@ -3,7 +3,7 @@ package am9.olbcore.onebot.newapi.modules
 import am9.olbcore.onebot.newapi.{AbstractModule, ApiGroupMessageEvent}
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.ErrorProcess
-import cn.hutool.http.HttpUtil
+import org.dromara.hutool.http.HttpUtil
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 

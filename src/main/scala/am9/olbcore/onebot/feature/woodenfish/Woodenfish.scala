@@ -1,8 +1,8 @@
 package am9.olbcore.onebot.feature.woodenfish
 
 import am9.olbcore.onebot.Main
-import cn.hutool.core.date.DateUtil
-import cn.hutool.core.util.RandomUtil
+import org.dromara.hutool.core.date.DateUtil
+import org.dromara.hutool.core.util.RandomUtil
 import com.google.gson.annotations.Expose
 import org.jetbrains.annotations.Nullable
 
@@ -129,7 +129,7 @@ class Woodenfish {
     }
   }
   private def getExperience(): Unit = {
-    val timeNow = DateUtil.date().toTimestamp.getTime
+    val timeNow = System.currentTimeMillis()
     if (ban != 0) return
     val cycleSpeed = Math.ceil(60 * Math.pow(0.978, level - 1))
     val elapsedTime = timeNow - time
@@ -291,7 +291,7 @@ class Woodenfish {
         status = "永久封禁中"
         tips = "【我说那个佛祖啊，我刚刚在刷功德的时候，你有在偷看罢？】"
       case 2 =>
-        val timeNow = DateUtil.date().toTimestamp.getTime
+        val timeNow = System.currentTimeMillis()
         if (timeNow < dt) {
           val banUntil = DateUtil.date(dt).toString
           status = s"暂时封禁中（直至：$banUntil）"

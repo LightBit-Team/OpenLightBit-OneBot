@@ -3,8 +3,8 @@ package am9.olbcore.onebot.newapi.modules
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.XiuXianData
 import am9.olbcore.onebot.newapi.{AbstractModule, ApiEvent, ApiGroupMessageEvent, EventProcessor}
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.util.RandomUtil
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.core.util.RandomUtil
 import com.google.gson.reflect.TypeToken
 
 import java.nio.charset.StandardCharsets

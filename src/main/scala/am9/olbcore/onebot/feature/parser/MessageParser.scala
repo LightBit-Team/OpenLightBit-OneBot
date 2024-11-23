@@ -4,7 +4,7 @@ import am9.olbcore.onebot.feature.*
 import am9.olbcore.onebot.newapi.ApiGroupMessageEvent
 import am9.olbcore.onebot.platform.onebot.event.{FriendMessage, GroupMessage}
 import am9.olbcore.onebot.{Main, Terminal}
-import cn.hutool.core.thread.ThreadUtil
+import org.dromara.hutool.core.thread.ThreadUtil
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 

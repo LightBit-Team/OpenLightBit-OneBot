@@ -1,14 +1,19 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.Main.logger
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.io.resource.ClassPathResource
-import cn.hutool.setting.dialect.Props
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.core.io.resource.ClassPathResource
+import org.dromara.hutool.setting.props.Props
 import org.jetbrains.annotations.NotNull
 
+import java.io.File
+import java.net.URL
 import java.nio.charset.StandardCharsets
+import java.security.cert.X509Certificate
 import java.util
 import java.util.Objects
+import javax.net.ssl.{HttpsURLConnection, TrustManager, X509TrustManager}
+import scala.util.control.Breaks.{break, breakable}
 
 object Terminal {
   def isRunningOnServerLauncher: Boolean = {
@@ -37,10 +42,10 @@ object Terminal {
 
   def saveCan(e: Throwable): Unit = {
     val time = System.currentTimeMillis
-    if (!FileUtil.exist("cans")) {
+    if (!FileUtil.exists("cans")) {
       FileUtil.mkdir("cans")
     }
-    if (!FileUtil.exist(s"cans/$time.can.json")) {
+    if (!FileUtil.exists(s"cans/$time.can.json")) {
       val json = Main.json.toJson(new java.util.HashMap[String, AnyRef](){
         put("time", time.toString)
         put("error", e.getClass.toString)
@@ -68,4 +73,32 @@ object Terminal {
       FileUtil.writeString(json, s"./cans/$time.can.json", StandardCharsets.UTF_8)
     }
   }
+  def downloadFile(url: String, dest: File): Unit = {
+    val connection = URL(url).openConnection().asInstanceOf[HttpsURLConnection]
+    try {
+      connection.setHostnameVerifier((_, _) => true)
+      val sc = javax.net.ssl.SSLContext.getInstance("SSL")
+      sc.init(null, Array(new X509TrustManager(){
+        override def getAcceptedIssuers: Array[X509Certificate] = null
+        override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = {}
+        override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = {}
+      }), null)
+      connection.setSSLSocketFactory(sc.getSocketFactory)
+    } catch {
+      case e: Exception => logger.error("SSL 验证失败", e)
+    }
+    val inputStream = connection.getInputStream
+    val outputStream = FileUtil.getOutputStream(dest)
+    val buffer = new Array[Byte](1024)
+    breakable {
+      while (true) {
+        val read = inputStream.read(buffer)
+        if (read == -1) break
+        outputStream.write(buffer, 0, read);
+      }
+    }
+    inputStream.close()
+    outputStream.close()
+  }
+
 }

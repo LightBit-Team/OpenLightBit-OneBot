@@ -1,7 +1,7 @@
 package am9.olbcore.onebot.platform.onebot
 
 import am9.olbcore.onebot.Main
-import cn.hutool.core.thread.ThreadUtil
+import org.dromara.hutool.core.thread.ThreadUtil
 
 import java.io.File
 import java.net.URI

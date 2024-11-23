@@ -3,8 +3,8 @@ package am9.olbcore.onebot.platform.onebot
 import am9.olbcore.onebot.Main
 import am9.olbcore.onebot.feature.parser.MessageParser
 import am9.olbcore.onebot.platform.onebot.action.params.{SendGroupMsgParams, SendPrivateMsgParams}
-import cn.hutool.http.HttpUtil
-import cn.hutool.http.server.SimpleServer
+import org.dromara.hutool.http.HttpUtil
+import org.dromara.hutool.http.server.SimpleServer
 
 import java.nio.charset.StandardCharsets
 import java.util
