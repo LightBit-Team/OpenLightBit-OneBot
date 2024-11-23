@@ -1,6 +1,5 @@
 package am9.olbcore.onebot
 
-import am9.olbcore.onebot.Main.logger
 import org.dromara.hutool.core.io.file.FileUtil
 import org.dromara.hutool.core.io.resource.ClassPathResource
 import org.dromara.hutool.setting.props.Props
@@ -85,7 +84,7 @@ object Terminal {
       }), null)
       connection.setSSLSocketFactory(sc.getSocketFactory)
     } catch {
-      case e: Exception => logger.error("SSL 验证失败", e)
+      case e: Exception => throw e
     }
     val inputStream = connection.getInputStream
     val outputStream = FileUtil.getOutputStream(dest)
@@ -94,7 +93,7 @@ object Terminal {
       while (true) {
         val read = inputStream.read(buffer)
         if (read == -1) break
-        outputStream.write(buffer, 0, read);
+        outputStream.write(buffer, 0, read)
       }
     }
     inputStream.close()
