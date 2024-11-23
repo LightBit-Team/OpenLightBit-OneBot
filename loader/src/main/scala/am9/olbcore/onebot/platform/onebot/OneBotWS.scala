@@ -9,7 +9,7 @@ import java.net.URI
 import java.util
 
 class OneBotWS(serverUri: URI) extends OneBot {
-  private val websocket: WebSocket = new WebSocketFactory().createSocket(serverUri).addListener(new LightbitAdapter()).connect()
+  private val websocket: WebSocket = new WebSocketFactory().createSocket(serverUri).addListener(LightbitAdapter).connect()
   override def sendGroup(groupId: Long, message: String): Unit = {
     val segment = new Segment("text", new util.HashMap[String, String](){
       put("text", message)
@@ -43,10 +43,13 @@ class OneBotWS(serverUri: URI) extends OneBot {
     val sendGroupMsg = new SendGroupMsg(groupId, segments, false)
     websocket.sendText(Main.json.toJson(sendGroupMsg))
   }
-}
 
-private class LightbitAdapter extends WebSocketAdapter {
-  override def onTextMessage(websocket: WebSocket, text: String): Unit = {
-    MessageParser.parse(text)
+  override def stop(): Unit = {
+    websocket.disconnect("OpenLightBit is shutting down...")
+  }
+  private object LightbitAdapter extends WebSocketAdapter {
+    override def onTextMessage(websocket: WebSocket, text: String): Unit = {
+      MessageParser.parse(text)
+    }
   }
 }

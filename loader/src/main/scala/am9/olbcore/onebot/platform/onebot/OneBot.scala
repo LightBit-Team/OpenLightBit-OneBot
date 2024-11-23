@@ -7,4 +7,5 @@ trait OneBot extends Platform {
   def sendGroupWithCqCode(groupId: Long, message: String): Unit
   def sendGroupWithSegments(groupId: Long, segments: java.util.List[Segment]): Unit
   def sendGroupRecord(groupId: Long, fileName: String): Unit
+  def stop(): Unit = {}
 }

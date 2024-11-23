@@ -1,6 +1,8 @@
-package am9.olbcore.onebot.feature
+package am9.olbcore.onebot.newapi.modules
 
+import am9.olbcore.onebot.newapi.{AbstractModule, ApiGroupMessageEvent}
 import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.feature.ErrorProcess
 import cn.hutool.http.HttpUtil
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
@@ -8,8 +10,31 @@ import com.google.gson.reflect.TypeToken
 import java.nio.charset.StandardCharsets
 import java.{lang, util}
 
-object WebThings {
-  def hitokoto(group: Long): Unit = {
+class WebThings extends AbstractModule(
+  "WebThings",
+  "WebThings",
+  "0.4.0",
+  java.util.List.of("Emerald-AM9")
+){
+  override def onEnable(): Unit = {
+    registerEvent {
+      case groupMessageEvent: ApiGroupMessageEvent =>
+        val str = groupMessageEvent.getRawMessage
+        if (str.startsWith("!hitokoto")) {
+          hitokoto(groupMessageEvent.getGroupId)
+        }
+        if (str.startsWith("!gotrend")) {
+          val args = str.split(" ")
+          if (args.length < 2) {
+            Main.oneBot.sendGroup(groupMessageEvent.getGroupId, "格式错误")
+          } else {
+            goTrend(groupMessageEvent.getGroupId, Integer.parseInt(args.apply(1)))
+          }
+        }
+      case _ =>
+    }
+  }
+  private def hitokoto(group: Long): Unit = {
     try {
       val response = HttpUtil.get("https://v1.hitokoto.cn/", StandardCharsets.UTF_8)
       val json = Main.json.fromJson[util.HashMap[String, String]](response, new TypeToken[util.HashMap[String, String]](){}.getType)
@@ -56,4 +81,5 @@ object WebThings {
     }
     Main.oneBot.sendGroup(group, messageContent.toString)
   }
+
 }

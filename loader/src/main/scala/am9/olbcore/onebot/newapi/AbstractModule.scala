@@ -1,11 +1,15 @@
 package am9.olbcore.onebot.newapi
 
 import am9.olbcore.onebot.Main
+import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
 abstract class AbstractModule(val name: String,
                       val description: String,
                       val version: String,
-                      val authors: java.util.List[String]) {
+                      val authors: List[String]) {
+  def this(name: String, description: String, version: String, authors: java.util.List[String]) = {
+    this(name, description, version, authors.asScala.toList)
+  }
   def onEnable(): Unit = {}
   def onDisable(): Unit = {}
   def onLoad(): Unit = {}

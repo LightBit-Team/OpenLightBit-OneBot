@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets
 import java.util
 
 class OneBotHttp(getUrl: String, postPort: Int) extends OneBot {
-  private val server: SimpleServer = HttpUtil.createServer(postPort).addAction("onebot", (request, response) => {
+  private var server: SimpleServer = HttpUtil.createServer(postPort).addAction("onebot", (request, response) => {
     MessageParser.parse(request.getBody(StandardCharsets.UTF_8))
   })
   server.start()
@@ -45,5 +45,9 @@ class OneBotHttp(getUrl: String, postPort: Int) extends OneBot {
   override def sendGroupWithSegments(groupId: Long, segments: util.List[Segment]): Unit = {
     val sendGroupMsgParams = new SendGroupMsgParams(groupId, segments, false)
     HttpUtil.post(getUrl + "send_group_msg", Main.json.toJson(sendGroupMsgParams))
+  }
+
+  override def stop(): Unit = {
+    server = null
   }
 }

@@ -11,11 +11,11 @@ class Kousuan extends AbstractModule(
   "Kousuan", "Kousuan", "0.4.0", java.util.List.of("Emerald-AM9")
 ){
   private val games: mutable.Map[Long, KousuanGame] = mutable.Map()
-  override def onLoad(): Unit = {
-    registerEvent match {
+  override def onEnable(): Unit = {
+    this.registerEvent {
       case groupMessageEvent: ApiGroupMessageEvent =>
-        val str = groupMessageEvent.getMessage
-        if (str.startsWith(s"${Main.config.getData.get("command-prefix").toString}kousuan")) {
+        val str = groupMessageEvent.getRawMessage
+        if (str.startsWith("!kousuan")) {
           val args = str.split(" ")
           if (args.length < 2) {
             groupMessageEvent.reply("格式错误")
@@ -45,9 +45,9 @@ class Kousuan extends AbstractModule(
     val game: KousuanGame = games(group)
     val currentProblem = game.currentProblem
     if (currentProblem.int1 < currentProblem.int2) {
-      ThreadUtil.execAsync(() => {
+      ThreadUtil.execute(() => {
         Main.oneBot.sendGroup(group, "回答正确")
-        Thread.sleep(2000)
+        ThreadUtil.safeSleep(2000)
         if (game.count == 10) {
           games.remove(group)
           Main.oneBot.sendGroup(group, "游戏结束")
@@ -65,9 +65,9 @@ class Kousuan extends AbstractModule(
     val game: KousuanGame = games(group)
     val currentProblem = game.currentProblem
     if (currentProblem.int1 > currentProblem.int2) {
-      ThreadUtil.execAsync(() => {
+      ThreadUtil.execute(() => {
         Main.oneBot.sendGroup(group, "回答正确")
-        Thread.sleep(2000)
+        ThreadUtil.safeSleep(2000)
         if (game.count == 10) {
           games.remove(group)
           Main.oneBot.sendGroup(group, "游戏结束")
@@ -85,9 +85,9 @@ class Kousuan extends AbstractModule(
     val game: KousuanGame = games(group)
     val currentProblem = game.currentProblem
     if (currentProblem.int1 == currentProblem.int2) {
-      ThreadUtil.execAsync(() => {
+      ThreadUtil.execute(() => {
         Main.oneBot.sendGroup(group, "回答正确")
-        Thread.sleep(2000)
+        ThreadUtil.safeSleep(2000)
         if (game.count == 10) {
           games.remove(group)
           Main.oneBot.sendGroup(group, "游戏结束")

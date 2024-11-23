@@ -1,7 +1,6 @@
 package am9.olbcore.onebot.feature.parser
 
 import am9.olbcore.onebot.feature.*
-import am9.olbcore.onebot.feature.event.NameChange
 import am9.olbcore.onebot.newapi.ApiGroupMessageEvent
 import am9.olbcore.onebot.platform.onebot.event.{FriendMessage, GroupMessage}
 import am9.olbcore.onebot.{Main, Terminal}
@@ -14,6 +13,7 @@ object MessageParser {
     ThreadUtil.execute(() => {
       val json = Main.json.fromJson[LinkedTreeMap[String, AnyRef]](str, new TypeToken[LinkedTreeMap[String, AnyRef]]() {})
       try {
+        Terminal.debug(json)
         json.get("post_type") match
           case "message" =>
             if (json.get("message_type").toString == "private") {
@@ -57,7 +57,6 @@ object MessageParser {
               }
               val apiGroupMessageEvent = new ApiGroupMessageEvent(groupMessage)
               Main.eventProcessors.forEach(i => i.onEvent(apiGroupMessageEvent))
-              NameChange.check(groupMessage.group_id, groupMessage.sender)
             }
             BreadFactory.expReward(java.lang.Double.parseDouble(json.get("group_id").toString).toLong)
           case "meta_event" =>
@@ -76,7 +75,9 @@ object MessageParser {
               Main.logger.warn(str)
             }
       } catch {
-        case e: MatchError => Main.logger.info("invalid event", e)
+        case e: Throwable =>
+          Terminal.saveCan(e)
+          Main.loggerInfo(e.toString)
       }
     })
   }

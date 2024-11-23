@@ -80,18 +80,6 @@ object CommandParser {
             case e: MatchError => Main.oneBot.sendGroup(groupId, "格式错误")
           }
         }
-        if (str.startsWith(s"${p}hitokoto")) {
-          WebThings.hitokoto(groupId)
-        }
-        if (str.startsWith(s"${p}gotrend")) {
-          val args = str.split(" ")
-          if (args.length < 2) {
-            Main.oneBot.sendGroup(groupId, "格式错误")
-            return
-          } else {
-            WebThings.goTrend(groupId, Integer.parseInt(args.apply(1)))
-          }
-        }
         if (str.startsWith(s"${p}info")) {
           val args = str.split(" ")
           if (args.length < 2) {

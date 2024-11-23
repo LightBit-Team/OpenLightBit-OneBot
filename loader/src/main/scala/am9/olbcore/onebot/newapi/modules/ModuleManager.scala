@@ -9,7 +9,7 @@ class ModuleManager extends AbstractModule(
   override def onEnable(): Unit = {
     this.registerEvent {
       case groupMessageEvent: ApiGroupMessageEvent =>
-        val argArray = groupMessageEvent.getMessage.split(" ")
+        val argArray = groupMessageEvent.getRawMessage.split(" ")
         if (argArray.nonEmpty) {
           if (argArray.apply(0) == "!module") {
             if (argArray.length == 1) {

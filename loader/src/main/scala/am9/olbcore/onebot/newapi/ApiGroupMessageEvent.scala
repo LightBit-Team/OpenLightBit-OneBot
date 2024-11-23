@@ -5,6 +5,7 @@ import am9.olbcore.onebot.newapi.ApiEvent
 import am9.olbcore.onebot.platform.onebot.event.GroupMessage
 import am9.olbcore.onebot.platform.onebot.{Segment, Sender}
 import com.google.gson.internal.LinkedTreeMap
+import org.jetbrains.annotations.NotNull
 
 import java.util
 
@@ -27,6 +28,7 @@ class ApiGroupMessageEvent(oneBotEvent: GroupMessage) extends ApiEvent {
       oneBotEvent.message.toString
     }
   }
+  @NotNull def getRawMessage: String = oneBotEvent.raw_message
   def getGroupId: Long = oneBotEvent.group_id
   def getMessageId: Long = oneBotEvent.message_id
 }
