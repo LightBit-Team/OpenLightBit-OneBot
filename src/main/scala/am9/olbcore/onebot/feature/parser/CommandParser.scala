@@ -3,7 +3,6 @@ package am9.olbcore.onebot.feature.parser
 import am9.olbcore.onebot.feature.*
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.helps.{HelpMenu, Helps}
-import am9.olbcore.onebot.feature.kousuan.Kousuan
 import am9.olbcore.onebot.feature.moyu.Fish
 import am9.olbcore.onebot.feature.woodenfish.{Woodenfish, Woodenfishes}
 import am9.olbcore.onebot.{Main, Terminal}
@@ -166,9 +165,6 @@ object CommandParser {
             groupList.add(lang.Long.parseLong(args.apply(i)))
           }
           Broadcast.broadcast(senderId, groupId, args.apply(1), groupList)
-        }
-        if (str.startsWith(s"${p}status")) {
-          Info.showInfo(groupId)
         }
         if (str.startsWith(s"${p}add_listen_group")) {
           Zhuan.addListenGroup(lang.Long.parseLong(str.split(" ").apply(1)), groupId)

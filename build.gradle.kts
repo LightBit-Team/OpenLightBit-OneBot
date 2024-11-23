@@ -14,14 +14,11 @@ plugins {
     application
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.graalvm.buildtools.native") version "0.10.2"
-    id("xyz.wagyourtail.jvmdowngrader") version "1.1.3"
 }
 
 project.version = "0.4.0"
 val prettyName = "Sun Qingqing"
 val javaVersion = JavaVersion.VERSION_17
-jvmdg.downgradeTo = JavaVersion.VERSION_1_8
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -33,6 +30,7 @@ repositories {
 
 dependencies {
     implementation("org.scala-lang:scala3-library_3:3.6.0-RC1-bin-20240915-ad8c21a-NIGHTLY")
+    implementation("org.scala-lang:scala-library:2.13.15")
     implementation("cn.hutool:hutool-bom:5.8.31") {
         exclude(group = "cn.hutool", module = "hutool-log")
         exclude(group = "cn.hutool", module = "hutool-socket")
@@ -50,14 +48,11 @@ dependencies {
         exclude(group = "cn.hutool", module = "hutool-extra")
     }
     implementation("com.github.valskalla:odin-core_3:0.13.0")
-    implementation("org.typelevel:cats-effect_3:3.2.8")
+    implementation("org.typelevel:cats-effect_3:3.6-ecf93db")
     implementation("org.virtuslab:scala-yaml_3:0.3.0")
     implementation("com.neovisionaries:nv-websocket-client:2.14")
     implementation("org.jetbrains:annotations:26.0.0")
     implementation("com.google.code.gson:gson:2.11.0")
-    implementation("com.github.oshi:oshi-core-java11:6.6.3")
-    compileOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader:1.1.3")
-    runtimeOnly("xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:1.1.3:downgraded-8")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

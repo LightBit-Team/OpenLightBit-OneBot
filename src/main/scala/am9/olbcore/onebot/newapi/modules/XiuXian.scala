@@ -1,6 +1,7 @@
 package am9.olbcore.onebot.newapi.modules
 
 import am9.olbcore.onebot.Main
+import am9.olbcore.onebot.feature.XiuXianData
 import am9.olbcore.onebot.newapi.{AbstractModule, ApiEvent, ApiGroupMessageEvent, EventProcessor}
 import cn.hutool.core.io.FileUtil
 import cn.hutool.core.util.RandomUtil
@@ -14,7 +15,7 @@ import scala.jdk.CollectionConverters.MutableMapHasAsJava
 class XiuXian extends AbstractModule(
   "xiuxian", "null", "0.4.0", java.util.List.of("Emerald-AM9")
 ){
-  private var idMap: Option[mutable.Map[String, UserData]] = None
+  private var idMap: Option[mutable.Map[String, XiuXianData]] = None
   override def onLoad(): Unit = {
     readData()
   }
@@ -25,7 +26,7 @@ class XiuXian extends AbstractModule(
     val dataFile = FileUtil.file("xiuxian.json")
     if (dataFile.exists()) {
       idMap = Some(Main.json.fromJson(FileUtil.getReader(dataFile, StandardCharsets.UTF_8),
-        new TypeToken[java.util.Map[String, UserData]](){}).asScala)
+        new TypeToken[java.util.Map[String, XiuXianData]](){}).asScala)
     } else {
       idMap = Some(mutable.Map())
     }
@@ -45,14 +46,16 @@ class XiuXian extends AbstractModule(
             if (argArray.length >= 2) {
               argArray(1) match {
                 case "register" =>
-                  idMap.get.put(groupMessageEvent.getSender.user_id.toString, new UserData)
+                  idMap.get.put(groupMessageEvent.getSender.user_id.toString, new XiuXianData)
                   saveData()
                   groupMessageEvent.reply("注册成功！")
                 case "xiulian" =>
                   val data = idMap.get(groupMessageEvent.getSender.user_id.toString)
-                  val newExp = data.exp +
-                    (data.level / 10 * RandomUtil.randomInt(1, 7 - data.level.toString.length))
+                  val newExp = if (data.level < 10)
+                    data.exp + RandomUtil.randomInt(1, 5)
+                    else data.exp + data.level / 10 * RandomUtil.randomInt(1, 10 - data.level.toString.length)
                   data.exp = newExp
+                  saveData()
                   groupMessageEvent.reply(s"获得${newExp - data.exp}经验！")
                 case "info" =>
                   val data = idMap.get(groupMessageEvent.getSender.user_id.toString)
@@ -67,6 +70,7 @@ class XiuXian extends AbstractModule(
                   if (data.exp >= exp2) {
                     data.level = newLevel.toByte
                     data.exp = data.exp - exp2
+                    saveData()
                     groupMessageEvent.reply(s"升级成功！当前等级为${data.level}")
                   } else {
                     groupMessageEvent.reply("升级失败！")
@@ -80,10 +84,5 @@ class XiuXian extends AbstractModule(
         case _ =>
       }
     }
-  }
-  private class UserData {
-    var name: String = ""
-    var level: Byte = 1
-    var exp: Int = 0
   }
 }

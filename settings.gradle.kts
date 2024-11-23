@@ -20,4 +20,3 @@ plugins {
 }
 
 rootProject.name = "OpenLightBit-OneBot"
-include("loader")
