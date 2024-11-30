@@ -47,16 +47,18 @@ object MessageParser {
                 Zhuan.zhuan(groupMessage.group_id, groupMessage.user_id, message, groupMessage.sender.role)
                 message = groupMessage.message.toString
               }
+              val apiGroupMessageEvent = new ApiGroupMessageEvent(groupMessage)
               if (message.contains("!")) {
                 CommandParser.parseCommand(
-                  java.lang.Double.parseDouble(json.get("user_id").toString).toLong,
-                  java.lang.Double.parseDouble(json.get("group_id").toString).toLong,
-                  java.lang.Double.parseDouble(json.get("message_id").toString).toLong,
+                  apiGroupMessageEvent.getSender.user_id,
+                  apiGroupMessageEvent.getGroupId,
+                  apiGroupMessageEvent.getMessageId,
                   message
                 )
               }
-              val apiGroupMessageEvent = new ApiGroupMessageEvent(groupMessage)
-              Main.eventProcessors.forEach(i => i.onEvent(apiGroupMessageEvent))
+              if (!Admin.isDisabled(apiGroupMessageEvent.getGroupId)) {
+                Main.eventProcessors.forEach(i => i.onEvent(apiGroupMessageEvent))
+              }
             }
             BreadFactory.expReward(java.lang.Double.parseDouble(json.get("group_id").toString).toLong)
           case "meta_event" =>

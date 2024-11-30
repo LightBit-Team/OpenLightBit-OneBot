@@ -1,7 +1,7 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanProp}
-import am9.olbcore.onebot.data.{JsonDataUtil, XmlDataUtil, YamlDataUtil}
+import am9.olbcore.onebot.data.{DataUtil, JsonDataUtil, XmlDataUtil, YamlDataUtil}
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
@@ -28,7 +28,7 @@ object Main extends IOApp.Simple {
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
   var mediaServer: MediaServer = null
   var oneBot: OneBot = null
-  var dataUtil: util.AbstractMap[String, util.AbstractMap[String, AnyRef]] = new util.HashMap()
+  var dataUtil: Option[util.AbstractMap[String, util.AbstractMap[String, AnyRef]]] = None
   var config: Config = new Config()
   var adminData: AdminData = new AdminData()
   var bread: Bread = new Bread()
@@ -38,7 +38,9 @@ object Main extends IOApp.Simple {
   val modules = new util.ArrayList[AbstractModule]()
   @NonNls
   val version = "0.3.0 (QingZhu)"
-  val changelog: String = "null"
+  val changelog: String =
+    """添加口算功能
+      |部分模块化""".stripMargin
   @NonNls
   val splashes: util.List[String] = util.List.of(
     "也试试KuoHuBit罢！Also try KuoHuBit!",
@@ -140,12 +142,7 @@ object Main extends IOApp.Simple {
           System.exit(0)
         }
       }
-      config.getData.get("data-format") match {
-        case "json" => dataUtil = new JsonDataUtil()
-        case "yaml" => dataUtil = new YamlDataUtil()
-        case "xml" => dataUtil = new XmlDataUtil()
-        case _ => throw new IllegalArgumentException("Unsupported data format")
-      }
+      dataUtil = Some(DataUtil.getDataUtil)
       if (!adminConfigFile.exists()) {
         adminData.write(adminConfigFile)
       }
@@ -166,7 +163,9 @@ object Main extends IOApp.Simple {
         Cave.read(new File("cave.json"))
       }
       AbstractModule.loadModule(classOf[WebThings])
-      AbstractModule.loadModule(classOf[XiuXian])
+      if (false) {
+        AbstractModule.loadModule(classOf[XiuXian])
+      }
       AbstractModule.loadModule(classOf[ModuleManager])
       AbstractModule.loadModule(classOf[Kousuan])
       modules.forEach(_.onLoad())

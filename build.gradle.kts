@@ -44,6 +44,9 @@ dependencies {
     implementation("org.virtuslab:scala-yaml_3:0.3.0")
     implementation("org.jetbrains:annotations:26.0.0")
     implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.mysql:mysql-connector-j:9.1.0")
+    implementation("com.google.protobuf:protobuf-java:4.29.0-RC3")
+    implementation("org.xerial:sqlite-jdbc:3.47.0.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

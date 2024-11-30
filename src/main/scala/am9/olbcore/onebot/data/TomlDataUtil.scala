@@ -1,20 +1,21 @@
 package am9.olbcore.onebot.data
 
-import am9.olbcore.onebot.Main
-import com.google.gson.reflect.TypeToken
 import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.core.io.resource.FileResource
+import org.dromara.hutool.setting.toml.Toml
 
+import java.nio.charset.StandardCharsets
 import java.util
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.util.control.Breaks.breakable
 
-class JsonDataUtil extends util.AbstractMap[String, util.AbstractMap[String, AnyRef]] {
+class TomlDataUtil extends util.AbstractMap[String, util.AbstractMap[String, AnyRef]] {
 
   override def entrySet(): util.Set[util.Map.Entry[String, util.AbstractMap[String, AnyRef]]] = {
     val ret = new util.HashSet[util.Map.Entry[String, util.AbstractMap[String, AnyRef]]]()
     breakable {
       for (i <- FileUtil.loopFiles("./data/").asScala) {
-        if (i.getName.contains(".json")) {
+        if (i.getName.contains(".toml")) {
           val tableName = i.getName.split(".")(0)
           ret.add(new util.Map.Entry[String, util.AbstractMap[String, AnyRef]](){
 
@@ -22,19 +23,19 @@ class JsonDataUtil extends util.AbstractMap[String, util.AbstractMap[String, Any
 
             override def getValue: util.AbstractMap[String, AnyRef] = new util.AbstractMap[String, AnyRef]{
 
-              override def entrySet(): util.Set[util.Map.Entry[String, AnyRef]] =
-                Main.json.fromJson(FileUtil.readUtf8String(i), new TypeToken[util.HashMap[String, AnyRef]](){}).entrySet()
+              override def entrySet: util.Set[util.Map.Entry[String, AnyRef]] =
+                Toml.read(FileResource(i)).entrySet()
 
               override def put(key: String, value: AnyRef): AnyRef = {
-                val map = Main.json.fromJson(FileUtil.readUtf8String(i), new TypeToken[util.HashMap[String, AnyRef]](){})
+                val map = Toml.read(FileResource(i))
                 map.put(key, value)
-                FileUtil.writeUtf8String(Main.json.toJson(map), i)
+                Toml.write(map, FileUtil.getWriter(i, StandardCharsets.UTF_8, false))
                 value
               }
             }
 
             override def setValue(v: util.AbstractMap[String, AnyRef]): util.AbstractMap[String, AnyRef] = {
-              FileUtil.writeUtf8String(Main.json.toJson(v), i)
+              Toml.write(v, FileUtil.getWriter(i, StandardCharsets.UTF_8, false))
               v
             }
           })
@@ -45,7 +46,7 @@ class JsonDataUtil extends util.AbstractMap[String, util.AbstractMap[String, Any
   }
 
   override def put(key: String, value: util.AbstractMap[String, AnyRef]): util.AbstractMap[String, AnyRef] = {
-    FileUtil.writeUtf8String(Main.json.toJson(value), s"./data/$key.json")
+    Toml.write(value, FileUtil.getWriter(s"./data/$key.toml", StandardCharsets.UTF_8, false))
     value
   }
 }

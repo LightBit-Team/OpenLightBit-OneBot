@@ -4,7 +4,7 @@ import org.dromara.hutool.core.io.file.FileUtil
 import org.virtuslab.yaml.*
 
 import java.util
-import scala.collection.JavaConverters.collectionAsScalaIterableConverter
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.MapHasAsScala
 import scala.util.control.Breaks.breakable
