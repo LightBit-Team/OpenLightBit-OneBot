@@ -16,7 +16,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-project.version = "0.4.0"
+project.version = "0.4.1-SNAPSHOT"
 val prettyName = "Sun Qingqing"
 val javaVersion = JavaVersion.VERSION_17
 
@@ -33,14 +33,9 @@ repositories {
 dependencies {
     implementation("org.scala-lang:scala3-library_3:${project.extra["scalaVersion"]}")
     implementation("org.dromara.hutool:hutool-core:6.0.0-M18")
-    implementation("org.dromara.hutool:hutool-http:6.0.0-M18") {
-        exclude(group = "org.dromara.hutool", module = "hutool-log")
-    }
-    implementation("org.dromara.hutool:hutool-setting:6.0.0-M18") {
-        exclude(group = "org.dromara.hutool", module = "hutool-log")
-    }
-    implementation("com.github.valskalla:odin-core_3:0.13.0")
-    implementation("org.typelevel:cats-effect_3:3.6-ecf93db")
+    implementation("org.dromara.hutool:hutool-http:6.0.0-M18")
+    implementation("org.dromara.hutool:hutool-setting:6.0.0-M18")
+    implementation("org.dromara.hutool:hutool-log:6.0.0-M18")
     implementation("org.virtuslab:scala-yaml_3:0.3.0")
     implementation("org.jetbrains:annotations:26.0.0")
     implementation("com.google.code.gson:gson:2.11.0")

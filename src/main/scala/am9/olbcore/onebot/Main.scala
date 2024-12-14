@@ -1,7 +1,7 @@
 package am9.olbcore.onebot
 
 import am9.olbcore.onebot.config.{AdminData, Bread, Config, ZhuanProp}
-import am9.olbcore.onebot.data.{DataUtil, JsonDataUtil, XmlDataUtil, YamlDataUtil}
+import am9.olbcore.onebot.data.DataUtil
 import am9.olbcore.onebot.feature.BreadFactory
 import am9.olbcore.onebot.feature.cave.Cave
 import am9.olbcore.onebot.feature.woodenfish.Woodenfishes
@@ -9,12 +9,13 @@ import am9.olbcore.onebot.media.MediaServer
 import am9.olbcore.onebot.newapi.modules.{Kousuan, ModuleManager, WebThings, XiuXian}
 import am9.olbcore.onebot.newapi.{AbstractModule, ApiConsoleTypeEvent, EventProcessor}
 import am9.olbcore.onebot.platform.onebot.{Connect, OneBot}
-import cats.effect.{IO, IOApp}
-import org.dromara.hutool.core.io.file.FileUtil
-import org.dromara.hutool.core.thread.ThreadUtil
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
-import io.odin.*
+import org.dromara.hutool.core.io.file.FileUtil
+import org.dromara.hutool.core.thread.ThreadUtil
+import org.dromara.hutool.log.engine.LogEngineFactory
+import org.dromara.hutool.log.engine.jdk.JdkLogEngine
+import org.dromara.hutool.log.{Log, LogFactory}
 import org.jetbrains.annotations.NonNls
 
 import java.io.File
@@ -22,8 +23,8 @@ import java.nio.charset.StandardCharsets
 import java.util
 import java.util.{Scanner, Timer}
 
-object Main extends IOApp.Simple {
-  var logger: Logger[IO] = consoleLogger()
+object Main {
+  var logger: Log = LogFactory.getLog("OpenLightBit")
   private val jb: GsonBuilder = new GsonBuilder()
   var json: Gson = jb.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create()
   var mediaServer: MediaServer = null
@@ -82,7 +83,8 @@ object Main extends IOApp.Simple {
       |
       |3496929815@qq.com
       |""".stripMargin
-  override def run: IO[Unit] = {
+  // MDOC ignores stderr
+  def main(args: Array[String]): Unit = {
     try {
       val adminConfigFile = new File("admin.json")
       val breadFile = new File("bread.json")
@@ -142,6 +144,8 @@ object Main extends IOApp.Simple {
           System.exit(0)
         }
       }
+      LogEngineFactory.setDefaultEngine(new JdkLogEngine())
+      logger = LogEngineFactory.getEngine.getLog(config.getData.get("logger-name").toString)
       dataUtil = Some(DataUtil.getDataUtil)
       if (!adminConfigFile.exists()) {
         adminData.write(adminConfigFile)
@@ -215,7 +219,7 @@ object Main extends IOApp.Simple {
   }
   private def reload(): Unit = {
     stop()
-    run
+    main(null)
   }
   def loggerInfo(msg: String): Unit = logger.info(msg)
   def loggerWarn(msg: String): Unit = logger.warn(msg)
